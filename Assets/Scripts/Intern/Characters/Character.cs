@@ -13,6 +13,7 @@ namespace Extinction
         /// </summary>
         public enum CharacterState
         {
+            IDLE
         }
 
         /// <summary>
@@ -28,18 +29,21 @@ namespace Extinction
             /// <summary>
             /// Max health that can have the character
             /// </summary>
-            protected static int _maxHealth;
+            [SerializeField]
+            protected static int _maxHealth = 100;
+
 
             /// <summary>
             /// Current health of the character
             /// </summary>
-            protected int _health;
+            [SerializeField]
+            protected int _health = 100;
 
             /// <summary>
             /// The current state of the character
             /// Can be used for the animation, sounds, etc. 
             /// </summary>
-            protected CharacterState _state;
+            protected CharacterState _state = CharacterState.IDLE;
 
             /// <summary>
             /// Position in the space
@@ -52,11 +56,10 @@ namespace Extinction
             /// </summary>
             protected Vector3 _orientation;
 
-            // ---------- Static values ---------
-
             /// <summary>
             /// Default speed of a character, without any passive skill
             /// </summary>
+            [SerializeField]
             protected static float _defaultCharacterSpeed = 1;
 
             // ----------------------------------------------------------------------------
