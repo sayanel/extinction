@@ -1,4 +1,4 @@
-﻿// Created by Florian, Mehdi-Antoine  & Pascale
+﻿// @author: Florian, Mehdi-Antoine  & Pascale
 
 using UnityEngine;
 using System.Collections;
