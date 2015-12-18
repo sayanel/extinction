@@ -44,7 +44,6 @@ namespace Extinction
             {
                 if ( Input.GetButton( "Jump" ) )
                 {
-                    Debug.Log( "Jump!" );
                     _survivor.jump();
                 }
             }
