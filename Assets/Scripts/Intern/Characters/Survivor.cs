@@ -13,14 +13,33 @@ namespace Extinction
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
-            private float _lifeMultiplier;
-            private float _stealthMultiplier;
-            private float _damageMultiplier;
-            private float _armorMultiplier;
+            private float _lifeMultiplier = 1;
+            private float _stealthMultiplier = 1;
+            private float _damageMultiplier = 1;
+            private float _armorMultiplier = 1;
+
+            [SerializeField]
+            private CharacterController _controller;
+
+            private Quaternion _quat = Quaternion.identity;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
+
+            public void Start()
+            {
+                if ( _controller != null ) return;
+
+                _controller = GetComponent<CharacterController>();
+
+                _orientation = Vector3.forward;
+            }
+
+            public void Update()
+            {
+                Debug.DrawLine( transform.position, transform.position + _orientation * 3, Color.black );
+            }
 
             public override void getDamage( int amount )
             {
@@ -29,7 +48,7 @@ namespace Extinction
 
             public override void move( Vector3 vec )
             {
-                throw new System.NotImplementedException();
+                _controller.Move( vec * Time.deltaTime );
             }
 
             public override void setOrientation( Vector3 orientation )
@@ -37,9 +56,19 @@ namespace Extinction
                 throw new System.NotImplementedException();
             }
 
+            public override Vector3 getOrientation()
+            {
+                return _orientation;
+            }
+
+            public void setOrientation( float verticalOrientation, float horizontalOrientation )
+            {
+                _orientation = Quaternion.Euler( -verticalOrientation, horizontalOrientation, 0 ) * Vector3.forward;
+            }
+
             public override void turn( float angle )
             {
-                throw new System.NotImplementedException();
+                transform.Rotate( Vector3.up, angle );
             }
 
             public override void activateSkill1()
@@ -50,6 +79,19 @@ namespace Extinction
             public override void activateSkill2()
             {
                 throw new System.NotImplementedException();
+            }
+
+            public void horizontalMovement( float horizontalValue )
+            {
+
+                Vector3 movement = new Vector3( _orientation.z, 0, - _orientation.x ) * horizontalValue * Time.deltaTime;
+                _controller.Move( movement );
+            }
+
+            public void verticalMovement( float verticalValue )
+            {
+                Vector3 movement = new Vector3(_orientation.x, 0, _orientation.z) * verticalValue * Time.deltaTime;
+                _controller.Move( movement );
             }
         }
     }

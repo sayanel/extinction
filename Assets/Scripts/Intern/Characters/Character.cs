@@ -60,7 +60,7 @@ namespace Extinction
             /// Default speed of a character, without any passive skill
             /// </summary>
             [SerializeField]
-            protected static float _defaultCharacterSpeed = 1;
+            protected static float _defaultCharacterSpeed = 2;
 
             // ----------------------------------------------------------------------------
             // ---------------------------------- METHODS ---------------------------------
@@ -88,6 +88,12 @@ namespace Extinction
             /// </summary>
             /// <param name="orientation"> orientation Vector </param>
             public abstract void setOrientation( Vector3 orientation );
+
+            /// <summary>
+            /// Returns the orientation vector of the character
+            /// </summary>
+            /// <returns></returns>
+            public abstract Vector3 getOrientation( );
 
             /// <summary>
             /// Decreases character's health
