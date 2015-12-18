@@ -1,4 +1,4 @@
-﻿// Created by Florian, Mehdi-Antoine  & Pascale
+﻿// @author: Florian, Mehdi-Antoine  & Pascale
 
 using UnityEngine;
 using System.Collections;
@@ -13,6 +13,7 @@ namespace Extinction
         /// </summary>
         public enum CharacterState
         {
+            IDLE
         }
 
         /// <summary>
@@ -28,18 +29,21 @@ namespace Extinction
             /// <summary>
             /// Max health that can have the character
             /// </summary>
-            protected static int _maxHealth;
+            [SerializeField]
+            protected static float _maxHealth = 100;
+
 
             /// <summary>
             /// Current health of the character
             /// </summary>
-            protected int _health;
+            [SerializeField]
+            protected float _health = 100;
 
             /// <summary>
             /// The current state of the character
             /// Can be used for the animation, sounds, etc. 
             /// </summary>
-            protected CharacterState _state;
+            protected CharacterState _state = CharacterState.IDLE;
 
             /// <summary>
             /// Position in the space
@@ -52,12 +56,11 @@ namespace Extinction
             /// </summary>
             protected Vector3 _orientation;
 
-            // ---------- Static values ---------
-
             /// <summary>
             /// Default speed of a character, without any passive skill
             /// </summary>
-            protected static float _defaultCharacterSpeed = 1;
+            [SerializeField]
+            protected static float _defaultCharacterSpeed = 2;
 
             // ----------------------------------------------------------------------------
             // ---------------------------------- METHODS ---------------------------------
@@ -85,6 +88,12 @@ namespace Extinction
             /// </summary>
             /// <param name="orientation"> orientation Vector </param>
             public abstract void setOrientation( Vector3 orientation );
+
+            /// <summary>
+            /// Returns the orientation vector of the character
+            /// </summary>
+            /// <returns></returns>
+            public abstract Vector3 getOrientation( );
 
             /// <summary>
             /// Decreases character's health
