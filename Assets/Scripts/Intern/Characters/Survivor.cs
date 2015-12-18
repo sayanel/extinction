@@ -19,6 +19,9 @@ namespace Extinction
             private float _armorMultiplier = 1;
 
             [SerializeField]
+            private float _speedMultiplier = 3;
+
+            [SerializeField]
             private CharacterController _controller;
 
             private Quaternion _quat = Quaternion.identity;
@@ -84,13 +87,13 @@ namespace Extinction
             public void horizontalMovement( float horizontalValue )
             {
 
-                Vector3 movement = new Vector3( _orientation.z, 0, - _orientation.x ) * horizontalValue * Time.deltaTime;
+                Vector3 movement = new Vector3( _orientation.z, 0, - _orientation.x ) * horizontalValue * _defaultCharacterSpeed * _speedMultiplier * Time.deltaTime;
                 _controller.Move( movement );
             }
 
             public void verticalMovement( float verticalValue )
             {
-                Vector3 movement = new Vector3(_orientation.x, 0, _orientation.z) * verticalValue * Time.deltaTime;
+                Vector3 movement = new Vector3( _orientation.x, 0, _orientation.z ) * verticalValue * _defaultCharacterSpeed * _speedMultiplier * Time.deltaTime;
                 _controller.Move( movement );
             }
         }
