@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Extinction {
     namespace FX{
-        public class FXManager: MonoBehaviour {
+        public class FXManager: Utils.SingletonMonoBehavior<FXManager> {
 
             /// <summary>
             /// Represents what prefab is associated with FXType
