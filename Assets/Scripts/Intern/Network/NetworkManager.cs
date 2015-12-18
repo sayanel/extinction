@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿// @author: Alex
+using UnityEngine;
 using System.Collections;
 
 namespace Extinction {
@@ -14,12 +15,17 @@ namespace Extinction {
 
             private static string roomName_startMenu = "StartMenuRoom";
             private static string roomName_mapAPO = "MapAPO";
-            public static PhotonPlayer localPlayer;
 
-            public NetworkManager() {
+            private NetworkInitializer _networkInitSurvivor; 
+            private NetworkInitializer _networkInitHerbie;
+
+            public void Awake() {
                 DontDestroyOnLoad(this);
+                _networkInitSurvivor = GetComponent<NetworkInitializerSurvivor>();
+                _networkInitHerbie = GetComponent<NetworkInitializerHerbie>();
+
             }
-            
+
             public static NetworkManager Instance {
                 get {
                     // lock if multithread context
@@ -28,7 +34,7 @@ namespace Extinction {
                             _instance = (NetworkManager) GameObject.FindObjectOfType(typeof(NetworkManager));
 
                             if (! _instance) {
-                                Debug.LogError("There needs to be one active MyClass script on a GameObject in your scene");
+                                Debug.LogError("The script NetworkManager must be attached to one GameObject");
                             }
                         }
                         return _instance;
@@ -41,9 +47,12 @@ namespace Extinction {
             /// AppID must be provided into PhotonServerSettings
             /// </summary>
             public void Start() {
-                PhotonNetwork.ConnectUsingSettings("v0.1");
-                localPlayer = PhotonNetwork.player;
-                Debug.Log("Connection to setup was initialized");
+                if (!PhotonNetwork.ConnectUsingSettings("v0.1")) {
+                    Debug.LogError("Connection to Photon has failed");
+                    return;
+                }
+
+                Debug.Log("Connection to Photon was initialized");
             }
 
             public void JoinRoom(string roomName) {
@@ -57,7 +66,15 @@ namespace Extinction {
 
             public override void OnJoinedRoom() {
                 base.OnJoinedRoom();
-                Debug.Log("The room " + PhotonNetwork.room.name + " was rejoined by " + localPlayer.name);
+                Debug.Log(PhotonNetwork.player.name + " rejoined the room " + PhotonNetwork.room.name);
+            }
+
+            public void CreateCharacter(string prefabName, Vector3 pos, Quaternion rot) {
+                GameObject go = PhotonNetwork.Instantiate(prefabName, pos, rot, 0);
+                //if(enumSurvivor)
+                //_networkInitSurvivor.Activate(go);
+                //else
+                //_networkInitHerbie.Activate(go);
             }
         }
     }

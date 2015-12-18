@@ -1,6 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿// @author: Alex
 
+using UnityEngine;
+using System.Collections;
 
 namespace Extinction {
     namespace Network {
