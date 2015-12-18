@@ -21,9 +21,6 @@ namespace Extinction
             private float _mouseSensitivity = 5;
 
             [SerializeField]
-            private float _maximumHorizontalRotation = 360;
-
-            [SerializeField]
             private float _maximumVerticalRotation = 60;
 
             private float _horizontalTranslation;
