@@ -9,24 +9,26 @@ using Extinction.Characters;
 namespace Extinction {
     namespace AI {
 
-        enum AIState
+        public enum AIState
         {
-            wait,
-            attack
+            WAIT,
+            ATTACK,
+            FOLLOW
         };
 
         public class Creaker : UncontrolableRobot
         {
             Transform _target;               // Reference to the player's position.
+            GameObject _survivor;
             NavMeshAgent _nav;              // Reference to the nav mesh agent.
-            
+
+            [SerializeField] private float _speed = 1;
+            AIState _state;
+
             const float min = .5f;
             const float max = 1.5f;
             //float detectionAngle = 40;
             float detectionRadius = 5;
-
-
-
 
             /// <summary>
             /// Initialize one creaker
@@ -34,17 +36,21 @@ namespace Extinction {
             public void Awake()
             {
 
-                _target = GameObject.FindGameObjectWithTag("Target").transform;
+                _target = GameObject.FindGameObjectWithTag("target").transform;
+                _survivor = GameObject.FindGameObjectWithTag("Player");
                 _nav = GetComponent<NavMeshAgent>();
-
+                _state = AIState.WAIT;
                 //detectionAngle *= Random.Range(min, max);
                 detectionRadius *= UnityEngine.Random.Range(min, max);
             }
 
-            void update()
+            void Update()
             {
-                // ... set the destination of the nav mesh agent to the player.
-                _nav.SetDestination(_target.position);
+                // ... set the destination of the nav mesh agent to the survivor.
+                if (_state == AIState.FOLLOW) {
+                    _nav.SetDestination(_survivor.transform.position);
+                }
+
 
             }
 
@@ -57,7 +63,13 @@ namespace Extinction {
 
                 //}
 
-                Debug.Log("Creaker.cs : VU!");
+                // If the entering collider is the player...
+                if (collision.gameObject == _survivor)
+                {
+                    _state = AIState.FOLLOW;
+                    _nav.SetDestination(_survivor.transform.position);
+                    Debug.Log("Creaker.cs : Je te suis !");
+                }
             }
 
             public override void addPotentialTarget(Character target)
