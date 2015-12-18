@@ -37,6 +37,16 @@ namespace Extinction
             {
                 processTranslateInputs();
                 processRotateInputs();
+                processMovementInputs();
+            }
+
+            public void processMovementInputs()
+            {
+                if ( Input.GetButton( "Jump" ) )
+                {
+                    Debug.Log( "Jump!" );
+                    _survivor.jump();
+                }
             }
 
             public void processTranslateInputs()

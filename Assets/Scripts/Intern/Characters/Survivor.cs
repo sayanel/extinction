@@ -24,7 +24,15 @@ namespace Extinction
             [SerializeField]
             private CharacterController _controller;
 
-            private Quaternion _quat = Quaternion.identity;
+            [SerializeField]
+            private float _gravity = 0.2f;
+
+            [SerializeField]
+            private float _jumpImpulse = 0.4f;
+
+            private float _verticalSpeed = 0;
+
+            private Vector3 _speed;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -37,11 +45,18 @@ namespace Extinction
                 _controller = GetComponent<CharacterController>();
 
                 _orientation = Vector3.forward;
+
+                _speed = Vector3.zero;
             }
 
             public void Update()
             {
-                Debug.DrawLine( transform.position, transform.position + _orientation * 3, Color.black );
+                _controller.Move( _speed );
+
+                applyGravity();
+
+                _speed.x = 0;
+                _speed.z = 0;
             }
 
             public override void getDamage( int amount )
@@ -86,15 +101,37 @@ namespace Extinction
 
             public void horizontalMovement( float horizontalValue )
             {
-
+                
                 Vector3 movement = new Vector3( _orientation.z, 0, - _orientation.x ) * horizontalValue * _defaultCharacterSpeed * _speedMultiplier * Time.deltaTime;
-                _controller.Move( movement );
+
+                _speed.x += movement.x;
+                _speed.z += movement.z;
             }
 
             public void verticalMovement( float verticalValue )
             {
                 Vector3 movement = new Vector3( _orientation.x, 0, _orientation.z ) * verticalValue * _defaultCharacterSpeed * _speedMultiplier * Time.deltaTime;
-                _controller.Move( movement );
+
+                _speed.x += movement.x;
+                _speed.z += movement.z;
+            }
+
+            public void jump()
+            {
+                if ( !_controller.isGrounded ) return;
+
+                _speed.y = _jumpImpulse * Time.deltaTime;
+            }
+
+            public void applyGravity()
+            {
+                if ( _controller.isGrounded )
+                {
+                    _speed.y = 0;
+                    return;
+                }
+
+                _speed.y -= _gravity * Time.deltaTime;
             }
         }
     }
