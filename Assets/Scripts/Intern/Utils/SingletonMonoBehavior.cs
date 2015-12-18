@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace Extinction {
     namespace Utils {
-        public class SingletonMonoBehavior<T> where T : MonoBehaviour {
+        public class SingletonMonoBehavior<T>: MonoBehaviour where T : MonoBehaviour {
             protected T _instance = null;
             private object _lock = new object();
             private static bool applicationIsQuitting = false;
