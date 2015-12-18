@@ -5,6 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+using Extinction.Herbie;
+
 namespace Extinction
 {
     namespace Characters
@@ -15,13 +17,32 @@ namespace Extinction
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
+            /// <summary>
+            /// canAttack is false if the special robot can't attack (robot shut down, destroy,...)
+            /// </summary>
+            [SerializeField]
+            private bool _canAttack = true;
+
             [SerializeField]
             private bool _isAlive = true;
+            public bool IsAlive
+            {
+                get{
+                    return _isAlive;
+                }
+            }
 
             [SerializeField]
             private List<Weapon> _weapons;
 
             private UnitBehaviour _unitBehaviour;
+
+            public UnitBehaviour UnitBehaviour
+            {
+                get { return _unitBehaviour; }
+                set { _unitBehaviour = value; }
+            }
+
 
             private NavMeshAgent _navMeshAgentComponent;
 
@@ -124,6 +145,71 @@ namespace Extinction
                 return _potentialTargets[index];
             }
 
+            public override Character getPriorityTarget()
+            {
+                if( _potentialTargets.Count > 0 )
+                    return _potentialTargets[0];
+                else
+                    return null;
+            }
+
+            /// <summary>
+            /// Update the targets, to remove hidden targets from target container, 
+            /// and move visible target from hiddenTarget to targets.
+            /// </summary>
+            void updateTargets()
+            {
+                for( int i = 0; i < _targets.Count; ++i )
+                {
+                    if( !Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _targets[i].transform.position, _detectionRadius ) )
+                    {
+                        _hiddenTargets.Add( _targets[i] );
+                        _targets.Remove( _targets[i] );
+                    }
+                }
+                for( int i = 0; i < _targets.Count; ++i )
+                {
+                    if( Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _hiddenTargets[i].transform.position, _detectionRadius ) )
+                    {
+                        _targets.Add( _hiddenTargets[i] );
+                        _hiddenTargets.Remove( _hiddenTargets[i] );
+                    }
+                }
+            }
+
+            /// <summary>
+            /// return true if this agent is able to attack this a weapon
+            /// </summary>
+            public bool canAttack()
+            {
+                if( _weapons.Count == 0 )
+                    return false;
+                if( !_canAttack )
+                    return false;
+
+                return true;
+            }
+
+            /// <summary>
+            /// return true if this agent can directly attack the target
+            /// </summary>
+            public bool canAttack( Character target )
+            {
+                if( _weapons.Count == 0 )
+                    return false;
+                if( !_canAttack )
+                    return false;
+
+                float distanceToTarget = Vector3.Distance( transform.position, target.transform.position );
+                foreach( Weapon weapon in _weapons )
+                {
+                    if( weapon.getRange() < distanceToTarget )
+                        return false;
+                }
+
+                return true;
+            }
+
             public override void attack()
             {
                 foreach(Weapon weapon in _weapons)
@@ -148,14 +234,6 @@ namespace Extinction
                 {
                     _isAlive = false;
                 }
-            }
-
-            public override Character getPriorityTarget()
-            {
-                if( _potentialTargets.Count > 0 )
-                    return _potentialTargets[0];
-                else
-                    return null;
             }
 
             public override void move( Vector3 vec )
@@ -189,26 +267,6 @@ namespace Extinction
                 {
                     Quaternion.RotateTowards( transform.rotation, Quaternion.EulerRotation( 0, angle, 0 ), _rotationSmoothFactor );
                     yield return new WaitForSeconds( 0.5f );
-                }
-            }
-
-            void updateTargets()
-            {
-                for(int i = 0; i < _targets.Count; ++i )
-                {
-                    if( !Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _targets[i].transform.position, _detectionRadius ) )
-                    {
-                        _hiddenTargets.Add( _targets[i] );
-                        _targets.Remove( _targets[i] );
-                    }
-                }
-                for( int i = 0; i < _targets.Count; ++i )
-                {
-                    if( Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _hiddenTargets[i].transform.position, _detectionRadius ) )
-                    {
-                        _targets.Add( _hiddenTargets[i] );
-                        _hiddenTargets.Remove( _hiddenTargets[i] );
-                    }
                 }
             }
 
