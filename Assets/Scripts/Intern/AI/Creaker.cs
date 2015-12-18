@@ -17,9 +17,9 @@ namespace Extinction {
 
         public class Creaker : UncontrolableRobot
         {
-
-            NavMeshAgent _nav;                   // Reference to the nav mesh agent.
-
+            Transform _target;               // Reference to the player's position.
+            NavMeshAgent _nav;              // Reference to the nav mesh agent.
+            
             const float min = .5f;
             const float max = 1.5f;
             //float detectionAngle = 40;
@@ -33,8 +33,19 @@ namespace Extinction {
             /// </summary>
             public void Awake()
             {
+
+                _target = GameObject.FindGameObjectWithTag("Target").transform;
+                _nav = GetComponent<NavMeshAgent>();
+
                 //detectionAngle *= Random.Range(min, max);
                 detectionRadius *= UnityEngine.Random.Range(min, max);
+            }
+
+            void update()
+            {
+                // ... set the destination of the nav mesh agent to the player.
+                _nav.SetDestination(_target.position);
+
             }
 
             public void OnCollisionEnter(Collision collision)

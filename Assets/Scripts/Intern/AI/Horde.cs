@@ -1,7 +1,7 @@
 ﻿// Created by Clement & Maximilien
 using UnityEngine;
 using System.Collections;
-using Boo.Lang;
+using System.Collections.Generic;
 
 namespace Extinction {
     namespace AI {
