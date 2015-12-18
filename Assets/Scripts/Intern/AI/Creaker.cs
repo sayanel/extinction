@@ -124,6 +124,11 @@ namespace Extinction {
             {
                 throw new NotImplementedException();
             }
+
+            public override Vector3 getOrientation()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
