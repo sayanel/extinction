@@ -30,14 +30,14 @@ namespace Extinction
             /// Max health that can have the character
             /// </summary>
             [SerializeField]
-            protected static int _maxHealth = 100;
+            protected static float _maxHealth = 100;
 
 
             /// <summary>
             /// Current health of the character
             /// </summary>
             [SerializeField]
-            protected int _health = 100;
+            protected float _health = 100;
 
             /// <summary>
             /// The current state of the character
