@@ -1,22 +1,32 @@
-﻿//@autor : Max, Clement 17/12/15
+﻿// Created by Clement & Maximilien
 //Last update : 17/12/2015
 
 using UnityEngine;
 using System.Collections;
+using System;
+using Extinction.Characters;
 
 namespace Extinction {
     namespace AI {
-        private class Creaker : Characters.Character {
 
-            enum AIState {
-               wait,
-               attack
-            };
+        enum AIState
+        {
+            wait,
+            attack
+        };
+
+        public class Creaker : UncontrolableRobot
+        {
+
+            NavMeshAgent _nav;                   // Reference to the nav mesh agent.
 
             const float min = .5f;
             const float max = 1.5f;
             //float detectionAngle = 40;
             float detectionRadius = 5;
+
+
+
 
             /// <summary>
             /// Initialize one creaker
@@ -24,7 +34,7 @@ namespace Extinction {
             public void Awake()
             {
                 //detectionAngle *= Random.Range(min, max);
-                detectionRadius *= Random.Range(min, max);
+                detectionRadius *= UnityEngine.Random.Range(min, max);
             }
 
             public void OnCollisionEnter(Collision collision)
@@ -39,9 +49,69 @@ namespace Extinction {
                 Debug.Log("Creaker.cs : VU!");
             }
 
-            public override void getDamage(int dmg)
+            public override void addPotentialTarget(Character target)
             {
+                throw new NotImplementedException();
+            }
 
+            public override void removePotentialTarget(Character target)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override Character getPriorityTarget()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override Character getTarget(int index)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void stopWalking()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void attack(Character target)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void attack()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void move(Vector3 vec)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void turn(float angle)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void setOrientation(Vector3 orientation)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void getDamage(int amount)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void activateSkill1()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void activateSkill2()
+            {
+                throw new NotImplementedException();
             }
         }
     }
