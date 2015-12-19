@@ -3,18 +3,12 @@
 using UnityEngine;
 using System.Collections;
 
+using Extinction.Enums;
+
 namespace Extinction
 {
     namespace Characters
     {
-        /// <summary>
-        /// The current state of the character
-        /// Can be used for the animation, sounds, etc. 
-        /// </summary>
-        public enum CharacterState
-        {
-            IDLE
-        }
 
         /// <summary>
         /// Abastract class that should be derived for all characters in the game :
@@ -32,6 +26,9 @@ namespace Extinction
             [SerializeField]
             protected static float _maxHealth = 100;
 
+            public static float MaxHealth{
+                get { return _maxHealth; }
+            }
 
             /// <summary>
             /// Current health of the character
@@ -39,22 +36,25 @@ namespace Extinction
             [SerializeField]
             protected float _health = 100;
 
+            public float Health{
+                get { return _health; }
+            }
+
+            /// <summary>
+            /// Parameter to quickly verify if this character is alive or dead.
+            /// </summary>
+            [SerializeField]
+            protected bool _isAlive = true;
+
+            public bool IsAlive{
+                get{ return _isAlive; }
+            }
+
             /// <summary>
             /// The current state of the character
             /// Can be used for the animation, sounds, etc. 
             /// </summary>
             protected CharacterState _state = CharacterState.IDLE;
-
-            /// <summary>
-            /// Position in the space
-            /// </summary>
-            protected Vector3 _position;
-
-            /// <summary>
-            /// Basically it's a lookat :
-            /// This attribute is the vector where the character is looking at
-            /// </summary>
-            protected Vector3 _orientation;
 
             /// <summary>
             /// Default speed of a character, without any passive skill
