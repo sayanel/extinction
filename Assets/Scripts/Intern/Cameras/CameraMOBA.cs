@@ -18,53 +18,60 @@ namespace Extinction
             /// if mouse pointer X position is greater than screenWidth - m_rightLimit, move the camera to the right
             /// </summary>
             [SerializeField]
-            private int m_rightLimit = 10;
+            private int _rightLimit = 10;
 
 
             /// <summary>
             /// if mouse pointer X position is less than m_leftLimit, move the camera to the left
             /// </summary>
             [SerializeField]
-            private int m_leftLimit = 10;
+            private int _leftLimit = 10;
 
             /// <summary>
             /// if mouse pointer Y position is less than m_topLimit, move the camera to the top
             /// </summary>
             [SerializeField]
-            private int m_topLimit = 10;
+            private int _topLimit = 10;
 
             /// <summary>
             /// if mouse pointer Y position is more than screenHeight - m_topLimit, move the camera to the bottom
             /// </summary>
             [SerializeField]
-            private int m_bottomLimit = 10;
+            private int _bottomLimit = 10;
 
             /// <summary>
             /// velocity of the camera
             /// </summary>
             [SerializeField]
-            private float m_velocity = 1.0F;
+            private float _velocity = 1.0F;
+            public float Velocity{
+                get{ return _velocity; }
+                set{ _velocity = value;}
+            }
 
             [SerializeField]
-            private float m_zoomMin = 10.0F;
+            private float _zoomSpeed = 0.1F;
 
             [SerializeField]
-            private float m_zoomMax = 90.0F;
+            private float _zoomMin = 10.0F;
 
             [SerializeField]
-            private float m_zoomStep = 0.1F;
+            private float _zoomMax = 90.0F;
 
             [SerializeField]
-            private float m_currentZoom = 60.0F;
+            private float _zoomStep = 0.1F;
 
             [SerializeField]
-            private bool m_hasChildCamera = true;
+            private float _currentZoom = 60.0F;
 
-            private Camera m_childCamera;
+            [SerializeField]
+            private bool _hasChildCamera = true;
 
-            private Vector2 m_direction;
+            private Camera _childCameraComponent;
 
-            private Camera m_thisCamera;
+            private Vector2 _direction;
+
+            private Camera _cameraComponent;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -72,27 +79,27 @@ namespace Extinction
 
             void Awake()
             {
-                m_thisCamera = GetComponent<Camera>();
-                _fieldOfView = m_thisCamera.fieldOfView;
+                _cameraComponent = GetComponent<Camera>();
+                _fieldOfView = _cameraComponent.fieldOfView;
 
                 //search into child object to find a child camera.
                 //if there is such a camera, store it in m_childCamera
-                if( m_hasChildCamera )
+                if( _hasChildCamera )
                 {
                     Camera[] cams = GetComponentsInChildren<Camera>();
                     foreach( Camera cam in cams )
                     {
-                        if( cam != m_thisCamera )
+                        if( cam != _cameraComponent )
                         {
-                            m_childCamera = cam;
+                            _childCameraComponent = cam;
                             //synchronize the field of view for the second camera : 
-                            m_childCamera.fieldOfView = _fieldOfView;
+                            _childCameraComponent.fieldOfView = _fieldOfView;
                             break;
                         }
                     }
                 }
 
-                m_currentZoom = m_zoomMax;
+                _currentZoom = _zoomMax;
 
                 zoom( 0 );
             }
@@ -100,18 +107,18 @@ namespace Extinction
             public override void setFieldOfView( float fieldOfView )
             {
                 //set fieldOfView member variable
-                _fieldOfView = Mathf.Clamp( fieldOfView, m_zoomMin, m_zoomMax );
+                _fieldOfView = Mathf.Clamp( fieldOfView, _zoomMin, _zoomMax );
 
                 //set fieldOfView of herbie's cameras
-                m_thisCamera.fieldOfView = fieldOfView;
+                _cameraComponent.fieldOfView = fieldOfView;
 
-                if( m_hasChildCamera )
-                    m_childCamera.fieldOfView = fieldOfView;
+                if( _hasChildCamera )
+                    _childCameraComponent.fieldOfView = fieldOfView;
             }
 
             /// <summary>
             /// Make a zoom in "time" second. 
-            /// The longer the time is, the smaller the deltaTime of the coroutine is, 
+            /// The longer the time is, the smaller the deltaTime of the coroutine is (ie : more steps in the coroutine), 
             /// with the following convention : One step each 0.1 second.
             /// </summary>
             /// <param name="targetFieldOfView"></param>
@@ -120,6 +127,18 @@ namespace Extinction
             {
                 //begin the coroutine, for a smooth zoom.
                 StartCoroutine( zoomCoroutine(targetFieldOfView, 0.1f/time) );
+            }
+
+            /// <summary>
+            /// Make a zoom in "time" second. 
+            /// The longer the time is, the smaller the deltaTime of the coroutine is (ie : more steps in the coroutine), 
+            /// with the following convention : One step each 0.1 second.
+            /// </summary>
+            /// <param name="targetFieldOfView"></param>
+            public void zoomSmooth( float targetFieldOfView )
+            {
+                //begin the coroutine, for a smooth zoom.
+                StartCoroutine( zoomCoroutine( targetFieldOfView, 0.1f / _zoomSpeed ) );
             }
 
             /// <summary>
@@ -133,7 +152,7 @@ namespace Extinction
                 float time = 0;
                 float begineFieldOfView = _fieldOfView;
                 while( Mathf.Approximately( _fieldOfView,  targetFieldOfView) 
-                    && _fieldOfView > m_zoomMin && _fieldOfView < m_zoomMax ) //between zoomMin and zoomMax
+                    && _fieldOfView > _zoomMin && _fieldOfView < _zoomMax ) //between zoomMin and zoomMax
                 {
                     _fieldOfView = Mathf.Lerp( begineFieldOfView, targetFieldOfView, time );
                     yield return new WaitForSeconds( deltaTime );
@@ -151,14 +170,14 @@ namespace Extinction
             {
                 if( delta < 0 )
                 {
-                    m_currentZoom += m_zoomStep;
+                    _currentZoom += _zoomStep;
                 }
                 else if( delta > 0 )
                 {
-                    m_currentZoom -= m_zoomStep;
+                    _currentZoom -= _zoomStep;
                 }
 
-                setFieldOfView( m_currentZoom );
+                setFieldOfView( _currentZoom );
             }
 
             /// <summary>
@@ -168,9 +187,9 @@ namespace Extinction
             /// <param name="zoomValue"></param>
             public void setZoom( float zoomValue )
             {
-                m_currentZoom = zoomValue;
+                _currentZoom = zoomValue;
 
-                setFieldOfView( m_currentZoom );
+                setFieldOfView( _currentZoom );
             }
 
             /// <summary>
@@ -180,29 +199,29 @@ namespace Extinction
             public override void setPosition( Vector3 position )
             {
                 //initialisation of the direction
-                m_direction = Vector2.zero;
+                _direction = Vector2.zero;
 
                 //update of the direction of the camera, based on the mouse position.
                 //No use of esle, because more than on instructions may be valid (diagonal direction)
-                if( position.x > m_thisCamera.pixelWidth - m_rightLimit )
+                if( position.x > _cameraComponent.pixelWidth - _rightLimit )
                 {
-                    m_direction += new Vector2( m_velocity, 0 );
+                    _direction += new Vector2( _velocity, 0 );
                 }
-                if( position.x < m_leftLimit )
+                if( position.x < _leftLimit )
                 {
-                    m_direction += new Vector2( -m_velocity, 0 );
+                    _direction += new Vector2( -_velocity, 0 );
                 }
-                if( position.y < m_topLimit )
+                if( position.y < _topLimit )
                 {
-                    m_direction += new Vector2( 0, -m_velocity );
+                    _direction += new Vector2( 0, -_velocity );
                 }
-                if( position.y > m_thisCamera.pixelHeight - m_bottomLimit )
+                if( position.y > _cameraComponent.pixelHeight - _bottomLimit )
                 {
-                    m_direction += new Vector2( 0, m_velocity );
+                    _direction += new Vector2( 0, _velocity );
                 }
 
                 //move the camera
-                transform.position += new Vector3( m_direction.x, 0, m_direction.y );
+                transform.position += new Vector3( _direction.x, 0, _direction.y );
             }
 
             public override void setRotation( Vector3 rotation )

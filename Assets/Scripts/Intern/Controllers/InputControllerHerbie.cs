@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Collections;
 using System;
 
+using Extinction.Cameras;
+
+
 namespace Extinction
 {
     namespace Controllers
@@ -14,8 +17,11 @@ namespace Extinction
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
-            private CameraMOBA _herbieCameraComponent;
-            private Herbie _herbieComponent;
+            [SerializeField]
+            private CameraMOBA _herbieCameraComponent = null;
+
+            [SerializeField]
+            private Characters.Herbie _herbieComponent = null;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -23,7 +29,11 @@ namespace Extinction
 
             void Awake()
             {
+                if( _herbieCameraComponent == null )
+                    _herbieCameraComponent = GetComponent<CameraMOBA>();
 
+                if( _herbieComponent == null )
+                    _herbieComponent = GetComponent<Characters.Herbie>();
             }
 
             public override void processUserInputs()
@@ -33,7 +43,7 @@ namespace Extinction
                 //zoom
                 if( !Mathf.Approximately( 0.0F, Input.GetAxis( "Mouse ScrollWheel" ) ) )
                 {
-                    _herbieCameraComponent.zoom( Input.GetAxis( "Mouse ScrollWheel" ) );
+                    _herbieCameraComponent.zoomSmooth( Input.GetAxis( "Mouse ScrollWheel" ) );
                 }
 
                 //position

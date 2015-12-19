@@ -101,8 +101,8 @@ namespace Extinction
             {
                 if( _unitBehaviour == _unitBehaviour.IDLE )
                 {
-                    if(_targets.Count > 0)
-                        _currentCommand = new CommandMoveAndAttack();
+                    if( _targets.Count > 0 )
+                        _currentCommand = new CommandMoveAndAttack( this, getPriorityTarget(), 0.5f );
                 }
             }
 
