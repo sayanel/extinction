@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System;
 
 using Extinction.Herbie;
+using Extinction.Enums;
 
 namespace Extinction
 {
@@ -24,25 +25,15 @@ namespace Extinction
             private bool _canAttack = true;
 
             [SerializeField]
-            private bool _isAlive = true;
-            public bool IsAlive
-            {
-                get{
-                    return _isAlive;
-                }
-            }
-
-            [SerializeField]
             private List<Weapon> _weapons;
 
-            private UnitBehaviour _unitBehaviour;
+            private UnitBehavior _unitBehavior;
 
-            public UnitBehaviour UnitBehaviour
+            public UnitBehavior UnitBehaviour
             {
-                get { return _unitBehaviour; }
-                set { _unitBehaviour = value; }
+                get { return _unitBehavior; }
+                set { _unitBehavior = value; }
             }
-
 
             private NavMeshAgent _navMeshAgentComponent;
 
@@ -99,7 +90,7 @@ namespace Extinction
 
             void AIUpdate()
             {
-                if( _unitBehaviour == _unitBehaviour.IDLE )
+                if( _unitBehavior == UnitBehavior.Idle )
                 {
                     if( _targets.Count > 0 )
                         _currentCommand = new CommandMoveAndAttack( this, getPriorityTarget(), 0.5f );
