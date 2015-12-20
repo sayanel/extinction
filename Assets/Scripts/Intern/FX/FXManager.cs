@@ -8,7 +8,7 @@ namespace Extinction {
         public class FXManager: Utils.SingletonMonoBehavior<FXManager> {
 
             /// <summary>
-            /// Represents what prefab is associated with FXType
+            /// Represents which prefab is associated with FXType
             /// Simply fill it in unity inspector
             /// Usefull to fill the FXPools afterall 
             /// </summary>
@@ -19,6 +19,9 @@ namespace Extinction {
             }
 
             [SerializeField]
+            private int _poolsSize;
+
+            [SerializeField]
             private List<FXModelsEntry> _FXModels;
             private Dictionary<Enums.FXType, FXPool> _FXPools;
 
@@ -27,15 +30,11 @@ namespace Extinction {
             /// </summary>
             private PhotonView _photonView;
 
-            [SerializeField]
-            private int _poolsSize;
-
             public void Start() {
                 _FXPools = new Dictionary<Enums.FXType, FXPool>();
                 foreach (FXModelsEntry model in _FXModels) {
                     _FXPools[model.type] = ScriptableObject.CreateInstance<FXPool>();
                     _FXPools[model.type].Init(model.prefab, _poolsSize);
-                    Debug.Log(_FXPools[model.type]);
                 }
             }
 

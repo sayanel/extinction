@@ -6,7 +6,7 @@ using System.Collections;
 namespace Extinction {
     namespace FX {
         /// <summary>
-        /// Represents a FXEvent: abstract.
+        /// Represents an fx event: abstract.
         /// On() and Off() must implement what components have to be enabled and disabled.
         /// </summary>
         public abstract class FXEvent: MonoBehaviour {

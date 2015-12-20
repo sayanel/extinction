@@ -18,21 +18,21 @@ namespace Extinction {
 
             private GameObject _fxObjectType;
 
+            /// <summary>
+            /// Constructs the Pool object
+            /// </summary>
             public void Init(GameObject fxObjectType, int poolSize) {
                 if (poolSize < 0)
                     throw new System.ArgumentOutOfRangeException();
 
                 _poolSize = poolSize;
                 _fxObjectType = fxObjectType;
-            }
-
-            /// <summary>
-            /// Constructs the Pool object
-            /// </summary>
-            public void Start() {
                 _poolCurrentIndex = -1;
                 _FXObjects = new List<GameObject>(_poolSize);
-                for(int i = 0; i< _poolSize; ++i) {
+
+
+                // fill the GameObject pool list according the fxObjectType 
+                for (int i = 0; i < _poolSize; ++i) {
                     GameObject go = (GameObject)Instantiate(_fxObjectType);
                     go.SetActive(false);
                     _FXObjects.Add(go);
