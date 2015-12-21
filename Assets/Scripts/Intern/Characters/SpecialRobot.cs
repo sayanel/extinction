@@ -61,9 +61,10 @@ namespace Extinction
             private Command _currentCommand = null;
 
             /// <summary>
-            /// current treaten command, if the robot is driven by the AI, not by a user input 
+            /// A reference to the HUDInfoDisplayer which is attached to this gameObject.
+            /// It is on this component that we can find all the displayable informations we will draw on GUI.
             /// </summary>
-            private Command _currentAICommand = null;
+            private HUDInfoDisplayer _hudInfoDisplayerComponent;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -85,6 +86,37 @@ namespace Extinction
                 if(_drivenByAI)
                 {
                     AIUpdate();
+                }
+                
+            }
+
+            /// <summary>
+            /// Execute the command given by the player.
+            /// If there is no command, turn the behaviour of this robot to idle (ie : driven by AI).
+            /// </summary>
+            void manualUpdate()
+            {
+                //Replace the current command if it is unasigned, or if the command has finished
+                if( _currentCommand == null || _currentCommand.IsFinished() )
+                {
+                    //if there is an other command to execute, set the current command and execute it
+                    if( _commandList.Count > 0 )
+                    {
+                        //properly end the current command
+                        if( _currentCommand != null )
+                            _currentCommand.End();
+
+                        //change the current command
+                        _currentCommand = _commandList.Dequeue();
+
+                        //Execute the new current command
+                        _currentCommand.Execute();
+                    }
+                    //no command are set, return to the idle behaviour
+                    else
+                    {
+                        idle();
+                    }
                 }
             }
 
@@ -261,24 +293,57 @@ namespace Extinction
                 }
             }
 
+            /// <summary>
+            /// Immediatly gives an order to the robot. 
+            /// This action remove all the previous commands given to this robot (clear command list).
+            /// </summary>
+            /// <param name="command"></param>
             public void setDirectCommand(Command command)
             {
-
+                clearCommand();
+                _currentCommand = command;
             }
 
-            public void addDirectCommand(Command command)
+            /// <summary>
+            /// Add a command to the command list. 
+            /// The commands of the list will be executed one after the other.
+            /// </summary>
+            /// <param name="command"></param>
+            public void addCommand(Command command)
             {
-
+                _commandList.Enqueue( command );
             }
 
+            /// <summary>
+            /// Remove all the commands of the list. 
+            /// Also remove the current command.
+            /// Automaticaly set the behaviour to idle. 
+            /// </summary>
             public void clearCommand()
             {
-
+                _commandList.Clear();
+                _currentCommand = null;
+                idle();
             }
 
+            /// <summary>
+            /// Make this robot have a idle behaviour.
+            /// ie : It is controlled by AI until the player give it an order. 
+            /// The AI of idling special robots is simple : They attack every target which are close enought.
+            /// </summary>
             public void idle()
             {
+                _unitBehavior = UnitBehavior.Idle;
+                _drivenByAI = true;
+            }
 
+            /// <summary>
+            /// return the HUDInfoDisplayer attached to this gameObject
+            /// </summary>
+            /// <returns></returns>
+            public HUDInfoDisplayer getHUDInfo()
+            {
+                return _hudInfoDisplayerComponent;
             }
 
         }
