@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 
 using Extinction.Characters;
+using Extinction.Enums;
 
 namespace Extinction
 {
@@ -24,7 +25,9 @@ namespace Extinction
             //ptr to coroutine to properly stop it
             private IEnumerator _moveAndAttackCoroutine;
 
-            //create the command with all the informations : 
+            /// <summary>
+            /// create the command with all the informations : 
+            /// </summary>
             public CommandMoveAndAttack( SpecialRobot actor, Character target, float aiDelay = 1 )
             {
                 _actor = actor;
@@ -32,9 +35,18 @@ namespace Extinction
                 _aiDelay = aiDelay;
             }
 
+            /// <summary>
+            /// create the command with all the informations, except the actor, which has to be set after : 
+            /// </summary>
+            public CommandMoveAndAttack( Character target, float aiDelay = 1 )
+            {
+                _target = target;
+                _aiDelay = aiDelay;
+            }
+
             public override void Execute()
             {
-                _actor.UnitBehaviour = UnitBehaviour.ATTACK;
+                _actor.UnitBehaviour = UnitBehavior.Attacking;
 
                 _moveAndAttackCoroutine = MoveAndAttackRoutine();
                 _actor.StartCoroutine( _moveAndAttackCoroutine );
@@ -72,6 +84,11 @@ namespace Extinction
             public override void End()
             {
                 _actor.StopCoroutine( _moveAndAttackCoroutine );
+            }
+
+            public override Command Clone()
+            {
+                return new CommandMoveAndAttack( _actor, _target, _aiDelay );
             }
         }
     }

@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 using Extinction.Characters;
 
@@ -16,6 +17,15 @@ namespace Extinction
         {
 
             // ----------------------------------------------------------------------------
+            // -------------------------------- ATTRIBUTES --------------------------------
+            // ----------------------------------------------------------------------------
+
+            /// <summary>
+            /// The unit which will follow the order
+            /// </summary>
+            protected SpecialRobot _actor;
+
+            // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
 
@@ -27,6 +37,17 @@ namespace Extinction
 
             //properly end the command
             public abstract void End();
+
+            public virtual void setActor(SpecialRobot specialRobot)
+            {
+                _actor = specialRobot;
+            }
+
+            /// <summary>
+            /// Clone design patern, to be able to make copy of an command.
+            /// </summary>
+            /// <returns></returns>
+            public abstract Command Clone();
         }
     }
 }

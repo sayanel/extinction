@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Collections;
 
 using Extinction.Characters;
+using Extinction.Enums;
+using System;
 
 namespace Extinction
 {
@@ -20,11 +22,6 @@ namespace Extinction
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
-            /// <summary>
-            /// The unit which will follow the order
-            /// </summary>
-            private SpecialRobot _actor;
-
             private Vector3 _targetPosition;
 
             // ----------------------------------------------------------------------------
@@ -40,9 +37,17 @@ namespace Extinction
                 _targetPosition = targetPosition;
             }
 
+            /// <summary>
+            /// create the command with all the informations, except the actor of the command, which has to be set after : 
+            /// </summary>
+            public CommandMove( Vector3 targetPosition )
+            {
+                _targetPosition = targetPosition;
+            }
+
             public override void Execute()
             {
-                _actor.UnitBehaviour = UnitBehaviour.MOVE;
+                _actor.UnitBehaviour = UnitBehavior.Moving;
 
                 _actor.move( _targetPosition );
             }
@@ -62,6 +67,11 @@ namespace Extinction
             public override void End()
             {
                 //nothing
+            }
+
+            public override Command Clone()
+            {
+                return new CommandMove( _actor, _targetPosition );
             }
         }
     }
