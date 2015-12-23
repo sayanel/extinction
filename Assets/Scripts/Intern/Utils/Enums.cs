@@ -4,19 +4,33 @@ using System.Collections;
 
 namespace Extinction {
     namespace Enums{
-        enum UnitBehavior {
+        public enum UnitBehavior {
             Idle,
             Moving,
             Attacking
         }
 
-        enum PlayerType {
+        public enum PlayerType {
             Survivor,
             Herbie
         }
 
-        enum AmmoType {
+        public enum AmmoType {
             Default
         }
+
+        public enum FXType {
+            ShootFX
+        }
+
+        /// <summary>
+        /// The current state of the character
+        /// Can be used for the animation, sounds, etc. 
+        /// </summary>
+        public enum CharacterState
+        {
+            IDLE
+        }
+
     }
 }
