@@ -17,13 +17,20 @@ namespace Extinction
         public class CommandMoveAndAttack : Command
         {
 
-            private SpecialRobot _actor;
+            // ----------------------------------------------------------------------------
+            // -------------------------------- ATTRIBUTES --------------------------------
+            // ----------------------------------------------------------------------------
+
             private Character _target;
             private bool _isFinished = false;
             //the delay between two update
             private float _aiDelay = 1;
             //ptr to coroutine to properly stop it
             private IEnumerator _moveAndAttackCoroutine;
+
+            // ----------------------------------------------------------------------------
+            // --------------------------------- METHODS ----------------------------------
+            // ----------------------------------------------------------------------------
 
             /// <summary>
             /// create the command with all the informations : 

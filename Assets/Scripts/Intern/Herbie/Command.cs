@@ -13,7 +13,7 @@ namespace Extinction
         /// <summary>
         /// An abstract Command class, to implement the Command Design Patern
         /// </summary>
-        public abstract class Command : ScriptableObject
+        public abstract class Command
         {
 
             // ----------------------------------------------------------------------------
