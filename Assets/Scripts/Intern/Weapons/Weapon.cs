@@ -52,10 +52,10 @@ namespace Extinction
             /// The range of the weapon.
             /// </summary>
             [SerializeField]
-            private float range = 1;
+            protected float _range = 1;
 
             public float Range{
-                get{ return range; }
+                get{ return _range; }
             }
 
             /// <summary>
