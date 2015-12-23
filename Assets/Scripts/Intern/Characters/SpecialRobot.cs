@@ -238,12 +238,12 @@ namespace Extinction
                 if( !_canAttack )
                     return false;
 
-                //float distanceToTarget = Vector3.Distance( transform.position, target.transform.position );
-                //foreach( Weapon weapon in _weapons )
-                //{
-                //    if( weapon.getRange() < distanceToTarget )
-                //        return false;
-                //}
+                float distanceToTarget = Vector3.Distance( transform.position, target.transform.position );
+                foreach( Weapon weapon in _weapons )
+                {
+                    if( weapon.Range < distanceToTarget )
+                        return false;
+                }
 
                 return true;
             }
