@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+using Extinction.Herbie;
+
 namespace Extinction
 {
     namespace Characters

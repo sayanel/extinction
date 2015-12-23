@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Extinction.Characters;
+using Extinction.Utils;
 
 namespace Extinction
 {
@@ -39,27 +40,6 @@ namespace Extinction
             private List<string> _selectableTags = new List<string>();
 
             [SerializeField]
-            private Material _lineMaterialSelection;
-
-            //property lineColor
-            [SerializeField]
-            private Color _lineColorSelection = Color.green;
-            public Color LineColorSelection
-            {
-                get
-                {
-                    return _lineColorSelection;
-                }
-                set
-                {
-                    _lineMaterialSelection.color = value;
-                    _lineColorSelection = value;
-                }
-            }
-
-            //endProperty lineColor
-
-            [SerializeField]
             private List<SpecialRobot> _selected = new List<SpecialRobot>();
 
             //GUI which will display the current selection
@@ -86,7 +66,6 @@ namespace Extinction
             void Start()
             {
                 transform.rotation = Quaternion.identity;
-                LineColorSelection = _lineColorSelection;
             }
 
             //remove the controle we have on each agent of the previous selection. 
@@ -116,9 +95,6 @@ namespace Extinction
                     transform.position = _triggerAnchor;
 
                     transform.localScale = new Vector3( 1, _triggerHeight, 1 );
-
-                    //m_thisTrigger.size = new Vector3(1, m_triggerHeight, 1);
-                    //m_thisTrigger.center = new Vector3(m_thisTrigger.size.x * 0.5F, 0, m_thisTrigger.size.z * 0.5F);
                 }
 
                 _thisTrigger.enabled = true;
@@ -139,8 +115,6 @@ namespace Extinction
 
                     transform.localScale = new Vector3( diagVector.x, _triggerHeight, diagVector.z );
 
-                    //m_thisTrigger.size = new Vector3(diagVector.x, m_triggerHeight, diagVector.z);
-                    //m_thisTrigger.center = new Vector3(m_thisTrigger.size.x * 0.5F, 0, m_thisTrigger.size.z * 0.5F);
                 }
             }
 
@@ -153,7 +127,7 @@ namespace Extinction
 
                 _thisTrigger.enabled = false;
 
-                updateGUI();
+                //updateGUI();
             }
 
             //update the visual of the gui with the new selection.
@@ -174,7 +148,7 @@ namespace Extinction
                     GameObject newIconeGameObject = new GameObject();
                     Image newIcone = newIconeGameObject.AddComponent<Image>();
 
-                    newIcone.sprite = _selected[0].getHUDInfo().getIcone();
+                    newIcone.sprite = _selected[0].getHUDInfo().Visual;
 
                     newIconeGameObject.transform.SetParent( _GUISelection );
                 }
@@ -206,26 +180,6 @@ namespace Extinction
                         {
                             _selected.Remove( selectedAgent );
                         }
-                    }
-                }
-            }
-
-            void Update()
-            {
-                //selection of gameEntities with correct tag
-                if( Input.GetMouseButtonDown( 0 ) )
-                {
-                    BeginSelection();
-                }
-                else if( _selecting )
-                {
-                    if( Input.GetMouseButtonUp( 0 ) )
-                    {
-                        EndSelection();
-                    }
-                    else
-                    {
-                        UpdateSelection();
                     }
                 }
             }

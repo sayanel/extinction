@@ -7,6 +7,8 @@ using System;
 
 using Extinction.Herbie;
 using Extinction.Enums;
+using Extinction.Weapons;
+using Extinction.HUD;
 
 namespace Extinction
 {
@@ -61,6 +63,11 @@ namespace Extinction
             private Command _currentCommand = null;
 
             /// <summary>
+            /// current treaten command, when the robot is driven by AI
+            /// </summary>
+            private Command _currentAICommand = null;
+
+            /// <summary>
             /// A reference to the HUDInfoDisplayer which is attached to this gameObject.
             /// It is on this component that we can find all the displayable informations we will draw on GUI.
             /// </summary>
@@ -73,12 +80,13 @@ namespace Extinction
             void Awake()
             {
                 _navMeshAgentComponent = GetComponent<NavMeshAgent>();
+                _hudInfoDisplayerComponent = GetComponent<HUDInfoDisplayer>();
             }
 
 
             void Start()
             {
-
+                
             }
 
             void Update()
@@ -87,7 +95,10 @@ namespace Extinction
                 {
                     AIUpdate();
                 }
-                
+                else
+                {
+                    manualUpdate();
+                }
             }
 
             /// <summary>
@@ -125,7 +136,11 @@ namespace Extinction
                 if( _unitBehavior == UnitBehavior.Idle )
                 {
                     if( _targets.Count > 0 )
-                        _currentCommand = new CommandMoveAndAttack( this, getPriorityTarget(), 0.5f );
+                    {
+                        _currentAICommand = new CommandMoveAndAttack( this, getPriorityTarget(), 0.5f );
+                        _currentAICommand.Execute();
+                        _unitBehavior = UnitBehavior.Attacking;
+                    }
                 }
             }
 
@@ -223,12 +238,12 @@ namespace Extinction
                 if( !_canAttack )
                     return false;
 
-                float distanceToTarget = Vector3.Distance( transform.position, target.transform.position );
-                foreach( Weapon weapon in _weapons )
-                {
-                    if( weapon.getRange() < distanceToTarget )
-                        return false;
-                }
+                //float distanceToTarget = Vector3.Distance( transform.position, target.transform.position );
+                //foreach( Weapon weapon in _weapons )
+                //{
+                //    if( weapon.getRange() < distanceToTarget )
+                //        return false;
+                //}
 
                 return true;
             }
@@ -279,8 +294,15 @@ namespace Extinction
 
             public override void turn( float angle )
             {
+                //remove the control over the rotation for the navMeshAgent in order to get a custom rotation to the robot
                 _navMeshAgentComponent.updateRotation = false;
-                StopCoroutine( _rotateRoutine );
+
+                //stop the previous rotation 
+                if( _rotateRoutine != null )
+                    StopCoroutine( _rotateRoutine );
+
+                //begin a new rotation
+                _rotateRoutine = rotateCoroutine( angle );
                 StartCoroutine( _rotateRoutine );
             }
 
@@ -288,7 +310,7 @@ namespace Extinction
             {
                 while(! transform.rotation .eulerAngles.y.AlmostEquals( angle , 0.05f) )
                 {
-                    Quaternion.RotateTowards( transform.rotation, Quaternion.EulerRotation( 0, angle, 0 ), _rotationSmoothFactor );
+                    Quaternion.RotateTowards( transform.rotation, Quaternion.Euler( 0, angle, 0 ), _rotationSmoothFactor );
                     yield return new WaitForSeconds( 0.5f );
                 }
             }
@@ -302,6 +324,12 @@ namespace Extinction
             {
                 clearCommand();
                 _currentCommand = command;
+                _drivenByAI = false;
+
+                if( _currentAICommand != null)
+                _currentAICommand.End();
+
+                _currentCommand.Execute();
             }
 
             /// <summary>
@@ -312,6 +340,10 @@ namespace Extinction
             public void addCommand(Command command)
             {
                 _commandList.Enqueue( command );
+                _drivenByAI = false;
+
+                if( _currentAICommand != null )
+                    _currentAICommand.End();
             }
 
             /// <summary>

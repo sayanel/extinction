@@ -13,7 +13,7 @@ namespace Extinction
 {
     namespace Controllers
     {
-        public class InputControllerherbie : InputController
+        public class InputControllerHerbie : InputController
         {
             // ----------------------------------------------------------------------------
             // -------------------------------- ATTRIBUTES --------------------------------
@@ -55,6 +55,11 @@ namespace Extinction
                 {
                     _selectorComponent = GetComponentInChildren<Selector>();
                 }
+            }
+
+            void Update()
+            {
+                processUserInputs();
             }
 
             public override void processUserInputs()
