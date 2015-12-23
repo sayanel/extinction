@@ -54,7 +54,7 @@ namespace Extinction
             [SerializeField]
             private float range = 1;
 
-            protected float Range{
+            public float Range{
                 get{ return range; }
             }
 
