@@ -52,17 +52,23 @@ namespace Extinction
             /// The range of the weapon.
             /// </summary>
             [SerializeField]
-            protected float _range = 1;
+            private float range = 1;
+
+            protected float Range{
+                get{ return range; }
+            }
 
             /// <summary>
             /// The last time we have shot with this weapon.
             /// </summary>
             protected float _previousTime;
 
+
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
-            
+
             /// <summary>
             /// Reaload the weapon.
             /// </summary>
