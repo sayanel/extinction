@@ -156,7 +156,7 @@ class LanguageTreeMVC(QtGui.QTreeWidget):
 
         jsElements = self.jsModel[LanguageTreeMVC.KEY_ELEMENTS]
         if jsElements.get(key):
-            confirmErase =  QtGui.QMessageBox.warning(self, "Warning erase value", "The Key: " + key + " will be erased (group)", QtGui.QMessageBox.Ok, QtGui.QMessageBox.Cancel)
+            confirmErase =  QtGui.QMessageBox.warning(self, "Warning erase value", "The Key: " + key + " will be erased", QtGui.QMessageBox.Ok, QtGui.QMessageBox.Cancel)
             if confirmErase != QtGui.QMessageBox.Ok:
                 return
 

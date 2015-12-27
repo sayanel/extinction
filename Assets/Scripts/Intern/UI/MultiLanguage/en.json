@@ -1,0 +1,18 @@
+{
+    "code": "en", 
+    "language": "English", 
+    "author": "ExtinctionTeam", 
+    "comments": "This is the reference json file. It will be used for MicrosoftTranslator API translation", 
+    "languageTargets": [
+        "fr", 
+        "da", 
+        "de", 
+        "it", 
+        "ja", 
+        "ru", 
+        "es", 
+        "zh-CHS"
+    ], 
+    "elements": {
+    }
+}
