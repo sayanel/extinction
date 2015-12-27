@@ -33,6 +33,9 @@ obj/
 .Trashes
 ehthumbs.db
 Thumbs.db
+Bin
+*.idea
+*.pyc
 
 # ========================== #
 # Extinction / Asset Folder  #
