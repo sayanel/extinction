@@ -120,10 +120,7 @@ def translatedWordsToJson(jsData, translatedWords):
     :param translatedWords: list
     """
     for idx, val in sorted(jsData.iteritems()):
-        if isinstance(val, dict):
-            translatedWordsToJson(val, translatedWords)
-        else:
-            jsData[idx] = translatedWords.pop(0)
+        jsData[idx] = translatedWords.pop(0)
 
 
 def getWordsToTranslate(jsData):
@@ -133,10 +130,7 @@ def getWordsToTranslate(jsData):
     """
     words = []
     for idx, val in sorted(jsData.iteritems()):
-        if isinstance(val, dict):
-            words += getWordsToTranslate(val)
-        else:
-            words.append(val)
+        words.append(val)
     return words
 
 

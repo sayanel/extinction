@@ -92,8 +92,8 @@ class LanguageTreeMVC(QtGui.QTreeWidget):
 
         # fill tree
         topLevelItem = LanguageTreeMVCItem(self, self.jsModel[LanguageTreeMVC.KEY_LANGUAGE])
-        self.fillTreeChildren(topLevelItem, self.jsModel[LanguageTreeMVC.KEY_ELEMENTS], _filter)
         self.addTopLevelItem(topLevelItem)
+        self.fillTreeChildren(topLevelItem, self.jsModel[LanguageTreeMVC.KEY_ELEMENTS], _filter)
         self.expandAll()
         self.resizeColumnToContents(0)
 
@@ -101,23 +101,40 @@ class LanguageTreeMVC(QtGui.QTreeWidget):
         """
         Recurse method used to construct the tree.
         The filter process is done here.
+        Constructs the tree as a real tree
+        Sample: Game.Menu.Options =>
+        Game
+           Menu
+               Options
         """
+
         _filter = str(_filter)
 
         for key, val in sorted(component.iteritems()):
             if _filter:
                 # Sample: if _fitler == Game.Menu.Options
-                # => Needs to match with Game and Game.Menu.Options.Title for instance
-                if not _filter.startswith(key) and not str(key).startswith(_filter):
+                if not str(key).startswith(_filter):
                     continue
 
-            parentTmp = LanguageTreeMVCItem(None, key)
-            parentItem.addChild(parentTmp)
+            splitKey = key.split('.')
+            finalKey = ""
 
-            if isinstance(val, dict):
-                self.fillTreeChildren(parentTmp, val, _filter)
-            else:
-                parentTmp.set(key, val)
+            parentItemTmp = parentItem
+            for idx, subkey in enumerate(splitKey):
+                finalKey += subkey
+                isRealFinalKey = idx == len(splitKey) - 1
+                item = LanguageTreeMVCItem(None, finalKey, val if isRealFinalKey else '')
+
+                if isRealFinalKey:
+                    parentItemTmp.addChild(item)
+                    break
+
+                subkeyAdded = self.findItems(finalKey, QtCore.Qt.MatchRecursive, 0)
+                if not subkeyAdded:
+                    parentItemTmp.addChild(item)
+
+                parentItemTmp = subkeyAdded[0] if subkeyAdded else item
+                finalKey += '.'
 
     def setupUI(self):
         self.headerItem().setText(0, "Keys")
@@ -127,7 +144,7 @@ class LanguageTreeMVC(QtGui.QTreeWidget):
     def addToModel(self, key, val):
         """
         Add key and val into jsData.
-        Dig into the jsData tree, creates key if not exists
+        Dig into the jsData tree
         Key based onto: A.B.C.D = val
         """
         key = str(key).strip()
@@ -137,45 +154,13 @@ class LanguageTreeMVC(QtGui.QTreeWidget):
             QtGui.QMessageBox.warning(self, "Add to Model failed", "Add to model fail: Key or value Empty")
             return
 
-        splitKeys = [x for x in key.split(".") if x]
-        if len(splitKeys) == 0:
-            QtGui.QMessageBox.warning(self, "Wrong input", "An error occurred while inserting into Tree: Wrong Key structure")
-            return
-
-        tmpSubKey = splitKeys[0]
-
-        # This will impact onto self.jsData because of reference when we update tmpJsDict
-        tmpJsDict = self.jsModel[LanguageTreeMVC.KEY_ELEMENTS]
-
-        if len(splitKeys) == 1:
-            tmpJsDict[tmpSubKey] = val
-            self.loadTree()
-            return
-
-        tmpSubKey = ""
-
-        # Ignore last key in loop: only when inserting into dict
-        # Dig into jsData and create key if not exists
-        for idx, subkey in enumerate(splitKeys[:-1]):
-            # # Reformat final key like Pascal style
-            tmpSubKey += subkey.capitalize()
-
-            # The key does not exist: create empty dir
-            if tmpSubKey not in tmpJsDict:
-                tmpJsDict[tmpSubKey] = {}
-
-            # Update handler dict
-            tmpJsDict = tmpJsDict[tmpSubKey]
-            tmpSubKey += '.'
-
-        # insert into jsData
-        tmpSubKey += splitKeys[-1].capitalize()
-        if tmpSubKey in tmpJsDict and isinstance(tmpJsDict[tmpSubKey], dict):
-            confirmErase =  QtGui.QMessageBox.warning(self, "Warning erase value", "The Value: " + tmpSubKey + " will be erased (group)", QtGui.QMessageBox.Ok, QtGui.QMessageBox.Cancel)
+        jsElements = self.jsModel[LanguageTreeMVC.KEY_ELEMENTS]
+        if jsElements.get(key):
+            confirmErase =  QtGui.QMessageBox.warning(self, "Warning erase value", "The Key: " + key + " will be erased (group)", QtGui.QMessageBox.Ok, QtGui.QMessageBox.Cancel)
             if confirmErase != QtGui.QMessageBox.Ok:
                 return
 
-        tmpJsDict[tmpSubKey] = val
+        jsElements[key] = val
 
         # Finally load tree
         self.loadTree()
@@ -187,28 +172,14 @@ class LanguageTreeMVC(QtGui.QTreeWidget):
             QtGui.QMessageBox.warning(self, "Remove from Model failed", "Remove from model failed: Key empty")
             return
 
-        splitKeys = key.split(".")
-
-        tmpDict = self.jsModel[LanguageTreeMVC.KEY_ELEMENTS]
-        tmpSubKey = ""
-
-        for subkey in splitKeys:
-            tmpSubKey += subkey
-            try:
-                tmpDict = tmpDict[tmpSubKey]
-                tmpSubKey += "."
-            except:
-                QtGui.QMessageBox.information(self, "Wrong Key", "The key " + tmpSubKey + " does not exist. Process canceled")
-                return
-
         confirmRemove = QtGui.QMessageBox.warning(self, "Remove ?", "Are you sure to remove " + key + " ?", QtGui.QMessageBox.Ok, QtGui.QMessageBox.Cancel)
         if confirmRemove != QtGui.QMessageBox.Ok:
             return
 
         try:
-            tmpDict.pop(tmpSubKey)
+            self.jsModel[LanguageTreeMVC.KEY_ELEMENTS].pop(key)
         except:
-            QtGui.QMessageBox.information(self, "Wrong Key", "The key " + tmpSubKey + " does not exist. Process canceled")
+            QtGui.QMessageBox.information(self, "Wrong Key", "The key " + key + " does not exist. Process canceled")
             return
 
         self.loadTree()
