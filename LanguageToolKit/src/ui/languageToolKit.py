@@ -79,9 +79,13 @@ class LanguageToolKit(QtGui.QWidget):
         self.jsonChooser.clicked.connect(self.onClickedJSON)
         self.treeComponent.itemClicked.connect(self.onItemClicked)
         self.updateJson.clicked.connect(lambda: self.treeComponent.addToModel(self.keyInput.text(), self.valueInput.text()))
-        self.saveButton.clicked.connect(lambda: self.treeComponent.saveJson(self.jsonPath.text()))
+        self.saveButton.clicked.connect(self.onSaveJSON)
         self.removeJson.clicked.connect(lambda: self.treeComponent.removeFromModel(self.keyInput.text()))
         self.keyInput.textChanged.connect(self.treeComponent.loadTree)
+
+    def onSaveJSON(self):
+        self.treeComponent.saveJson(self.jsonPath.text())
+        self.loadMeta()
 
     def loadFromCache(self):
         # Cache json path
