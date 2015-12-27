@@ -15,6 +15,25 @@ namespace Extinction {
             Herbie
         }
 
+        public enum CharacterType {
+            Survivor,
+            SpecialRobot,
+            Creaker,
+            Herbie
+        }
+
+        public enum CharacterName {
+            Hal,
+            Red,
+            Anton,
+            Malik,
+            RController,
+            RTank,
+            RScout,
+            Creaker,
+            Herbie
+        }
+
         public enum AmmoType {
             Default
         }
