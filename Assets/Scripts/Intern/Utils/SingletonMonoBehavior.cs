@@ -6,11 +6,11 @@ using System.Collections;
 namespace Extinction {
     namespace Utils {
         public class SingletonMonoBehavior<T>: MonoBehaviour where T : MonoBehaviour {
-            protected T _instance = null;
-            private object _lock = new object();
+            private static T _instance = null;
+            private static object _lock = new object();
             private static bool applicationIsQuitting = false;
 
-            public T Instance {
+            public static T Instance {
                 get {
                     if (applicationIsQuitting) {
                         Debug.LogWarning("[Singleton] Instance '" + typeof(T) + "' already destroyed on application quit. Won't create again - returning null.");
