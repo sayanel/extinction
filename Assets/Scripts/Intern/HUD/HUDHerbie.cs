@@ -92,7 +92,7 @@ namespace Extinction
 
                     newRobotWidget.transform.SetParent(_selectionHUD);
 
-                    _robotHudInfos.Add( robot.CharacterName, newRobotWidget );
+                    _robotHudInfos.Add( robot.getCharacterName, newRobotWidget );
                 }
             }
 
