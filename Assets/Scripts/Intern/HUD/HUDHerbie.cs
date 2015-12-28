@@ -35,13 +35,67 @@ namespace Extinction
             [SerializeField]
             Transform _selectionHUD;
 
+            /// <summary>
+            /// Tint color when a robot is selected.
+            /// </summary>
             [SerializeField]
             Color _selectedColor = new Color(0, 1, 0, 0.7f);
+
+            /// <summary>
+            /// Tint color when a robot is selected.
+            /// </summary>
             [SerializeField]
             Color _unselectedColor = new Color(1, 1, 1, 0.5f);
 
+            /// <summary>
+            /// Number of emplacements, on HUD, for robots.
+            /// </summary>
             [SerializeField]
             int nbRobotEmplacement = 3;
+
+            /// <summary>
+            /// The model for robot widget.
+            /// </summary>
+            [SerializeField]
+            private GameObject _robotWidgetModel;
+
+            /// <summary>
+            /// the path to find the robots visual widget from the root HerbieHUD
+            /// </summary>
+            [SerializeField]
+            private string _robotsVisualWidgetPath = "RobotVisual";
+
+            /// <summary>
+            /// the path to find the robots active skills widget from the root HerbieHUD
+            /// </summary>
+            [SerializeField]
+            private string _robotsActiveSkillsWidgetPath = "RobotActiveSkills";
+
+            public void initUI(List<SpecialRobot> robots)
+            {
+                foreach (SpecialRobot robot in robots)
+                {
+                    GameObject newRobotWidget = Instantiate(_robotWidgetModel);
+
+                    Transform robotVisual = newRobotWidget.transform.Find(_robotsVisualWidgetPath);
+
+                    Transform playerActiveSkill = newRobotWidget.transform.Find(_robotsActiveSkillsWidgetPath);
+                    Transform skillEmplacement01 = playerActiveSkill.GetChild(0);
+                    Transform skillEmplacement02 = playerActiveSkill.GetChild(1);
+
+                    robotVisual.GetComponent<Image>().sprite = robot.Visual;
+                    skillEmplacement01.GetComponent<Image>().sprite = robot.Skill01.Visual;
+                    skillEmplacement02.GetComponent<Image>().sprite = robot.Skill02.Visual;
+
+                    skillEmplacement01.GetComponent<Button>().onClick.AddListener(() => { robot.Skill01.beginActivation(); });
+                    skillEmplacement02.GetComponent<Button>().onClick.AddListener(() => { robot.Skill02.beginActivation(); });
+
+                    newRobotWidget.transform.SetParent(_selectionHUD);
+
+                    _robotHudInfos.Add( robot.CharacterName, newRobotWidget );
+                }
+            }
+
 
             void Awake()
             {
@@ -54,6 +108,7 @@ namespace Extinction
                     _selectionHUD = transform.Find("RobotSelection");
                 }
 
+                /*
                 //fill dictionary : 
                 _robotHudInfos.Clear();
                 for( int emplacementIndex = 0; emplacementIndex < 3; emplacementIndex++ )
@@ -74,10 +129,11 @@ namespace Extinction
                 {
                     Button skillButton = skill.GetComponent<Button>();
 
-                    skillButton.onClick.AddListener([]=>{
+                    skillButton.onClick.AddListener(()=>{
                         skill.BeginExecution();
                     });
                 }
+                */
             }
 
             void changeSelection(List<CharacterName> selectedNames)
@@ -87,12 +143,24 @@ namespace Extinction
                     if( selectedNames.Contains( robotInfo.Key ) )
                     {
                         //change the visual to show a selected color on the robot hud info
-                        robotInfo.Value.GetComponent<Image>().color = _unselectedColor;
+                        robotInfo.Value.GetComponent<Image>().color = _selectedColor;
+
+                        Button[] skillButtons = robotInfo.Value.GetComponents<Button>();
+                        foreach(Button button in skillButtons)
+                        {
+                            button.interactable = true;
+                        }
                     }
                     else
                     {
                         //change the visual to show an unselected color on the robot hud info
                         robotInfo.Value.GetComponent<Image>().color = _unselectedColor;
+
+                        Button[] skillButtons = robotInfo.Value.GetComponents<Button>();
+                        foreach (Button button in skillButtons)
+                        {
+                            button.interactable = false;
+                        }
                     }
                 }
             }
