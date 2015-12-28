@@ -11,14 +11,6 @@ namespace Extinction
     {
         public class MachineGun : ActiveSkill
         {
-            [SerializeField]
-            private Texture2D _cursorTexture;
-
-            [SerializeField]
-            private Vector2 _cursorHotSpot = Vector2.zero;
-
-            [SerializeField]
-            private CursorMode _cursorLockMode = CursorMode.Auto;
 
             [SerializeField]
             private GameObject _projectileModel;
@@ -52,7 +44,6 @@ namespace Extinction
                 StartCoroutine(fireCoroutine(position));
 
                 StartCoroutine(handleCooldown());
-                Cursor.SetCursor(null, _cursorHotSpot, _cursorLockMode);
             }
 
             IEnumerator fireCoroutine(Vector3 position)
@@ -71,7 +62,8 @@ namespace Extinction
                     if(Physics.Raycast(transform.position + new Vector3(fireOffset.x, 0, fireOffset.y), fireDirection, out hitInfo, _damageArea, LayerMask.GetMask(_damageFilter)))
                     {
                         Character hitCharacter = hitInfo.transform.GetComponent<Character>();
-                        hitCharacter.getDamage(_damage);
+                        //TODO : remove int cast
+                        hitCharacter.getDamage((int)_damage);
                     }
 
                     yield return new WaitForSeconds(Random.Range(0.1f, 0.8f));
