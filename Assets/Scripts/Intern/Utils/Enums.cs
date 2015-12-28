@@ -22,5 +22,15 @@ namespace Extinction {
         public enum FXType {
             ShootFX
         }
+
+        /// <summary>
+        /// The current state of the character
+        /// Can be used for the animation, sounds, etc. 
+        /// </summary>
+        public enum CharacterState
+        {
+            IDLE
+        }
+
     }
 }
