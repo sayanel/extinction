@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Extinction.FX;
+using Extinction.Enums;
+using Extinction.Characters;
+
 namespace Extinction
 {
     namespace Skills
@@ -60,14 +64,14 @@ namespace Extinction
                     Vector3 instantiatedPosition = new Vector3(position.x + fireOffset.x, position.y, position.z + fireOffset.y);
 
                     //activates FX on network
-                    FXManager.Activate(_fireFX, instantiatedPosition, Quaternion.LookRotation(fireDirection, Vector3.up));
+                    FXManager.Instance.Activate(_fireFX, instantiatedPosition, Quaternion.LookRotation(fireDirection, Vector3.up));
 
                     //deals damage to hit characters 
                     RaycastHit hitInfo;
                     if(Physics.Raycast(transform.position + new Vector3(fireOffset.x, 0, fireOffset.y), fireDirection, out hitInfo, _damageArea, LayerMask.GetMask(_damageFilter)))
                     {
                         Character hitCharacter = hitInfo.transform.GetComponent<Character>();
-                        hitCharacter.getDamage();
+                        hitCharacter.getDamage(_damage);
                     }
 
                     yield return new WaitForSeconds(Random.Range(0.1f, 0.8f));

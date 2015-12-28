@@ -11,26 +11,26 @@ namespace Extinction
             /// Is the active skill apply on the character which has launched the skill ?
             /// </summary>
             [SerializeField]
-            private bool _skillOnSelf = false;
+            protected bool _skillOnSelf = false;
 
             /// <summary>
             /// In case where the skill is launched on a position of battleground, this is the maximal distance from where the player can launch the skill.
             /// </summary>
             [SerializeField]
-            private float _activationDistance = 0;
+            protected float _activationDistance = 0;
 
             /// <summary>
             /// The time (in second) we have to wait befor we can launch this skill.
             /// </summary>
             [SerializeField]
-            private float _coolDown = 5;
+            protected float _coolDown = 5;
 
-            private float _currentCoolDown = 5;
+            protected float _currentCoolDown = 5;
 
             /// <summary>
             /// Set it to true if we can launch this skill (ie : the skill is available, and the cooldown is over).
             /// </summary>
-            private bool _activable = true;
+            protected bool _activable = true;
 
             public bool Activable{
                 get { return _activable; }

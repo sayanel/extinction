@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Extinction.FX;
+using Extinction.Enums;
+using Extinction.Characters;
+
 namespace Extinction
 {
     namespace Skills

@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Extinction.FX;
+using Extinction.Enums;
+using Extinction.Characters;
+
 namespace Extinction
 {
     namespace Skills
@@ -54,7 +58,7 @@ namespace Extinction
                     Vector2 randomPositionOffset = Random.insideUnitCircle * _damageArea;
                     Vector3 instantiatedPosition = new Vector3(_launcher.position.x + randomPositionOffset.x, _launcher.position.y , _launcher.position.z + randomPositionOffset.y);
                     //activate the FX on network
-                    FXManager.Activate(_launchingFX, instantiatedPosition, _launcher.rotation);
+                    FXManager.Instance.Activate(_launchingFX, instantiatedPosition, _launcher.rotation);
 
                     yield return new WaitForSeconds(Random.Range(0.1f, 0.8f));
                 }
