@@ -43,7 +43,6 @@ namespace Extinction
                 set { _unitBehaviour = value; }
             }
 
-
             private NavMeshAgent _navMeshAgentComponent;
 
             private IEnumerator _rotateRoutine;
@@ -73,6 +72,24 @@ namespace Extinction
             /// current treaten command, if the robot is driven by the AI, not by a user input 
             /// </summary>
             private Command _currentAICommand = null;
+
+            /// <summary>
+            /// A visual for the player
+            /// </summary>
+            [SerializeField]
+            private Sprite _visual;
+
+            public Sprite Visual{
+                get { return _visual; }
+            }
+
+            [SerializeField]
+            private CharacterName _characterName;
+
+            public CharacterName getCharacterName {
+                get { return _characterName; }
+            }
+
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
