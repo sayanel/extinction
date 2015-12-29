@@ -76,6 +76,12 @@ namespace Extinction
                 get { return _visual; }
             }
 
+            /// <summary>
+            /// A list with references to active skills of the robot.
+            /// </summary>
+            [SerializeField]
+            private List<ActiveSkill> _activeSkills = new List<ActiveSkill>();
+
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -364,6 +370,19 @@ namespace Extinction
             {
                 _unitBehavior = UnitBehavior.Idle;
                 _drivenByAI = true;
+            }
+
+            /// <summary>
+            /// Get one of the active skills of this robot, by index. 
+            /// </summary>
+            /// <param name="index"></param>
+            /// <returns></returns>
+            public ActiveSkill getActiveSkill(int index)
+            {
+                if (index >= 0 && index < _activeSkills.Count)
+                    return _activeSkills[index];
+                else
+                    return null;
             }
 
         }
