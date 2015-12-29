@@ -34,8 +34,7 @@ obj/
 ehthumbs.db
 Thumbs.db
 Bin
-*.idea
-*.pyc
+
 
 # ========================== #
 # Extinction / Asset Folder  #
@@ -50,3 +49,14 @@ Assets/Sounds*
 Assets/Textures*
 Assets/Standard Assets*
 Assets/Plugins*
+
+
+# ===================================== #
+# Extinction Language Tool Kit (python) #
+# ===================================== #
+
+*.idea
+*.pyc
+LanguageToolKit/build
+LanguageToolKit/dist
+**/ELTK-languageBackup/
