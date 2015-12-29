@@ -71,6 +71,7 @@ namespace Extinction
             /// <summary>
             /// The visual of this robot. 
             /// </summary>
+            [SerializeField]
             private Sprite _visual;
 
             public Sprite Visual{
@@ -386,6 +387,14 @@ namespace Extinction
                     return null;
             }
 
+            /// <summary>
+            /// Return the number of active skill own by this robot.
+            /// </summary>
+            /// <returns> The number of active skill own by this robot. </returns>
+            public int getActiveSkillCount()
+            {
+                return _activeSkills.Count;
+            }
         }
     }
 }
