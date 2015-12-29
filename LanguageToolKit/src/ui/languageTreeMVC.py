@@ -99,7 +99,7 @@ class LanguageTreeMVC(QtGui.QTreeWidget):
 
     def fillTreeChildren(self, parentItem, component, _filter=''):
         """
-        Recurse method used to construct the tree.
+        Method used to construct the tree.
         The filter process is done here.
         Constructs the tree as a real tree
         Sample: Game.Menu.Options =>
@@ -110,31 +110,50 @@ class LanguageTreeMVC(QtGui.QTreeWidget):
 
         _filter = str(_filter)
 
+
         for key, val in sorted(component.iteritems()):
             if _filter:
-                # Sample: if _fitler == Game.Menu.Options
+                # Sample: _fitler == Game.Menu.Options
                 if not str(key).startswith(_filter):
                     continue
 
+            # Constructs the tree as real tree with subkey:
+            # Sample: Game.Menu.Options =>
+            # Game -> Game.Menu -> Game.Menu.Options
             splitKey = key.split('.')
             finalKey = ""
 
             parentItemTmp = parentItem
             for idx, subkey in enumerate(splitKey):
                 finalKey += subkey
-                isRealFinalKey = idx == len(splitKey) - 1
+                isRealFinalKey = (idx == len(splitKey) - 1)
                 item = LanguageTreeMVCItem(None, finalKey, val if isRealFinalKey else '')
 
+                # If last element: add it to parentItemTmp and break
                 if isRealFinalKey:
                     parentItemTmp.addChild(item)
                     break
 
-                subkeyAdded = self.findItems(finalKey, QtCore.Qt.MatchRecursive, 0)
+                # Find potential parent subkey already added
+                subkeyAdded = self.findItemFromKey(parentItemTmp, finalKey)
+
+                # If not subkey added: add to parentItemTmp and set item as parentItemTmp
                 if not subkeyAdded:
                     parentItemTmp.addChild(item)
+                    parentItemTmp = item
+                else:
+                    parentItemTmp = subkeyAdded
 
-                parentItemTmp = subkeyAdded[0] if subkeyAdded else item
                 finalKey += '.'
+
+    def findItemFromKey(self, item, key, col=0):
+        for i in range(0, item.childCount()):
+            itemAdded = item.child(i)
+            if str(itemAdded.text(col)).strip() == key.strip():
+                return itemAdded
+        return None
+
+
 
     def setupUI(self):
         self.headerItem().setText(0, "Keys")
