@@ -71,6 +71,10 @@ namespace Extinction
             [SerializeField]
             private string _robotsActiveSkillsWidgetPath = "RobotActiveSkills";
 
+            //TEMPORARY
+            [SerializeField]
+            private List<SpecialRobot> _robotList = new List<SpecialRobot>();
+
             public void initUI(List<SpecialRobot> robots)
             {
                 foreach (SpecialRobot robot in robots)
@@ -95,7 +99,6 @@ namespace Extinction
                     _robotHudInfos.Add( robot.getCharacterName, newRobotWidget );
                 }
             }
-
 
             void Awake()
             {
@@ -134,6 +137,13 @@ namespace Extinction
                     });
                 }
                 */
+            }
+
+
+            void Start()
+            {
+                //TEMPORARY
+                initUI(_robotList);
             }
 
             void changeSelection(List<CharacterName> selectedNames)
