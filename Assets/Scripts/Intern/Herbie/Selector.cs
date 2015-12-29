@@ -7,6 +7,8 @@ using System.Collections.Generic;
 
 using Extinction.Characters;
 using Extinction.Utils;
+using Extinction.Enums;
+using Extinction.HUD;
 
 namespace Extinction
 {
@@ -44,7 +46,7 @@ namespace Extinction
 
             //GUI which will display the current selection
             [SerializeField]
-            private RectTransform _GUISelection;
+            private HUDHerbie _hudHerbie;
 
 
             // ----------------------------------------------------------------------------
@@ -127,31 +129,37 @@ namespace Extinction
 
                 _thisTrigger.enabled = false;
 
-                //updateGUI();
+                updateGUI();
             }
 
             //update the visual of the gui with the new selection.
             public void updateGUI()
             {
-                // TO COMPLETE
-
-                //clear the gui 
-                int childCount = _GUISelection.childCount;
-                for( int i = 0; i < childCount; i++ )
+                List<CharacterName> selectedNames = new List<CharacterName>();
+                foreach(SpecialRobot robot in _selected)
                 {
-                    Destroy( _GUISelection.GetChild( 0 ).gameObject );
+                    selectedNames.Add(robot.getCharacterName());
                 }
 
-                //repopulate gui with the first selected item
-                if( _selected.Count > 0 )
-                {
-                    GameObject newIconeGameObject = new GameObject();
-                    Image newIcone = newIconeGameObject.AddComponent<Image>();
+                _hudHerbie.changeSelection(selectedNames);
 
-                    newIcone.sprite = _selected[0].getHUDInfo().Visual;
+                ////clear the gui 
+                //int childCount = _GUISelection.childCount;
+                //for( int i = 0; i < childCount; i++ )
+                //{
+                //    Destroy( _GUISelection.GetChild( 0 ).gameObject );
+                //}
 
-                    newIconeGameObject.transform.SetParent( _GUISelection );
-                }
+                ////repopulate gui with the first selected item
+                //if( _selected.Count > 0 )
+                //{
+                //    GameObject newIconeGameObject = new GameObject();
+                //    Image newIcone = newIconeGameObject.AddComponent<Image>();
+
+                //    newIcone.sprite = _selected[0].getHUDInfo().Visual;
+
+                //    newIconeGameObject.transform.SetParent( _GUISelection );
+                //}
             }
 
             void OnTriggerEnter( Collider other )
