@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System;
 
 using Extinction.Herbie;
+using Extinction.Enums;
+using Extinction.Weapons;
+using Extinction.HUD;
 
 namespace Extinction
 {
@@ -24,23 +27,14 @@ namespace Extinction
             private bool _canAttack = true;
 
             [SerializeField]
-            private bool _isAlive = true;
-            public bool IsAlive
-            {
-                get{
-                    return _isAlive;
-                }
-            }
-
-            [SerializeField]
             private List<Weapon> _weapons;
 
-            private UnitBehaviour _unitBehaviour;
+            private UnitBehavior _unitBehavior;
 
-            public UnitBehaviour UnitBehaviour
+            public UnitBehavior UnitBehaviour
             {
-                get { return _unitBehaviour; }
-                set { _unitBehaviour = value; }
+                get { return _unitBehavior; }
+                set { _unitBehavior = value; }
             }
 
             private NavMeshAgent _navMeshAgentComponent;
@@ -69,25 +63,17 @@ namespace Extinction
             private Command _currentCommand = null;
 
             /// <summary>
-            /// current treaten command, if the robot is driven by the AI, not by a user input 
+            /// current treaten command, when the robot is driven by AI
             /// </summary>
             private Command _currentAICommand = null;
 
             /// <summary>
-            /// A visual for the player
+            /// The visual of this robot. 
             /// </summary>
-            [SerializeField]
             private Sprite _visual;
 
             public Sprite Visual{
                 get { return _visual; }
-            }
-
-            [SerializeField]
-            private CharacterName _characterName;
-
-            public CharacterName getCharacterName {
-                get { return _characterName; }
             }
 
 
@@ -100,26 +86,58 @@ namespace Extinction
                 _navMeshAgentComponent = GetComponent<NavMeshAgent>();
             }
 
-
-            void Start()
-            {
-
-            }
-
             void Update()
             {
                 if(_drivenByAI)
                 {
                     AIUpdate();
                 }
+                else
+                {
+                    manualUpdate();
+                }
+            }
+
+            /// <summary>
+            /// Execute the command given by the player.
+            /// If there is no command, turn the behaviour of this robot to idle (ie : driven by AI).
+            /// </summary>
+            void manualUpdate()
+            {
+                //Replace the current command if it is unasigned, or if the command has finished
+                if( _currentCommand == null || _currentCommand.IsFinished() )
+                {
+                    //if there is an other command to execute, set the current command and execute it
+                    if( _commandList.Count > 0 )
+                    {
+                        //properly end the current command
+                        if( _currentCommand != null )
+                            _currentCommand.End();
+
+                        //change the current command
+                        _currentCommand = _commandList.Dequeue();
+
+                        //Execute the new current command
+                        _currentCommand.Execute();
+                    }
+                    //no command are set, return to the idle behaviour
+                    else
+                    {
+                        idle();
+                    }
+                }
             }
 
             void AIUpdate()
             {
-                if( _unitBehaviour == _unitBehaviour.IDLE )
+                if( _unitBehavior == UnitBehavior.Idle )
                 {
-                    if(_targets.Count > 0)
-                        _currentCommand = new CommandMoveAndAttack();
+                    if( _targets.Count > 0 )
+                    {
+                        _currentAICommand = new CommandMoveAndAttack( this, getPriorityTarget(), 0.5f );
+                        _currentAICommand.Execute();
+                        _unitBehavior = UnitBehavior.Attacking;
+                    }
                 }
             }
 
@@ -220,7 +238,7 @@ namespace Extinction
                 float distanceToTarget = Vector3.Distance( transform.position, target.transform.position );
                 foreach( Weapon weapon in _weapons )
                 {
-                    if( weapon.getRange() < distanceToTarget )
+                    if( weapon.Range < distanceToTarget )
                         return false;
                 }
 
@@ -273,8 +291,15 @@ namespace Extinction
 
             public override void turn( float angle )
             {
+                //remove the control over the rotation for the navMeshAgent in order to get a custom rotation to the robot
                 _navMeshAgentComponent.updateRotation = false;
-                StopCoroutine( _rotateRoutine );
+
+                //stop the previous rotation 
+                if( _rotateRoutine != null )
+                    StopCoroutine( _rotateRoutine );
+
+                //begin a new rotation
+                _rotateRoutine = rotateCoroutine( angle );
                 StartCoroutine( _rotateRoutine );
             }
 
@@ -282,29 +307,72 @@ namespace Extinction
             {
                 while(! transform.rotation .eulerAngles.y.AlmostEquals( angle , 0.05f) )
                 {
-                    Quaternion.RotateTowards( transform.rotation, Quaternion.EulerRotation( 0, angle, 0 ), _rotationSmoothFactor );
+                    Quaternion.RotateTowards( transform.rotation, Quaternion.Euler( 0, angle, 0 ), _rotationSmoothFactor );
                     yield return new WaitForSeconds( 0.5f );
                 }
             }
 
+            /// <summary>
+            /// Immediatly gives an order to the robot. 
+            /// This action remove all the previous commands given to this robot (clear command list).
+            /// </summary>
+            /// <param name="command"></param>
             public void setDirectCommand(Command command)
             {
+                clearCommand();
+                _currentCommand = command;
+                _drivenByAI = false;
 
+                if( _currentAICommand != null)
+                _currentAICommand.End();
+
+                _currentCommand.Execute();
             }
 
-            public void addDirectCommand(Command command)
+            /// <summary>
+            /// Add a command to the command list. 
+            /// The commands of the list will be executed one after the other.
+            /// </summary>
+            /// <param name="command"></param>
+            public void addCommand(Command command)
             {
+                _commandList.Enqueue( command );
+                _drivenByAI = false;
 
+                if( _currentAICommand != null )
+                    _currentAICommand.End();
             }
 
+            /// <summary>
+            /// Remove all the commands of the list. 
+            /// Also remove the current command.
+            /// Automaticaly set the behaviour to idle. 
+            /// </summary>
             public void clearCommand()
             {
-
+                _commandList.Clear();
+                _currentCommand = null;
+                idle();
             }
 
+            /// <summary>
+            /// Make this robot have a idle behaviour.
+            /// ie : It is controlled by AI until the player give it an order. 
+            /// The AI of idling special robots is simple : They attack every target which are close enought.
+            /// </summary>
             public void idle()
             {
+                _unitBehavior = UnitBehavior.Idle;
+                _drivenByAI = true;
+            }
 
+            /// <summary>
+            /// return the HUDInfoDisplayer attached to this gameObject
+            /// </summary>
+            /// <returns></returns>
+            public HUDInfoDisplayer getHUDInfo()
+            {
+                return _hudInfoDisplayerComponent;
             }
 
         }
