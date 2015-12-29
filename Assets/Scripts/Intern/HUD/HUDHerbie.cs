@@ -97,7 +97,11 @@ namespace Extinction
 
                         skillEmplacement.GetComponent<Image>().sprite = robot.getActiveSkill(i).Visual;
 
-                        skillEmplacement.GetComponent<Button>().onClick.AddListener(() => { robot.getActiveSkill(i).beginActivation(); });
+                        SpecialRobot tmpRobot = robot;
+                        skillEmplacement.GetComponent<Button>().onClick.AddListener(() => {
+                            ActiveSkill tmpSkill = tmpRobot.getActiveSkill(i);
+                            tmpSkill.beginActivation();
+                        });
                     }
 
                     newRobotWidget.transform.SetParent(_selectionHUD);
