@@ -62,9 +62,35 @@ namespace Extinction
             [SerializeField]
             protected static float _defaultCharacterSpeed = 1;
 
+            /// <summary>
+            /// The name of this character.
+            /// </summary>
+            [SerializeField]
+            protected CharacterName _characterName;
+
+            /// <summary>
+            /// The type of this character.
+            /// </summary>
+            [SerializeField]
+            protected CharacterType _characterType;
+
             // ----------------------------------------------------------------------------
             // ---------------------------------- METHODS ---------------------------------
             // ----------------------------------------------------------------------------
+
+            /// <summary>
+            /// Return the name of this character.
+            /// </summary>
+            /// <returns></returns>
+            public CharacterName getCharacterName()
+            {
+                return _characterName;
+            }
+
+            public CharacterType getCharacterType()
+            {
+                return _characterType;
+            }
 
             /// <summary>
             /// This method must be derived to describe how to move a character
