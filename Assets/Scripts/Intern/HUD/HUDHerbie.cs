@@ -92,11 +92,13 @@ namespace Extinction
                     Transform skillEmplacement02 = playerActiveSkill.GetChild(1);
 
                     robotVisual.GetComponent<Image>().sprite = robot.Visual;
-                    skillEmplacement01.GetComponent<Image>().sprite = robot.getActiveSkill(0).Visual;
-                    skillEmplacement02.GetComponent<Image>().sprite = robot.getActiveSkill(1).Visual;
 
-                    skillEmplacement01.GetComponent<Button>().onClick.AddListener(() => { robot.getActiveSkill(0).beginActivation(); });
-                    skillEmplacement02.GetComponent<Button>().onClick.AddListener(() => { robot.getActiveSkill(1).beginActivation(); });
+                    for(int i = 0; i < Mathf.Min(robot.getActiveSkillCount(), 2); ++i)
+                    {
+                        skillEmplacement01.GetComponent<Image>().sprite = robot.getActiveSkill(i).Visual;
+
+                        skillEmplacement01.GetComponent<Button>().onClick.AddListener(() => { robot.getActiveSkill(i).beginActivation(); });
+                    }
 
                     newRobotWidget.transform.SetParent(_selectionHUD);
 
