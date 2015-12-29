@@ -9,6 +9,7 @@ using Extinction.Herbie;
 using Extinction.Enums;
 using Extinction.Weapons;
 using Extinction.HUD;
+using Extinction.Skills;
 
 namespace Extinction
 {
