@@ -366,15 +366,6 @@ namespace Extinction
                 _drivenByAI = true;
             }
 
-            /// <summary>
-            /// return the HUDInfoDisplayer attached to this gameObject
-            /// </summary>
-            /// <returns></returns>
-            public HUDInfoDisplayer getHUDInfo()
-            {
-                return _hudInfoDisplayerComponent;
-            }
-
         }
     }
 }
