@@ -16,14 +16,8 @@ namespace Extinction {
             private static string roomName_startMenu = "StartMenuRoom";
             private static string roomName_mapAPO = "MapAPO";
 
-            private NetworkInitializer _networkInitSurvivor; 
-            private NetworkInitializer _networkInitHerbie;
-
             public void Awake() {
                 DontDestroyOnLoad(this);
-                _networkInitSurvivor = GetComponent<NetworkInitializerSurvivor>();
-                _networkInitHerbie = GetComponent<NetworkInitializerHerbie>();
-
             }
 
             public static NetworkManager Instance {
@@ -71,10 +65,7 @@ namespace Extinction {
 
             public void CreateCharacter(string prefabName, Vector3 pos, Quaternion rot) {
                 GameObject go = PhotonNetwork.Instantiate(prefabName, pos, rot, 0);
-                //if(enumSurvivor)
-                //_networkInitSurvivor.Activate(go);
-                //else
-                //_networkInitHerbie.Activate(go);
+                //((INetworkInitializerPrefab)(go.GetComponent<Character>())).Activate();
             }
         }
     }
