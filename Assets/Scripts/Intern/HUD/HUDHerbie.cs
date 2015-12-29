@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 using Extinction.Enums;
 using Extinction.Characters;
+using Extinction.Skills;
 
 namespace Extinction
 {
