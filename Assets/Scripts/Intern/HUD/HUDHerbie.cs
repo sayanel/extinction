@@ -161,7 +161,7 @@ namespace Extinction
                         //change the visual to show a selected color on the robot hud info
                         robotInfo.Value.GetComponent<Image>().color = _selectedColor;
 
-                        Button[] skillButtons = robotInfo.Value.GetComponents<Button>();
+                        Button[] skillButtons = robotInfo.Value.GetComponentsInChildren<Button>();
                         foreach(Button button in skillButtons)
                         {
                             button.interactable = true;
@@ -172,7 +172,7 @@ namespace Extinction
                         //change the visual to show an unselected color on the robot hud info
                         robotInfo.Value.GetComponent<Image>().color = _unselectedColor;
 
-                        Button[] skillButtons = robotInfo.Value.GetComponents<Button>();
+                        Button[] skillButtons = robotInfo.Value.GetComponentsInChildren<Button>();
                         foreach (Button button in skillButtons)
                         {
                             button.interactable = false;
