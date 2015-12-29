@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Extinction.Enums;
+using Extinction.Characters;
 
 namespace Extinction
 {
@@ -20,6 +21,9 @@ namespace Extinction
             [SerializeField]
             private List<RobotHUDInfo> _robotHudInfoList = new List<RobotHUDInfo>();
 
+            /// <summary>
+            /// A dictionary to store references to hud widgets representing each robot. 
+            /// </summary>
             private Dictionary<CharacterName, Transform> _robotHudInfos = new Dictionary<CharacterName, Transform>();
 
 
@@ -88,15 +92,15 @@ namespace Extinction
                     Transform skillEmplacement02 = playerActiveSkill.GetChild(1);
 
                     robotVisual.GetComponent<Image>().sprite = robot.Visual;
-                    skillEmplacement01.GetComponent<Image>().sprite = robot.Skill01.Visual;
-                    skillEmplacement02.GetComponent<Image>().sprite = robot.Skill02.Visual;
+                    skillEmplacement01.GetComponent<Image>().sprite = robot.getActiveSkill(0).Visual;
+                    skillEmplacement02.GetComponent<Image>().sprite = robot.getActiveSkill(1).Visual;
 
-                    skillEmplacement01.GetComponent<Button>().onClick.AddListener(() => { robot.Skill01.beginActivation(); });
-                    skillEmplacement02.GetComponent<Button>().onClick.AddListener(() => { robot.Skill02.beginActivation(); });
+                    skillEmplacement01.GetComponent<Button>().onClick.AddListener(() => { robot.getActiveSkill(0).beginActivation(); });
+                    skillEmplacement02.GetComponent<Button>().onClick.AddListener(() => { robot.getActiveSkill(1).beginActivation(); });
 
                     newRobotWidget.transform.SetParent(_selectionHUD);
 
-                    _robotHudInfos.Add( robot.getCharacterName, newRobotWidget );
+                    _robotHudInfos.Add( robot.getCharacterName(), newRobotWidget.transform );
                 }
             }
 
