@@ -68,10 +68,14 @@ namespace Extinction
             private Command _currentAICommand = null;
 
             /// <summary>
-            /// A reference to the HUDInfoDisplayer which is attached to this gameObject.
-            /// It is on this component that we can find all the displayable informations we will draw on GUI.
+            /// The visual of this robot. 
             /// </summary>
-            private HUDInfoDisplayer _hudInfoDisplayerComponent;
+            private Sprite _visual;
+
+            public Sprite Visual{
+                get { return _visual; }
+            }
+
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -80,13 +84,6 @@ namespace Extinction
             void Awake()
             {
                 _navMeshAgentComponent = GetComponent<NavMeshAgent>();
-                _hudInfoDisplayerComponent = GetComponent<HUDInfoDisplayer>();
-            }
-
-
-            void Start()
-            {
-                
             }
 
             void Update()
@@ -367,15 +364,6 @@ namespace Extinction
             {
                 _unitBehavior = UnitBehavior.Idle;
                 _drivenByAI = true;
-            }
-
-            /// <summary>
-            /// return the HUDInfoDisplayer attached to this gameObject
-            /// </summary>
-            /// <returns></returns>
-            public HUDInfoDisplayer getHUDInfo()
-            {
-                return _hudInfoDisplayerComponent;
             }
 
         }
