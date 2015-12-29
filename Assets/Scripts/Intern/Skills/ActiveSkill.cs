@@ -8,6 +8,16 @@ namespace Extinction
         public abstract class ActiveSkill : MonoBehaviour
         {
             /// <summary>
+            /// A visual for the skill. 
+            /// </summary>
+            [SerializeField]
+            protected Sprite _visual;
+
+            public Sprite Visual{
+                get{ return _visual; }
+            }
+
+            /// <summary>
             /// Is the active skill apply on the character which has launched the skill ?
             /// </summary>
             [SerializeField]
