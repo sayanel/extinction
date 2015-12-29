@@ -1,6 +1,7 @@
 ﻿// @author : florian
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System;
 
@@ -69,7 +70,9 @@ namespace Extinction
                 //zoom
                 if( !Mathf.Approximately( 0.0F, Input.GetAxis( "Mouse ScrollWheel" ) ) )
                 {
-                    _herbieCameraComponent.zoomSmooth( Input.GetAxis( "Mouse ScrollWheel" ) );
+                    if (!EventSystem.current.IsPointerOverGameObject())
+                        _herbieCameraComponent.zoom(Input.GetAxis("Mouse ScrollWheel"));
+                        //_herbieCameraComponent.zoomSmooth( Input.GetAxis( "Mouse ScrollWheel" ) );
                 }
 
                 //position
@@ -78,7 +81,8 @@ namespace Extinction
                 //Selector Inputs : 
                 if( Input.GetMouseButtonDown( 0 ) )
                 {
-                    _selectorComponent.BeginSelection();
+                    if (!EventSystem.current.IsPointerOverGameObject())
+                        _selectorComponent.BeginSelection();
                 }
                 else if( _selectorComponent.Selecting )
                 {
@@ -93,7 +97,8 @@ namespace Extinction
                 }
 
                 //SpecialRobots Inputs
-                if( Input.GetMouseButtonDown( 1 ) )
+                if( Input.GetMouseButtonDown( 1 ) && 
+                    !EventSystem.current.IsPointerOverGameObject())
                 {
                     if( checkMouseTarget( out m_mouseTargetInfo ) ) // first step : rayCast and store information on the mouseTargetInfo
                     {

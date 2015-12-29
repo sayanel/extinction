@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 namespace Extinction
@@ -73,6 +74,8 @@ namespace Extinction
 
             private Camera _cameraComponent;
 
+            private Queue<float> _zoomQueue = new Queue<float>();
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -126,7 +129,7 @@ namespace Extinction
             public override void zoom( float targetFieldOfView, float time )
             {
                 //begin the coroutine, for a smooth zoom.
-                StartCoroutine( zoomCoroutine(targetFieldOfView, 0.1f/time) );
+                zoom(targetFieldOfView);
             }
 
             /// <summary>
@@ -137,8 +140,16 @@ namespace Extinction
             /// <param name="targetFieldOfView"></param>
             public void zoomSmooth( float targetFieldOfView )
             {
+                targetFieldOfView *= _zoomStep;
                 //begin the coroutine, for a smooth zoom.
-                StartCoroutine( zoomCoroutine( targetFieldOfView, 0.1f / _zoomSpeed ) );
+                if (_zoomQueue.Count == 0)
+                {
+                    _zoomQueue.Enqueue(targetFieldOfView);
+                    StartCoroutine(zoomCoroutine(0.1f / _zoomSpeed));
+                }
+                else
+                    _zoomQueue.Enqueue(targetFieldOfView);
+
             }
 
             /// <summary>
@@ -147,16 +158,33 @@ namespace Extinction
             /// <param name="targetFieldOfView"> The desired field of view at the end of zoom processing. </param>
             /// <param name="deltaTime"> The time between two calls of the routine. </param>
             /// <returns></returns>
-            public IEnumerator zoomCoroutine( float targetFieldOfView, float deltaTime)
+            public IEnumerator zoomCoroutine( float deltaTime)
             {
-                float time = 0;
-                float begineFieldOfView = _fieldOfView;
-                while( Mathf.Approximately( _fieldOfView,  targetFieldOfView) 
-                    && _fieldOfView > _zoomMin && _fieldOfView < _zoomMax ) //between zoomMin and zoomMax
+                for(int i = 0; i < _zoomQueue.Count; i++)
                 {
-                    _fieldOfView = Mathf.Lerp( begineFieldOfView, targetFieldOfView, time );
-                    yield return new WaitForSeconds( deltaTime );
-                    time += deltaTime;
+                    float targetFieldOfView = _zoomQueue.Dequeue() + _fieldOfView;
+
+                    float time = 0;
+                    float beginFieldOfView = _fieldOfView;
+                    while (!Mathf.Approximately(_fieldOfView, targetFieldOfView))
+                    {
+                        _fieldOfView = Mathf.Lerp(beginFieldOfView, targetFieldOfView, time);
+
+                        //keep field of view between zoom min and zoom max
+                        if (_fieldOfView < _zoomMin)
+                        {
+                            _fieldOfView = _zoomMin;
+                            yield return null;
+                        }
+                        else if (_fieldOfView > _zoomMax)
+                        {
+                            _fieldOfView = _zoomMax;
+                            yield return null;
+                        }
+
+                        time += deltaTime;
+                        yield return new WaitForSeconds(deltaTime);
+                    }
                 }
             }
 
@@ -166,7 +194,7 @@ namespace Extinction
             /// For a smooth zoom, see the "public override void zoom( float targetFieldOfView, float time )" methode.
             /// </summary>
             /// <param name="delta"> camera's field of view will be incremented/decremented with this value. </param>
-            void zoom( float delta )
+            public void zoom( float delta )
             {
                 if( delta < 0 )
                 {

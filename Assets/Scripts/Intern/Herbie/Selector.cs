@@ -32,7 +32,9 @@ namespace Extinction
             }
 
             private Vector2 _beginPoint;
+            private Vector2 _beginPointScreenSpace;
             private Vector2 _endPoint;
+            private Vector2 _endPointScreenSpace;
 
             private BoxCollider _thisTrigger;
 
@@ -47,6 +49,11 @@ namespace Extinction
             //GUI which will display the current selection
             [SerializeField]
             private HUDHerbie _hudHerbie;
+
+            [SerializeField]
+            private Transform _cameraTransform;
+
+            private Vector3 _cameraBeginPosition;
 
 
             // ----------------------------------------------------------------------------
@@ -80,11 +87,13 @@ namespace Extinction
             {
                 _selecting = true;
 
-                _beginPoint.x = Input.mousePosition.x;
-                _beginPoint.y = Input.mousePosition.y;
+                _cameraBeginPosition = _cameraTransform.position;
 
-                _endPoint.x = Input.mousePosition.x;
-                _endPoint.y = Input.mousePosition.y;
+                _beginPointScreenSpace.x = Input.mousePosition.x;
+                _beginPointScreenSpace.y = Input.mousePosition.y;
+
+                _endPointScreenSpace.x = Input.mousePosition.x;
+                _endPointScreenSpace.y = Input.mousePosition.y;
 
                 clearSelection();
 
@@ -104,8 +113,24 @@ namespace Extinction
 
             public void UpdateSelection()
             {
-                _endPoint.x = Input.mousePosition.x;
-                _endPoint.y = Input.mousePosition.y;
+                Vector3 cameraPosBegin = Camera.main.WorldToScreenPoint(_cameraBeginPosition);
+                Vector3 cameraPosEnd = Camera.main.WorldToScreenPoint(_cameraTransform.position);
+                Vector3 cameraOffset = cameraPosEnd - cameraPosBegin;
+
+                _beginPoint.x = _beginPointScreenSpace.x - cameraOffset.x;
+                _beginPoint.y = _beginPointScreenSpace.y - cameraOffset.y;
+
+                _endPointScreenSpace.x = Input.mousePosition.x;
+                _endPointScreenSpace.y = Input.mousePosition.y;
+
+                _endPoint.x = _endPointScreenSpace.x;
+                _endPoint.y = _endPointScreenSpace.y;
+
+                Debug.Log("beginPoint = "+_beginPoint);
+                Debug.Log("endPoint = "+_endPoint);
+                Debug.Log("beginPointScreenSpace = " + _beginPointScreenSpace);
+                Debug.Log("endPointScreenSpace = " + _endPointScreenSpace);
+
 
                 Ray selectionRay = Camera.main.ScreenPointToRay( Input.mousePosition );
                 RaycastHit hitInfo;
@@ -123,10 +148,6 @@ namespace Extinction
             public void EndSelection()
             {
                 _selecting = false;
-
-                _endPoint.x = Input.mousePosition.x;
-                _endPoint.y = Input.mousePosition.y;
-
                 _thisTrigger.enabled = false;
 
                 updateGUI();
@@ -195,7 +216,7 @@ namespace Extinction
             void OnGUI()
             {
                 if( _selecting )
-                    GUIUtils.DrawScreenRectBorder( new Rect( _beginPoint.x, Camera.main.pixelHeight - _beginPoint.y, _endPoint.x - _beginPoint.x, _beginPoint.y - _endPoint.y ), 1, Color.red );
+                    GUIUtils.DrawScreenRectBorder( new Rect( _beginPoint.x, Camera.main.pixelHeight - _beginPoint.y, _endPoint.x - _beginPoint.x , _beginPoint.y - _endPoint.y ), 1, Color.red );
             }
 
             public void attachCommandToSelected( Command command, bool enqueue = false )
