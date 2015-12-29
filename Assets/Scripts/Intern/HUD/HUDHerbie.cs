@@ -150,7 +150,7 @@ namespace Extinction
                 initUI(_robotList);
             }
 
-            void changeSelection(List<CharacterName> selectedNames)
+            public void changeSelection(List<CharacterName> selectedNames)
             {
                 foreach(KeyValuePair<CharacterName, Transform> robotInfo in _robotHudInfos)
                 {
@@ -179,7 +179,7 @@ namespace Extinction
                 }
             }
 
-            void clearSelection()
+            public void clearSelection()
             {
                 for(int i = 0; i < _selectionHUD.childCount; ++i)
                 {
