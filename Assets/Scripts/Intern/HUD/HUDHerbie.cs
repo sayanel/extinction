@@ -79,6 +79,9 @@ namespace Extinction
             //TEMPORARY
             [SerializeField]
             private List<SpecialRobot> _robotList = new List<SpecialRobot>();
+            //TEMPORARY
+            [SerializeField]
+            private Characters.Herbie _herbie;
 
             public void initUI(List<SpecialRobot> robots, Characters.Herbie herbie)
             {
@@ -159,7 +162,7 @@ namespace Extinction
             void Start()
             {
                 //TEMPORARY
-                initUI(_robotList);
+                initUI(_robotList, _herbie);
             }
 
             public void changeSelection(List<CharacterName> selectedNames)

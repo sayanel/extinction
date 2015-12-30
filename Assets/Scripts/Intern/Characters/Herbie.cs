@@ -41,7 +41,17 @@ namespace Extinction
             }
 
             private ActiveSkill _skillToCast;
-            private SpecialRobot _skillCaster; 
+            private SpecialRobot _skillCaster;
+
+            [Header("Cast skill cursor")]
+
+            [SerializeField]
+            private Texture2D _castSkillCursorVisual;
+            [SerializeField]
+            private Vector2 _castSkillCursorHotSpot = Vector2.zero;
+            [SerializeField]
+            private CursorMode _castSkillCursorMode = CursorMode.Auto;
+
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -53,13 +63,27 @@ namespace Extinction
                 if (!skillToCast.Activable)
                     return;
 
+                // change cursor visual
+                Cursor.SetCursor(_castSkillCursorVisual, _castSkillCursorHotSpot, _castSkillCursorMode);
+
                 // launch the beginActivation of the skill
-                skillToCast.beginActivation();
+                //skillToCast.beginActivation();
 
                 // set herbie to cast skill mode 
                 _isCastingSkill = true;
                 _skillToCast = skillToCast;
                 _skillCaster = skillCaster;
+            }
+
+            public void cancelSkillCast()
+            {
+                // set default cursor visual
+                Cursor.SetCursor(null, _castSkillCursorHotSpot, _castSkillCursorMode);
+
+                // set herbie to normal mode 
+                _isCastingSkill = false;
+                _skillToCast = null;
+                _skillCaster = null;
             }
 
             /// <summary>

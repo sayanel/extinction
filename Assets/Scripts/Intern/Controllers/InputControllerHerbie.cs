@@ -78,6 +78,26 @@ namespace Extinction
                 //position
                 _herbieCameraComponent.setPosition( Input.mousePosition );
 
+                //if herbie is casting a skill
+                if(_herbieComponent.IsCastingSkill)
+                {
+                    if(Input.GetMouseButtonDown( 0 ))
+                    {
+                        if (checkMouseTarget(out m_mouseTargetInfo)) // first step : rayCast and store information on the mouseTargetInfo
+                        {
+                            Debug.Log("mouse encounter a target with tag : " + m_mouseTargetInfo.tag.ToString());
+
+                            _herbieComponent.attachCommandToSelected(new SkillCastCommand(m_mouseTargetInfo.position), Input.GetKey(KeyCode.LeftShift));
+
+                            _herbieComponent.cancelSkillCast();
+                        }
+                    }
+                    else if(Input.GetMouseButtonDown( 1 ))
+                    {
+                        _herbieComponent.cancelSkillCast();
+                    }
+                }
+
                 //Selector Inputs : 
                 if( Input.GetMouseButtonDown( 0 ) )
                 {
