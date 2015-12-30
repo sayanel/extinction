@@ -11,6 +11,9 @@ public class HUDSkillButton : MonoBehaviour
 {
 
     [SerializeField]
+    private float _delayBeforeDisplayingInfo = 1;
+
+    [SerializeField]
     private float _updateDeltaTime = 0.2f;
 
     [SerializeField]
@@ -24,29 +27,50 @@ public class HUDSkillButton : MonoBehaviour
 
     private EventTrigger _eventTrigger;
 
-    private GameObject _floatingInfoModel;
+    private GameObject _floatingInfoHUD;
 
+    private Coroutine _showFloatingInfoRoutine;
+
+    public void setDelayBeforeDisplayingInfo(float time)
+    {
+        _delayBeforeDisplayingInfo = time;
+    }
 
     public void setFloatingInfoModel(GameObject model)
     {
-        _floatingInfoModel = model;
+        _floatingInfoHUD = model;
     }
 
     public void showDescription(BaseEventData eventData)
     {
-        if (_floatingInfoModel == null)
+        if (_floatingInfoHUD == null)
             return;
 
-        _floatingInfoModel.SetActive(true);
-        _floatingInfoModel.transform.position = Input.mousePosition;
+        _showFloatingInfoRoutine = StartCoroutine(showFloatingInfoCoroutine());
     }
 
     public void hideDescription(BaseEventData eventData)
     {
-        if (_floatingInfoModel == null)
+        if (_showFloatingInfoRoutine != null)
+            StopCoroutine(_showFloatingInfoRoutine);
+
+        if (_floatingInfoHUD == null)
             return;
 
-        _floatingInfoModel.SetActive(false);
+        _floatingInfoHUD.SetActive(false);
+    }
+
+    IEnumerator showFloatingInfoCoroutine()
+    {
+        yield return new WaitForSeconds(_delayBeforeDisplayingInfo);
+
+        //change the description on floating info hud
+        _floatingInfoHUD.transform.GetChild(0).GetComponent<Text>().text = _description;
+
+        //active the floating info hud
+        _floatingInfoHUD.SetActive(true);
+        _floatingInfoHUD.transform.position = Input.mousePosition;
+
     }
 
     public void setSkill(ActiveSkill skill)

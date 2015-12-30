@@ -89,6 +89,12 @@ namespace Extinction
             [SerializeField]
             private GameObject _floatingInfoHUD;
 
+            /// <summary>
+            /// The delay before infos are displayed on top of HUD (in second).
+            /// </summary>
+            [SerializeField]
+            private float _delayBeforeDisplayInfo = 1;
+
             //TEMPORARY
             [SerializeField]
             private List<SpecialRobot> _robotList = new List<SpecialRobot>();
@@ -174,6 +180,8 @@ namespace Extinction
                         hudSkillButton.setFloatingInfoModel(_floatingInfoHUD);
                         //set a reference to the skill handled by this button
                         hudSkillButton.setSkill(robot.getActiveSkill(i));
+                        //set the delay before displaying hud infos : 
+                        hudSkillButton.setDelayBeforeDisplayingInfo(_delayBeforeDisplayInfo);
 
                         SpecialRobot tmpRobot = robot;
                         int tmpIndex = i;
