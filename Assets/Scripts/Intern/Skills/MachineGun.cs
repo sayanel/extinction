@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿// @author = florian 
+
+using UnityEngine;
 using System.Collections;
 
 using Extinction.FX;
