@@ -95,53 +95,55 @@ namespace Extinction
                         _herbieComponent.cancelSkillCast();
                     }
                 }
-
-                //Selector Inputs : 
-                if( Input.GetMouseButtonDown( 0 ) )
+                else //herbie is not casting active skill
                 {
-                    if (!EventSystem.current.IsPointerOverGameObject())
-                        _selectorComponent.BeginSelection();
-                }
-                else if( _selectorComponent.Selecting )
-                {
-                    if( Input.GetMouseButtonUp( 0 ) )
+                    //Selector Inputs : 
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        _selectorComponent.EndSelection();
+                        if (!EventSystem.current.IsPointerOverGameObject())
+                            _selectorComponent.BeginSelection();
                     }
-                    else
+                    else if (_selectorComponent.Selecting)
                     {
-                        _selectorComponent.UpdateSelection();
-                    }
-                }
-
-                //SpecialRobots Inputs
-                if( Input.GetMouseButtonDown( 1 ) && 
-                    !EventSystem.current.IsPointerOverGameObject())
-                {
-                    if( checkMouseTarget( out m_mouseTargetInfo ) ) // first step : rayCast and store information on the mouseTargetInfo
-                    {
-                        Debug.Log( "mouse encounter a target with tag : " + m_mouseTargetInfo.tag.ToString() );
-
-                        if( m_mouseTargetInfo.tag == "Target" )
+                        if (Input.GetMouseButtonUp(0))
                         {
-                            //store a pointer to the current target
-                            Character currentTarget = m_mouseTargetInfo.gameObject.GetComponent<Character>();
-
-                            //launch a coroutine for attack behaviour
-                            if( currentTarget != null )
-                            {
-                                //MoveAndAttack();
-                                _herbieComponent.attachCommandToSelected( new CommandMoveAndAttack( currentTarget, 0.5f ), Input.GetKey(KeyCode.LeftShift) );
-                                //AttachNewCommand( new MoveAndAttackCommand( _agent, currentTarget, 0.5f ) );
-                            }
+                            _selectorComponent.EndSelection();
                         }
                         else
                         {
-                            //Move( m_mouseTargetInfo.position );
-                            _herbieComponent.attachCommandToSelected( new CommandMove( m_mouseTargetInfo.position ), Input.GetKey( KeyCode.LeftShift ) );
+                            _selectorComponent.UpdateSelection();
                         }
                     }
-                }
+
+                    //SpecialRobots Inputs
+                    if (Input.GetMouseButtonDown(1) &&
+                        !EventSystem.current.IsPointerOverGameObject())
+                    {
+                        if (checkMouseTarget(out m_mouseTargetInfo)) // first step : rayCast and store information on the mouseTargetInfo
+                        {
+                            Debug.Log("mouse encounter a target with tag : " + m_mouseTargetInfo.tag.ToString());
+
+                            if (m_mouseTargetInfo.tag == "Target")
+                            {
+                                //store a pointer to the current target
+                                Character currentTarget = m_mouseTargetInfo.gameObject.GetComponent<Character>();
+
+                                //launch a coroutine for attack behaviour
+                                if (currentTarget != null)
+                                {
+                                    //MoveAndAttack();
+                                    _herbieComponent.attachCommandToSelected(new CommandMoveAndAttack(currentTarget, 0.5f), Input.GetKey(KeyCode.LeftShift));
+                                    //AttachNewCommand( new MoveAndAttackCommand( _agent, currentTarget, 0.5f ) );
+                                }
+                            }
+                            else
+                            {
+                                //Move( m_mouseTargetInfo.position );
+                                _herbieComponent.attachCommandToSelected(new CommandMove(m_mouseTargetInfo.position), Input.GetKey(KeyCode.LeftShift));
+                            }
+                        }
+                    }
+                }                
             }
 
 

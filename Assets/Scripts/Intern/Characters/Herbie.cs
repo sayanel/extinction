@@ -36,8 +36,9 @@ namespace Extinction
             /// </summary>
             private bool _isCastingSkill = false;
 
-            public bool IsCastingSkill{
-                get{ return _isCastingSkill; }
+            public bool IsCastingSkill
+            {
+                get { return _isCastingSkill; }
             }
 
             private ActiveSkill _skillToCast;
@@ -60,7 +61,7 @@ namespace Extinction
             void Start()
             {
                 //try to fill missing parameters : 
-                if(_hudHerbie == null)
+                if (_hudHerbie == null)
                 {
                     _hudHerbie = FindObjectOfType<HUDHerbie>();
                 }
@@ -93,7 +94,7 @@ namespace Extinction
 
             public void castSkill(Vector3 targetPosition, bool queued = false)
             {
-                attachCommandToSelected(new CommandSkillCast( _skillToCast, targetPosition), queued);
+                attachCommandToSingleUnit(_skillCaster, new CommandSkillCast(_skillToCast, targetPosition), queued);
 
                 cancelSkillCast();
             }
@@ -147,6 +148,22 @@ namespace Extinction
                         robot.setDirectCommand(newRobotCommand);
                     }
                 }
+            }
+
+            /// <summary>
+            /// Give an order to a single among selected units.
+            /// </summary>
+            /// <param name="actor"> The unit which will apply the order. </param>
+            /// <param name="command"> The order. </param>
+            /// <param name="enqueue"> If true the order will be placed on the order queue. </param>
+            public void attachCommandToSingleUnit(SpecialRobot actor, Command command, bool enqueue = false)
+            {
+                Command newRobotCommand = command.Clone();
+                newRobotCommand.setActor(actor);
+                if (enqueue)
+                    actor.addCommand(newRobotCommand);
+                else
+                    actor.setDirectCommand(newRobotCommand);
             }
 
             /// <summary>
