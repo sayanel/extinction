@@ -43,6 +43,7 @@ namespace Extinction
 
             private ActiveSkill _skillToCast;
             private SpecialRobot _skillCaster;
+            private HUDSkillButton _skillButton;
 
             [Header("Cast skill cursor")]
 
@@ -67,7 +68,7 @@ namespace Extinction
                 }
             }
 
-            public void prepareSkillCast(ActiveSkill skillToCast, SpecialRobot skillCaster)
+            public void prepareSkillCast(ActiveSkill skillToCast, SpecialRobot skillCaster, HUDSkillButton skillButton)
             {
                 // if the skill isn't ready to be used, do nothing
                 if (!skillToCast.Activable)
@@ -77,6 +78,7 @@ namespace Extinction
                 _isCastingSkill = true;
                 _skillToCast = skillToCast;
                 _skillCaster = skillCaster;
+                _skillButton = skillButton;
 
                 //directly cast the skill if the skill applies on the robot
                 if (skillToCast.SkillOnSelf)
@@ -94,7 +96,11 @@ namespace Extinction
 
             public void castSkill(Vector3 targetPosition, bool queued = false)
             {
+                // Give the unit the order to cast the active skill to the given position
                 attachCommandToSingleUnit(_skillCaster, new CommandSkillCast(_skillToCast, targetPosition), queued);
+
+                //callback on the button, to display the coolDown effect on HUD.
+                _skillButton.OnActiveSkill();
 
                 cancelSkillCast();
             }
@@ -108,6 +114,7 @@ namespace Extinction
                 _isCastingSkill = false;
                 _skillToCast = null;
                 _skillCaster = null;
+                _skillButton = null;
             }
 
             /// <summary>
