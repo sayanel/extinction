@@ -76,6 +76,13 @@ namespace Extinction
             [SerializeField]
             private string _robotsActiveSkillsWidgetPath = "RobotActiveSkills";
 
+            /// <summary>
+            /// A model of floating widget which contains text. 
+            /// This widget is displayed on top of other widgets if the mouse ramains over the widget for a few seconds. 
+            /// </summary>
+            [SerializeField]
+            private GameObject _floatingInfoModel; 
+
             //TEMPORARY
             [SerializeField]
             private List<SpecialRobot> _robotList = new List<SpecialRobot>();
@@ -101,15 +108,26 @@ namespace Extinction
 
                         skillEmplacement.GetComponent<Image>().sprite = robot.getActiveSkill(i).Visual;
 
+                        HUDSkillButton hudSkillButton = skillEmplacement.GetComponent<HUDSkillButton>();
+                        //find cool down image in the child of skillEmplacement.
+                        hudSkillButton.setCoolDownImage(skillEmplacement.GetChild(0).GetComponent<Image>());
+                        //the description is the same as the skill description
+                        hudSkillButton.setDescription(robot.getActiveSkill(i).Description);
+                        //same floating info model as HUDHerbie's.
+                        hudSkillButton.setFloatingInfoModel(_floatingInfoModel);
+                        //set a reference to the skill handled by this button
+                        hudSkillButton.setSkill(robot.getActiveSkill(i));
+
                         SpecialRobot tmpRobot = robot;
                         int tmpIndex = i;
                         Characters.Herbie tmpHerbie = herbie;
+                        HUDSkillButton tmpSkillButton = hudSkillButton;
                         skillEmplacement.GetComponent<Button>().onClick.AddListener(() => {
 
                             ActiveSkill tmpSkill = tmpRobot.getActiveSkill(tmpIndex);
 
                             if (tmpSkill != null)
-                                tmpHerbie.prepareSkillCast(tmpSkill, tmpRobot);
+                                tmpHerbie.prepareSkillCast(tmpSkill, tmpRobot, tmpSkillButton);
                         });
                     }
 
