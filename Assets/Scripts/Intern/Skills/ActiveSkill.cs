@@ -18,6 +18,16 @@ namespace Extinction
             }
 
             /// <summary>
+            /// A description for this skill.
+            /// </summary>
+            [SerializeField]
+            protected string _description;
+
+            public string Description {
+                get { return _description; }
+            }
+
+            /// <summary>
             /// Is the active skill apply on the character which has launched the skill ?
             /// </summary>
             [SerializeField]
