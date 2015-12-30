@@ -34,12 +34,18 @@ public class HUDSkillButton : MonoBehaviour
 
     public void showDescription(BaseEventData eventData)
     {
+        if (_floatingInfoModel == null)
+            return;
+
         _floatingInfoModel.SetActive(true);
         _floatingInfoModel.transform.position = Input.mousePosition;
     }
 
     public void hideDescription(BaseEventData eventData)
     {
+        if (_floatingInfoModel == null)
+            return;
+
         _floatingInfoModel.SetActive(false);
     }
 
