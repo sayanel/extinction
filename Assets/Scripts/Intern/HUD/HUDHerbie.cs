@@ -80,7 +80,7 @@ namespace Extinction
             [SerializeField]
             private List<SpecialRobot> _robotList = new List<SpecialRobot>();
 
-            public void initUI(List<SpecialRobot> robots)
+            public void initUI(List<SpecialRobot> robots, Characters.Herbie herbie)
             {
                 foreach (SpecialRobot robot in robots)
                 {
@@ -100,12 +100,13 @@ namespace Extinction
 
                         SpecialRobot tmpRobot = robot;
                         int tmpIndex = i;
+                        Characters.Herbie tmpHerbie = herbie;
                         skillEmplacement.GetComponent<Button>().onClick.AddListener(() => {
 
                             ActiveSkill tmpSkill = tmpRobot.getActiveSkill(tmpIndex);
 
-                            if(tmpSkill != null)
-                                tmpSkill.beginActivation();
+                            if (tmpSkill != null)
+                                tmpHerbie.prepareSkillCast(tmpSkill, tmpRobot);
                         });
                     }
 
