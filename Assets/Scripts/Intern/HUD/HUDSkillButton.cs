@@ -82,6 +82,9 @@ public class HUDSkillButton : MonoBehaviour
             _coolDownImage.fillAmount = fillRatio;
 
             yield return new WaitForSeconds(_updateDeltaTime);
+
+            if (_skill.CurrentCoolDown <= 0)
+                _coolDownImage.fillAmount = 0;
         }
     }
 

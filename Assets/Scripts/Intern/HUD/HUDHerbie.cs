@@ -81,66 +81,26 @@ namespace Extinction
             /// This widget is displayed on top of other widgets if the mouse ramains over the widget for a few seconds. 
             /// </summary>
             [SerializeField]
-            private GameObject _floatingInfoModel; 
+            private GameObject _floatingInfoModel;
+
+            /// <summary>
+            /// The floating info instance.
+            /// </summary>
+            [SerializeField]
+            private GameObject _floatingInfoHUD;
 
             //TEMPORARY
             [SerializeField]
             private List<SpecialRobot> _robotList = new List<SpecialRobot>();
 
-            public void initUI(List<SpecialRobot> robots, Characters.Herbie herbie)
-            {
-                foreach (SpecialRobot robot in robots)
-                {
-                    GameObject newRobotWidget = Instantiate(_robotWidgetModel);
-
-                    Transform robotVisual = newRobotWidget.transform.Find(_robotsVisualWidgetPath);
-
-                    Transform robotActiveSkills = newRobotWidget.transform.Find(_robotsActiveSkillsWidgetPath);
-
-                    robotVisual.GetComponent<Image>().sprite = robot.Visual;
-
-                    for(int i = 0; i < Mathf.Min(robot.getActiveSkillCount(), 2); ++i)
-                    {
-                        Transform skillEmplacement = robotActiveSkills.GetChild(i);
-
-                        skillEmplacement.GetComponent<Image>().sprite = robot.getActiveSkill(i).Visual;
-
-                        HUDSkillButton hudSkillButton = skillEmplacement.GetComponent<HUDSkillButton>();
-                        //find cool down image in the child of skillEmplacement.
-                        hudSkillButton.setCoolDownImage(skillEmplacement.GetChild(0).GetComponent<Image>());
-                        //the description is the same as the skill description
-                        hudSkillButton.setDescription(robot.getActiveSkill(i).Description);
-                        //same floating info model as HUDHerbie's.
-                        hudSkillButton.setFloatingInfoModel(_floatingInfoModel);
-                        //set a reference to the skill handled by this button
-                        hudSkillButton.setSkill(robot.getActiveSkill(i));
-
-                        SpecialRobot tmpRobot = robot;
-                        int tmpIndex = i;
-                        Characters.Herbie tmpHerbie = herbie;
-                        HUDSkillButton tmpSkillButton = hudSkillButton;
-                        skillEmplacement.GetComponent<Button>().onClick.AddListener(() => {
-
-                            ActiveSkill tmpSkill = tmpRobot.getActiveSkill(tmpIndex);
-
-                            if (tmpSkill != null)
-                                tmpHerbie.prepareSkillCast(tmpSkill, tmpRobot, tmpSkillButton);
-                        });
-                    }
-
-                    newRobotWidget.transform.SetParent(_selectionHUD);
-
-                    _robotHudInfos.Add( robot.getCharacterName(), newRobotWidget.transform );
-                }
-            }
 
             void Awake()
             {
-                if(_miniMap == null)
+                if (_miniMap == null)
                 {
-                    _miniMap =  transform.Find("HerbieMap");
+                    _miniMap = transform.Find("HerbieMap");
                 }
-                if(_selectionHUD == null)
+                if (_selectionHUD == null)
                 {
                     _selectionHUD = transform.Find("RobotSelection");
                 }
@@ -176,8 +136,58 @@ namespace Extinction
 
             void Start()
             {
+                //intantiate the floating info hud.
+                _floatingInfoHUD = Instantiate(_floatingInfoModel);
+
                 //TEMPORARY
                 initUI(_robotList);
+            }
+
+            public void initUI(List<SpecialRobot> robots, Characters.Herbie herbie)
+            {
+                foreach (SpecialRobot robot in robots)
+                {
+                    GameObject newRobotWidget = Instantiate(_robotWidgetModel);
+
+                    Transform robotVisual = newRobotWidget.transform.Find(_robotsVisualWidgetPath);
+
+                    Transform robotActiveSkills = newRobotWidget.transform.Find(_robotsActiveSkillsWidgetPath);
+
+                    robotVisual.GetComponent<Image>().sprite = robot.Visual;
+
+                    for(int i = 0; i < Mathf.Min(robot.getActiveSkillCount(), 2); ++i)
+                    {
+                        Transform skillEmplacement = robotActiveSkills.GetChild(i);
+
+                        skillEmplacement.GetComponent<Image>().sprite = robot.getActiveSkill(i).Visual;
+
+                        HUDSkillButton hudSkillButton = skillEmplacement.GetComponent<HUDSkillButton>();
+                        //find cool down image in the child of skillEmplacement.
+                        hudSkillButton.setCoolDownImage(skillEmplacement.GetChild(0).GetComponent<Image>());
+                        //the description is the same as the skill description
+                        hudSkillButton.setDescription(robot.getActiveSkill(i).Description);
+                        //same floating info model as HUDHerbie's.
+                        hudSkillButton.setFloatingInfoModel(_floatingInfoHUD);
+                        //set a reference to the skill handled by this button
+                        hudSkillButton.setSkill(robot.getActiveSkill(i));
+
+                        SpecialRobot tmpRobot = robot;
+                        int tmpIndex = i;
+                        Characters.Herbie tmpHerbie = herbie;
+                        HUDSkillButton tmpSkillButton = hudSkillButton;
+                        skillEmplacement.GetComponent<Button>().onClick.AddListener(() => {
+
+                            ActiveSkill tmpSkill = tmpRobot.getActiveSkill(tmpIndex);
+
+                            if (tmpSkill != null)
+                                tmpHerbie.prepareSkillCast(tmpSkill, tmpRobot, tmpSkillButton);
+                        });
+                    }
+
+                    newRobotWidget.transform.SetParent(_selectionHUD);
+
+                    _robotHudInfos.Add( robot.getCharacterName(), newRobotWidget.transform );
+                }
             }
 
             public void changeSelection(List<CharacterName> selectedNames)
