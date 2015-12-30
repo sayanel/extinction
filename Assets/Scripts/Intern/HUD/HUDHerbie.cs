@@ -139,8 +139,9 @@ namespace Extinction
 
             void Start()
             {
-                //intantiate the floating info hud.
+                //intantiate the floating info hud and attach it to herbie's hud.
                 _floatingInfoHUD = Instantiate(_floatingInfoModel);
+                _floatingInfoHUD.transform.SetParent(transform);
 
                 //TEMPORARY
                 initUI(_robotList, _herbie);
