@@ -7,8 +7,6 @@ using System.Collections.Generic;
 
 using Extinction.Characters;
 using Extinction.Utils;
-using Extinction.Enums;
-using Extinction.HUD;
 
 namespace Extinction
 {
@@ -46,14 +44,13 @@ namespace Extinction
             [SerializeField]
             private List<SpecialRobot> _selected = new List<SpecialRobot>();
 
-            //GUI which will display the current selection
-            [SerializeField]
-            private HUDHerbie _hudHerbie;
-
             [SerializeField]
             private Transform _cameraTransform;
 
             private Vector3 _cameraBeginPosition;
+
+            [SerializeField]
+            private Characters.Herbie _herbie;
 
 
             // ----------------------------------------------------------------------------
@@ -150,38 +147,12 @@ namespace Extinction
                 _selecting = false;
                 _thisTrigger.enabled = false;
 
-                updateGUI();
+                //send the new selection to herbie, and clear the selection of selector.
+                _herbie.changeSelection(_selected);
+                _selected.Clear();
             }
 
-            //update the visual of the gui with the new selection.
-            public void updateGUI()
-            {
-                List<CharacterName> selectedNames = new List<CharacterName>();
-                foreach(SpecialRobot robot in _selected)
-                {
-                    selectedNames.Add(robot.getCharacterName());
-                }
-
-                _hudHerbie.changeSelection(selectedNames);
-
-                ////clear the gui 
-                //int childCount = _GUISelection.childCount;
-                //for( int i = 0; i < childCount; i++ )
-                //{
-                //    Destroy( _GUISelection.GetChild( 0 ).gameObject );
-                //}
-
-                ////repopulate gui with the first selected item
-                //if( _selected.Count > 0 )
-                //{
-                //    GameObject newIconeGameObject = new GameObject();
-                //    Image newIcone = newIconeGameObject.AddComponent<Image>();
-
-                //    newIcone.sprite = _selected[0].getHUDInfo().Visual;
-
-                //    newIconeGameObject.transform.SetParent( _GUISelection );
-                //}
-            }
+            
 
             void OnTriggerEnter( Collider other )
             {
@@ -217,28 +188,6 @@ namespace Extinction
             {
                 if( _selecting )
                     GUIUtils.DrawScreenRectBorder( new Rect( _beginPoint.x, Camera.main.pixelHeight - _beginPoint.y, _endPoint.x - _beginPoint.x , _beginPoint.y - _endPoint.y ), 1, Color.red );
-            }
-
-            public void attachCommandToSelected( Command command, bool enqueue = false )
-            {
-                if(enqueue)
-                {
-                    foreach(SpecialRobot robot in _selected)
-                    {
-                        Command newRobotCommand = command.Clone();
-                        newRobotCommand.setActor( robot );
-                        robot.addCommand( newRobotCommand );
-                    }
-                }
-                else
-                {
-                    foreach( SpecialRobot robot in _selected )
-                    {
-                        Command newRobotCommand = command.Clone();
-                        newRobotCommand.setActor( robot );
-                        robot.setDirectCommand( newRobotCommand );
-                    }
-                }
             }
         }
     }

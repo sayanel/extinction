@@ -113,14 +113,14 @@ namespace Extinction
                             if( currentTarget != null )
                             {
                                 //MoveAndAttack();
-                                _selectorComponent.attachCommandToSelected( new CommandMoveAndAttack( currentTarget, 0.5f ), Input.GetKey(KeyCode.LeftShift) );
+                                _herbieComponent.attachCommandToSelected( new CommandMoveAndAttack( currentTarget, 0.5f ), Input.GetKey(KeyCode.LeftShift) );
                                 //AttachNewCommand( new MoveAndAttackCommand( _agent, currentTarget, 0.5f ) );
                             }
                         }
                         else
                         {
                             //Move( m_mouseTargetInfo.position );
-                            _selectorComponent.attachCommandToSelected( new CommandMove( m_mouseTargetInfo.position ), Input.GetKey( KeyCode.LeftShift ) );
+                            _herbieComponent.attachCommandToSelected( new CommandMove( m_mouseTargetInfo.position ), Input.GetKey( KeyCode.LeftShift ) );
                         }
                     }
                 }
