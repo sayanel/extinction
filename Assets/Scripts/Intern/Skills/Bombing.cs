@@ -11,14 +11,6 @@ namespace Extinction
     {
         public class Bombing : ActiveSkill
         {
-            [SerializeField]
-            private Texture2D _cursorTexture;
-
-            [SerializeField]
-            private Vector2 _cursorHotSpot = Vector2.zero;
-
-            [SerializeField]
-            private CursorMode _cursorLockMode = CursorMode.Auto;
 
             [SerializeField]
             private GameObject _projectileModel;
@@ -40,7 +32,7 @@ namespace Extinction
 
             public override void beginActivation()
             {
-                Cursor.SetCursor(_cursorTexture, _cursorHotSpot, _cursorLockMode);
+
             }
 
             public override void activate(Vector3 position)
@@ -48,7 +40,6 @@ namespace Extinction
                 StartCoroutine(bombingCoroutine(position));
 
                 StartCoroutine(handleCooldown());
-                Cursor.SetCursor(null, _cursorHotSpot, _cursorLockMode);
             }
 
             IEnumerator bombingCoroutine(Vector3 position)
