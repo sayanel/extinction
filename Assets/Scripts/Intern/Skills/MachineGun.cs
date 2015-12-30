@@ -37,8 +37,7 @@ namespace Extinction
 
             public override void beginActivation()
             {
-                //immediatly activate the skill
-                activate(Vector3.zero);
+
             }
 
             public override void activate(Vector3 position)
