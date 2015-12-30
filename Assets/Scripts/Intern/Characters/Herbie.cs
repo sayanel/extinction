@@ -57,22 +57,45 @@ namespace Extinction
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
 
+            void Start()
+            {
+                //try to fill missing parameters : 
+                if(_hudHerbie == null)
+                {
+                    _hudHerbie = FindObjectOfType<HUDHerbie>();
+                }
+            }
+
             public void prepareSkillCast(ActiveSkill skillToCast, SpecialRobot skillCaster)
             {
                 // if the skill isn't ready to be used, do nothing
                 if (!skillToCast.Activable)
                     return;
 
-                // change cursor visual
-                Cursor.SetCursor(_castSkillCursorVisual, _castSkillCursorHotSpot, _castSkillCursorMode);
-
-                // launch the beginActivation of the skill
-                //skillToCast.beginActivation();
-
                 // set herbie to cast skill mode 
                 _isCastingSkill = true;
                 _skillToCast = skillToCast;
                 _skillCaster = skillCaster;
+
+                //directly cast the skill if the skill applies on the robot
+                if (skillToCast.SkillOnSelf)
+                {
+                    castSkill(_skillCaster.transform.position, Input.GetKeyDown(KeyCode.LeftShift));
+                    return;
+                }
+
+                // change cursor visual
+                Cursor.SetCursor(_castSkillCursorVisual, _castSkillCursorHotSpot, _castSkillCursorMode);
+
+                // launch the beginActivation of the skill
+                skillToCast.beginActivation();
+            }
+
+            public void castSkill(Vector3 targetPosition, bool queued = false)
+            {
+                attachCommandToSelected(new CommandSkillCast( _skillToCast, targetPosition), queued);
+
+                cancelSkillCast();
             }
 
             public void cancelSkillCast()

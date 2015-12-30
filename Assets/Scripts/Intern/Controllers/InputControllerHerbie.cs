@@ -87,9 +87,7 @@ namespace Extinction
                         {
                             Debug.Log("mouse encounter a target with tag : " + m_mouseTargetInfo.tag.ToString());
 
-                            _herbieComponent.attachCommandToSelected(new SkillCastCommand(m_mouseTargetInfo.position), Input.GetKey(KeyCode.LeftShift));
-
-                            _herbieComponent.cancelSkillCast();
+                            _herbieComponent.castSkill(m_mouseTargetInfo.position, Input.GetKey(KeyCode.LeftShift));
                         }
                     }
                     else if(Input.GetMouseButtonDown( 1 ))

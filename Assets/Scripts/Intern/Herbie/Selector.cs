@@ -72,6 +72,12 @@ namespace Extinction
             void Start()
             {
                 transform.rotation = Quaternion.identity;
+
+                //try to fill missing parameters : 
+                if(_herbie == null)
+                {
+                    _herbie = FindObjectOfType<Characters.Herbie>();
+                }
             }
 
             //remove the controle we have on each agent of the previous selection. 

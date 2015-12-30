@@ -78,6 +78,7 @@ namespace Extinction
                     {
                         _actor.stopWalking();
                         _skillToCast.activate(_targetPosition);
+                        _isFinished = true;
                     }
                     else
                     {
