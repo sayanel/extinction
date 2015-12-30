@@ -23,11 +23,19 @@ namespace Extinction
             [SerializeField]
             protected bool _skillOnSelf = false;
 
+            public bool SkillOnSelf {
+                get { return _skillOnSelf; }
+            }
+
             /// <summary>
             /// In case where the skill is launched on a position of battleground, this is the maximal distance from where the player can launch the skill.
             /// </summary>
             [SerializeField]
             protected float _activationDistance = 0;
+
+            public float ActivationDistance {
+                get { return _activationDistance; }
+            }
 
             /// <summary>
             /// The time (in second) we have to wait befor we can launch this skill.
@@ -35,14 +43,22 @@ namespace Extinction
             [SerializeField]
             protected float _coolDown = 5;
 
+            public float CoolDown {
+                get { return _coolDown; }
+            }
+
             protected float _currentCoolDown = 5;
+
+            public float CurrentCoolDown {
+                get { return _currentCoolDown; }
+            }
 
             /// <summary>
             /// Set it to true if we can launch this skill (ie : the skill is available, and the cooldown is over).
             /// </summary>
             protected bool _activable = true;
 
-            public bool Activable{
+            public bool Activable {
                 get { return _activable; }
             }
 
