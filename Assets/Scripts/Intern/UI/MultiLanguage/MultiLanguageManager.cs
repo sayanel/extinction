@@ -4,7 +4,7 @@ using Extinction.Utils;
 
 
 namespace Extinction {
-    namespace MyNamespace {
+    namespace UI {
         /// <summary>
         /// MultiLanguage Singleton.
         /// Default Language: English.
@@ -12,15 +12,16 @@ namespace Extinction {
         /// Check ELTK Extinction Language Tool Kit for easier insertion
         /// </summary>
 
-        public class MultiLanguage : SingletonMonoBehavior<MultiLanguage> {
+        public class MultiLanguageManager : SingletonMonoBehavior<MultiLanguageManager> {
             [SerializeField]
             public string jsonDirPath = "./Assets/Scripts/Intern/UI/MultiLanguage";
 
-            private string _code = "en";
+            public string _code = "en";
             private JSONObject _elements;
             private static string KEY_ELEMENTS = "elements";
 
-            public void Start() {
+            new public void Awake() {
+                base.Awake();
                 ChangeLanguage(_code);
             }
 
@@ -28,7 +29,7 @@ namespace Extinction {
                 _code = code;
                 string path = System.IO.Path.Combine(jsonDirPath, code + ".json");
                 JSONObject obj = new JSONObject(System.IO.File.ReadAllText(path));
-                _elements = obj[MultiLanguage.KEY_ELEMENTS];
+                _elements = obj[MultiLanguageManager.KEY_ELEMENTS];
             }
 
 
@@ -37,7 +38,7 @@ namespace Extinction {
             /// <param name="key"></param>
             /// <returns>The key associated value</returns>
             public string Get(string key){
-                return _elements[key].ToString();
+                return _elements[key].str;
             }
         }
     }
