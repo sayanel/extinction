@@ -26,19 +26,6 @@ namespace Extinction
             [SerializeField]
             protected float _velocity = 10f;
 
-            /// <summary>
-            /// The position from which the projectile will be launched.
-            /// If the anchor isn't set in the editor, it will automatically be the child transform of this gameObject.
-            /// If there is no child transform, it will be the transform of this gameObject.
-            /// </summary>
-            [SerializeField]
-            protected Transform _anchor;
-
-            /// <summary>
-            /// The targetTags will be given to instanced projectile when shooting.
-            /// Only GameObjects with on of these tags can be hit by the projectile.
-            /// </summary>
-            protected string[] _targetTag;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------

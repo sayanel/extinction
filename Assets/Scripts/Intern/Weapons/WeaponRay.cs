@@ -32,9 +32,6 @@ namespace Extinction
             /// </summary>
             protected float _rayLenght = 100f;
 
-            protected Transform _anchor;
-            protected string[] _targetTag;
-
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------

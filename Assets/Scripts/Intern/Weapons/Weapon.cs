@@ -63,6 +63,26 @@ namespace Extinction
             /// </summary>
             protected float _previousTime;
 
+            /// <summary>
+            /// The position from which the ray/projectile will be launched.
+            /// If the anchor isn't set in the editor, it will automatically be the child transform of this gameObject.
+            /// If there is no child transform, it will be the transform of this gameObject.
+            /// </summary>
+            [SerializeField]
+            protected Transform _anchor;
+
+            /// <summary>
+            /// Only GameObjects with on of these tags can be hit by the ray.
+            /// </summary>
+            [SerializeField]
+            protected string[] _targetTag;
+
+            protected string[] TargetTag
+            {
+                get { return _targetTag; }
+                set { _targetTag = value; }
+            }
+
 
 
             // ----------------------------------------------------------------------------
