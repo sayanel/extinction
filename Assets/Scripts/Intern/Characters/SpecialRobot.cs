@@ -30,6 +30,9 @@ namespace Extinction
             [SerializeField]
             private List<Weapon> _weapons;
 
+            [SerializeField]
+            private HUDProgressBar _lifeBar;
+
             private UnitBehavior _unitBehavior;
 
             public UnitBehavior UnitBehaviour
@@ -394,6 +397,15 @@ namespace Extinction
             public int getActiveSkillCount()
             {
                 return _activeSkills.Count;
+            }
+
+            /// <summary>
+            /// set the life bar parameter with given argument.
+            /// </summary>
+            /// <param name="lifeBar">A reference to the new life bar of this robot.</param>
+            public void setLifeBar(HUDProgressBar lifeBar)
+            {
+                _lifeBar = lifeBar;
             }
         }
     }
