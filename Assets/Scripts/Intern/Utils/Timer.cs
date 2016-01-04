@@ -31,7 +31,7 @@ namespace Extinction {
             private TimerCallback _endCallback;
             private TimerCallback _stopCallback;
 
-            public Timer(float maxTime, TimerCallback start, TimerCallback step, TimerCallback end, TimerCallback stop) {
+            public void init(float maxTime, TimerCallback start, TimerCallback step, TimerCallback end, TimerCallback stop) {
                 if (maxTime < 0)
                     throw new System.Exception("Timer: maxTime must be greater than 0");
 
@@ -48,14 +48,14 @@ namespace Extinction {
             /// Start the timer coroutine from user trigger.
             /// Calls the start callback if provided.
             /// </summary>
-            public void Start() {
-                StopCoroutine(Routine());
+            public void start() {
+                StopCoroutine(routine());
                 _currentTime = 0;
 
                 if (_startCallback != null)
                     _startCallback();
 
-                StartCoroutine(Routine());
+                StartCoroutine(routine());
                 Debug.Log("Utils.Timer was started at: " + Time.time);
             }
 
@@ -64,15 +64,15 @@ namespace Extinction {
             /// Stop the timer from user trigger.
             /// Calls the stop callback if provided.
             /// </summary>
-            public void Stop() {
-                StopCoroutine(Routine());
+            public void stop() {
+                StopCoroutine(routine());
 
                 if (_stopCallback != null)
                     _stopCallback();
                 Debug.Log("Utils.Timer was stoped at: " + Time.time);
             }
 
-            public IEnumerator Routine() {
+            public IEnumerator routine() {
                 while (true) {
                     _currentTime += Time.deltaTime;
 
