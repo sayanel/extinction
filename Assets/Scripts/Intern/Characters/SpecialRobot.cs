@@ -308,6 +308,11 @@ namespace Extinction
 
             public override void turn( float angle )
             {
+                transform.Rotate( 0, angle, 0 );
+            }
+
+            public void smoothTurn(float angle)
+            {
                 //remove the control over the rotation for the navMeshAgent in order to get a custom rotation to the robot
                 _navMeshAgentComponent.updateRotation = false;
 
