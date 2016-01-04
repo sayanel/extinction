@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using Extinction.Weapons;
 
 namespace Extinction
 {
@@ -33,6 +34,16 @@ namespace Extinction
             private float _verticalSpeed = 0;
 
             private Vector3 _speed;
+            private Vector3 _orientation = Vector3.forward;
+
+            [SerializeField]
+            private Weapon _weapon;
+
+            private bool _aiming = false;
+
+            public bool isAiming { get { return _aiming; } }
+
+            public Vector3 orientation { get { return _orientation; } }
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -40,19 +51,20 @@ namespace Extinction
 
             public void Start()
             {
+                _orientation = Vector3.forward;
+
+                _speed = Vector3.zero;
+
                 if ( _controller != null ) return;
 
                 _controller = GetComponent<CharacterController>();
 
-                _orientation = Vector3.forward;
-
-                _speed = Vector3.zero;
             }
 
             public void Update()
             {
-                _controller.Move( _speed );
-
+                //_controller.Move( _speed );
+                move( _speed );
                 applyGravity();
 
                 _speed.x = 0;
@@ -66,17 +78,7 @@ namespace Extinction
 
             public override void move( Vector3 vec )
             {
-                _controller.Move( vec * Time.deltaTime );
-            }
-
-            public override void setOrientation( Vector3 orientation )
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public override Vector3 getOrientation()
-            {
-                return _orientation;
+                _controller.Move( vec /** Time.deltaTime*/ );
             }
 
             public void setOrientation( float verticalOrientation, float horizontalOrientation )
@@ -132,6 +134,16 @@ namespace Extinction
                 }
 
                 _speed.y -= _gravity * Time.deltaTime;
+            }
+
+            public void fire()
+            {
+                _weapon.fire();
+            }
+
+            public void aim( bool aiming )
+            {
+                _aiming = aiming;
             }
         }
     }

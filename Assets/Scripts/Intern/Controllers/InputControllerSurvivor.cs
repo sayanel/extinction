@@ -35,12 +35,24 @@ namespace Extinction
 
             public override void processUserInputs()
             {
-                processTranslateInputs();
-                processRotateInputs();
-                processMovementInputs();
+                translate();
+                rotate();
+                movement();
+                weapon();
             }
 
-            public void processMovementInputs()
+            public void weapon()
+            {
+
+                _survivor.aim(Input.GetMouseButton(1) ? true:false);
+
+                if ( Input.GetMouseButton( 0 ) )
+                {
+                    _survivor.fire();
+                }
+            }
+
+            public void movement()
             {
                 if ( Input.GetButton( "Jump" ) )
                 {
@@ -48,7 +60,7 @@ namespace Extinction
                 }
             }
 
-            public void processTranslateInputs()
+            public void translate()
             {
                 _horizontalTranslation = Input.GetAxis( "Horizontal" );
                 _verticalTranslation = Input.GetAxis( "Vertical" );
@@ -60,7 +72,7 @@ namespace Extinction
                     _survivor.verticalMovement( _verticalTranslation );
             }
 
-            public void processRotateInputs()
+            public void rotate()
             {
                 float mouseX = Input.GetAxis( "Mouse X" ) * _mouseSensitivity;
                 float mouseY = Input.GetAxis( "Mouse Y" ) * _mouseSensitivity;
