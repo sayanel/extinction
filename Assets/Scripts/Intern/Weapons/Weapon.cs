@@ -72,15 +72,16 @@ namespace Extinction
             protected Transform _anchor;
 
             /// <summary>
-            /// Only GameObjects with on of these tags can be hit by the ray.
+            /// Only GameObjects which are on these layers can be hit by the ray.
+            /// Contains Default layer by default.
             /// </summary>
             [SerializeField]
-            protected string[] _targetTag;
+            protected string[] _targetLayer = { "Default" };
 
-            protected string[] TargetTag
+            protected string[] TargetLayer
             {
-                get { return _targetTag; }
-                set { _targetTag = value; }
+                get { return _targetLayer; }
+                set { _targetLayer = value; }
             }
 
 

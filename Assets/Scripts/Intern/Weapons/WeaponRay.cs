@@ -63,7 +63,7 @@ namespace Extinction
                                         _anchor.forward,
                                         out hitInfo,
                                         _rayLenght,
-                                        LayerMask.GetMask(_targetTag))){
+                                        LayerMask.GetMask(_targetLayer))){
                         GameObject target = hitInfo.transform.gameObject;
                         onHit(target);
                     }

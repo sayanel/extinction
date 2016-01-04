@@ -51,7 +51,7 @@ namespace Extinction
                 {
                     Projectile p = Instantiate(_projectile, _anchor.position, _anchor.rotation) as Projectile;
                     p.Dammage = _damage;
-                    p.TargetTag = _targetTag;
+                    p.TargetTag = _targetLayer;
                     Rigidbody pBody = p.GetComponent<Rigidbody>();
                     if (pBody != null)
                         pBody.AddForce(_anchor.forward * _velocity);
