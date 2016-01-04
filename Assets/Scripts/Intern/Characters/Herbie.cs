@@ -26,6 +26,16 @@ namespace Extinction
             private HUDHerbie _hudHerbie;
 
             /// <summary>
+            /// A list containing all CharacterType which could be considered as targets.
+            /// </summary>
+            [SerializeField]
+            private List<CharacterType> _validTargetTypes = new List<CharacterType>();
+
+            public List<CharacterType> ValidTargetTypes{
+                get { return _validTargetTypes; }
+            }
+
+            /// <summary>
             /// A list which contains the selected special robots.
             /// </summary>
             private List<SpecialRobot> _selected = new List<SpecialRobot>();
@@ -40,6 +50,7 @@ namespace Extinction
             {
                 get { return _isCastingSkill; }
             }
+
 
             private ActiveSkill _skillToCast;
             private SpecialRobot _skillCaster;

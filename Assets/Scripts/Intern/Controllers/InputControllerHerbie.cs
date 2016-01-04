@@ -44,11 +44,7 @@ namespace Extinction
             [SerializeField]
             private Selector _selectorComponent = null;
 
-            /// <summary>
-            /// A list containing all CharacterType which could be considered as targets.
-            /// </summary>
-            [SerializeField]
-            private List<CharacterType> _validTargetTypes = new List<CharacterType>();
+
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -134,7 +130,7 @@ namespace Extinction
                             Debug.Log("mouse encounter a target with tag : " + m_mouseTargetInfo.tag.ToString());
 
                             //hit a character and this character is a valid target (ie it appears in _validTargetType list)
-                            if (m_mouseTargetInfo.isCharacter && _validTargetTypes.Contains(m_mouseTargetInfo.hitCharacter.getCharacterType()) )
+                            if (m_mouseTargetInfo.isCharacter && _herbieComponent.ValidTargetTypes.Contains(m_mouseTargetInfo.hitCharacter.getCharacterType()) )
                             {
                                 //store a pointer to the current target
                                 Character currentTarget = m_mouseTargetInfo.hitCharacter;
