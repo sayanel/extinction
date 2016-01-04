@@ -3,11 +3,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 using Extinction.Cameras;
 using Extinction.Herbie;
 using Extinction.Characters;
+using Extinction.Enums;
 
 
 namespace Extinction
@@ -26,6 +28,8 @@ namespace Extinction
                 public Vector3 position;
                 public GameObject gameObject;
                 public string tag;
+                public bool isCharacter;
+                public Character hitCharacter;
             }
 
             //used to store information on the entity the mouse has clicked on (if any)
@@ -39,6 +43,12 @@ namespace Extinction
 
             [SerializeField]
             private Selector _selectorComponent = null;
+
+            /// <summary>
+            /// A list containing all CharacterType which could be considered as targets.
+            /// </summary>
+            [SerializeField]
+            private List<CharacterType> _validTargetTypes = new List<CharacterType>();
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -123,10 +133,11 @@ namespace Extinction
                         {
                             Debug.Log("mouse encounter a target with tag : " + m_mouseTargetInfo.tag.ToString());
 
-                            if (m_mouseTargetInfo.tag == "Target")
+                            //hit a character and this character is a valid target (ie it appears in _validTargetType list)
+                            if (m_mouseTargetInfo.isCharacter && _validTargetTypes.Contains(m_mouseTargetInfo.hitCharacter.getCharacterType()) )
                             {
                                 //store a pointer to the current target
-                                Character currentTarget = m_mouseTargetInfo.gameObject.GetComponent<Character>();
+                                Character currentTarget = m_mouseTargetInfo.hitCharacter;
 
                                 //launch a coroutine for attack behaviour
                                 if (currentTarget != null)
@@ -160,6 +171,10 @@ namespace Extinction
                     info.gameObject = hitInfo.collider.gameObject;
                     info.position = hitInfo.point;
                     info.tag = hitInfo.collider.tag;
+
+                    info.hitCharacter = hitInfo.collider.GetComponent<Character>();
+                    info.isCharacter = (info.hitCharacter != null);
+
                     return true;
                 }
                 else
@@ -167,6 +182,8 @@ namespace Extinction
                     info.gameObject = null;
                     info.position = Vector3.zero;
                     info.tag = "none";
+                    info.hitCharacter = null;
+                    info.isCharacter = false;
                     return false;
                 }
             }
