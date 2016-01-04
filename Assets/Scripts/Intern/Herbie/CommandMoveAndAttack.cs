@@ -77,6 +77,10 @@ namespace Extinction
                     else if( _actor.canAttack( _target ) )
                     {
                         _actor.stopWalking();
+
+                        float angle = Vector3.Angle( _actor.transform.forward, _target.transform.position - _actor.transform.position );
+                        _actor.turn(angle);
+
                         _actor.attack( _target );
                     }
                     else
