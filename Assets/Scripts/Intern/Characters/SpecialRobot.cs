@@ -336,12 +336,15 @@ namespace Extinction
             /// <param name="command"></param>
             public void setDirectCommand(Command command)
             {
+                //properly stop the previous commands
+                if( _currentCommand != null )
+                    _currentCommand.End();
+                if( _currentAICommand != null )
+                    _currentAICommand.End();
+
                 clearCommand();
                 _currentCommand = command;
                 _drivenByAI = false;
-
-                if( _currentAICommand != null)
-                _currentAICommand.End();
 
                 _currentCommand.Execute();
             }
