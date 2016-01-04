@@ -78,10 +78,11 @@ namespace Extinction
                     {
                         _actor.stopWalking();
 
-                        float angle = Vector3.Angle( _actor.transform.forward, _target.transform.position - _actor.transform.position );
-                        _actor.turn(angle);
+                        //float angle = Vector3.Angle( _actor.transform.forward, _target.transform.position - _actor.transform.position );
+                        //_actor.turn(angle);
+                        _actor.transform.LookAt( _target.transform );
 
-                        _actor.attack( _target );
+                        _actor.attack();
                     }
                     else
                     {
