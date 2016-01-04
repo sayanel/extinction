@@ -1,4 +1,4 @@
-﻿// @author : Pascale
+﻿// @author : Pascale, florian
 
 using UnityEngine;
 using System.Collections;
@@ -15,9 +15,23 @@ namespace Extinction
             // ----------------------------------------------------------------------------
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
+
+            /// <summary>
+            /// The ray will be casted from _anchor.position + _minDistance.
+            /// </summary>
+            [SerializeField]
             protected float _minDistance = 1.0f;
+
+            /// <summary>
+            /// The extremity of the ray. Automatically deduced with _minDistance and _rayLength.
+            /// </summary>
             protected float _maxDistance = 100f;
+
+            /// <summary>
+            /// The length of the ray. Automatically deduced with the range of this weapon.
+            /// </summary>
             protected float _rayLenght = 100f;
+
             protected Transform _anchor;
             protected string[] _targetTag;
 
@@ -25,13 +39,21 @@ namespace Extinction
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
+
             public void Start()
             {
                 _previousTime = Time.time;
+
+                _rayLenght = _range;
                 _maxDistance = _rayLenght + _minDistance;
-                if (_anchor == null && transform.childCount > 0)
-                {
-                    _anchor = transform.GetChild(0);
+
+                if( _anchor == null ){
+                    if( transform.childCount > 0 ){
+                        _anchor = transform.GetChild( 0 );
+                    }
+                    else{
+                        _anchor = transform;
+                    }
                 }
             }
 
@@ -56,17 +78,17 @@ namespace Extinction
             public void onHit(GameObject obj)
             {
                 Character o = obj.GetComponent<Character>();
-                o.getDamage(_dammage);
+                o.getDamage(_damage);
             }
 
             override
             public void reload(int ammo)
             {
+                //number of ammo we can to put on the magazine : 
                 int nb = _magazineMaxCapacity - _nbCurrentAmmo;
+
                 _nbCurrentAmmo += (ammo > nb) ? nb : ammo;
             }
-
-
         }
     }
 }
