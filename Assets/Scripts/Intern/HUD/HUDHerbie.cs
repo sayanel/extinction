@@ -27,7 +27,6 @@ namespace Extinction
             /// </summary>
             private Dictionary<CharacterName, Transform> _robotHudInfos = new Dictionary<CharacterName, Transform>();
 
-
             /// <summary>
             /// Reference to Herbie's miniMap on the HUD.
             /// </summary>
@@ -65,16 +64,22 @@ namespace Extinction
             private GameObject _robotWidgetModel;
 
             /// <summary>
-            /// the path to find the robots visual widget from the root HerbieHUD
+            /// the path to find the robots visual widget from the robot widget
             /// </summary>
             [SerializeField]
             private string _robotsVisualWidgetPath = "RobotVisual";
 
             /// <summary>
-            /// the path to find the robots active skills widget from the root HerbieHUD
+            /// the path to find the robots active skills widget from the robot widget
             /// </summary>
             [SerializeField]
             private string _robotsActiveSkillsWidgetPath = "RobotActiveSkills";
+
+            /// <summary>
+            /// the path to find the robots active skills widget from the robot widget
+            /// </summary>
+            [SerializeField]
+            private string _robotsLifeBarPath = "RobotLifeBar";
 
             /// <summary>
             /// A model of floating widget which contains text. 
@@ -159,6 +164,11 @@ namespace Extinction
                     Transform robotVisual = newRobotWidget.transform.Find(_robotsVisualWidgetPath);
 
                     Transform robotActiveSkills = newRobotWidget.transform.Find(_robotsActiveSkillsWidgetPath);
+
+                    //find the life bar, and give a reference to the robot.
+                    Transform robotLifeBarTransform = newRobotWidget.transform.Find(_robotsLifeBarPath);
+                    HUDProgressBar robotLifeBar = robotLifeBarTransform.GetComponent<HUDProgressBar>();
+                    robot.setLifeBar( robotLifeBar );
 
                     robotVisual.GetComponent<Image>().sprite = robot.Visual;
 
