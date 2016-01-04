@@ -276,6 +276,12 @@ namespace Extinction
             public override void getDamage( int amount )
             {
                 _health -= amount;
+
+                if(_lifeBar != null)
+                {
+                    _lifeBar.setProgression( (_health / (float)_maxHealth) );
+                }
+
                 if(_health <= 0)
                 {
                     _isAlive = false;

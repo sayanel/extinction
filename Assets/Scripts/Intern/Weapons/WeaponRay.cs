@@ -32,9 +32,6 @@ namespace Extinction
             /// </summary>
             protected float _rayLenght = 100f;
 
-            protected Transform _anchor;
-            protected string[] _targetTag;
-
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -66,7 +63,7 @@ namespace Extinction
                                         _anchor.forward,
                                         out hitInfo,
                                         _rayLenght,
-                                        LayerMask.GetMask(_targetTag))){
+                                        LayerMask.GetMask(_targetLayer))){
                         GameObject target = hitInfo.transform.gameObject;
                         onHit(target);
                     }
