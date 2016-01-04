@@ -109,13 +109,6 @@ namespace Extinction
             public abstract void turn( float angle );
 
             /// <summary>
-            /// Sets the orientation vector of the character
-            /// basically describes in which direction the character is looking at
-            /// </summary>
-            /// <param name="orientation"> orientation Vector </param>
-            public abstract void setOrientation( Vector3 orientation );
-
-            /// <summary>
             /// Decreases character's health
             /// </summary>
             /// <param name="amount">quantity of health to decrease</param>
