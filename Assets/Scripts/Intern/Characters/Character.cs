@@ -54,7 +54,7 @@ namespace Extinction
             /// The current state of the character
             /// Can be used for the animation, sounds, etc. 
             /// </summary>
-            protected CharacterState _state = CharacterState.IDLE;
+            protected CharacterState _state = CharacterState.Idle;
 
             /// <summary>
             /// Default speed of a character, without any passive skill
@@ -108,13 +108,6 @@ namespace Extinction
             /// </param>
             public abstract void turn( float angle );
 
-            /// <summary>
-
-            /// <summary>
-            /// Returns the orientation vector of the character
-            /// </summary>
-            /// <returns></returns>
-            public abstract Vector3 getOrientation( );
             /// Decreases character's health
             /// </summary>
             /// <param name="amount">quantity of health to decrease</param>

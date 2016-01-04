@@ -270,13 +270,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27cdd1d3fde87934dbcba401fd1eed0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _magazineMaxCapacity: 1
   _nbCurrentAmmo: 10
   _isAutomatic: 0
   _fireRate: .100000001
   _damage: 1
   _friendlyFire: 1
   _range: 1
+  _previousTime: 0
   _minDistance: 1
+  _maxDistance: 100
+  _rayLenght: 100
   _anchor: {fileID: 775180557}
   _targetTag: []
 --- !u!1 &175639139
@@ -706,8 +710,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f7c5651c66e5ac4284bcfaffa69c4fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _position: {x: 0, y: 0, z: 0}
+  _rotation: {x: 0, y: 0, z: 0}
+  _fieldOfView: 0
   _survivor: {fileID: 1612495616}
   _camera: {fileID: 0}
+  _currentFOV: 0
   _normalFOV: 60
   _accurateFOV: 30
 --- !u!81 &775180559
@@ -1501,6 +1509,10 @@ MonoBehaviour:
   _survivor: {fileID: 0}
   _mouseSensitivity: 5
   _maximumVerticalRotation: 60
+  _horizontalTranslation: 0
+  _verticalTranslation: 0
+  _horizontalRotation: 0
+  _verticalRotation: 0
 --- !u!114 &1612495616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1515,11 +1527,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _isAlive: 1
+  _state: 0
+  _lifeMultiplier: 1
+  _stealthMultiplier: 1
+  _damageMultiplier: 1
+  _armorMultiplier: 1
   _speedMultiplier: 3
   _controller: {fileID: 0}
   _gravity: 1
   _jumpImpulse: 20
+  _verticalSpeed: 0
+  _speed: {x: 0, y: 0, z: 0}
+  _orientation: {x: 0, y: 0, z: 1}
   _weapon: {fileID: 134024893}
+  _aiming: 0
 --- !u!143 &1612495617
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1829,7 +1850,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2118200791}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 2.0999999, z: -10.8999996}
+  m_LocalPosition: {x: -6.92000008, y: 2.0999999, z: -10.8999996}
   m_LocalScale: {x: 5.72867966, y: 5.72867727, z: 5.72867727}
   m_Children: []
   m_Father: {fileID: 1265661546}

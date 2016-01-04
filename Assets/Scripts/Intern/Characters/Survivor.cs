@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using Extinction.Weapons;
+using Extinction.Enums;
 
 namespace Extinction
 {
@@ -45,6 +46,8 @@ namespace Extinction
 
             public Vector3 orientation { get { return _orientation; } }
 
+            public CharacterState state { get { return _state; } }
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -58,12 +61,10 @@ namespace Extinction
                 if ( _controller != null ) return;
 
                 _controller = GetComponent<CharacterController>();
-
             }
 
             public void Update()
             {
-                //_controller.Move( _speed );
                 move( _speed );
                 applyGravity();
 
@@ -78,17 +79,7 @@ namespace Extinction
 
             public override void move( Vector3 vec )
             {
-                _controller.Move( vec /** Time.deltaTime*/ );
-            }
-
-            public void setOrientation( float verticalOrientation, float horizontalOrientation )
-            {
-                _orientation = Quaternion.Euler( -verticalOrientation, horizontalOrientation, 0 ) * Vector3.forward;
-            }
-
-            public override void turn( float angle )
-            {
-                transform.Rotate( Vector3.up, angle );
+                _controller.Move( vec );
             }
 
             public override void activateSkill1()
@@ -101,21 +92,33 @@ namespace Extinction
                 throw new System.NotImplementedException();
             }
 
-            public void horizontalMovement( float horizontalValue )
+            public void idle()
             {
-                
-                Vector3 movement = new Vector3( _orientation.z, 0, - _orientation.x ) * horizontalValue * _defaultCharacterSpeed * _speedMultiplier * Time.deltaTime;
-
-                _speed.x += movement.x;
-                _speed.z += movement.z;
+                _state = CharacterState.Idle;
             }
 
-            public void verticalMovement( float verticalValue )
+            public void strafeLeft( float value )
             {
-                Vector3 movement = new Vector3( _orientation.x, 0, _orientation.z ) * verticalValue * _defaultCharacterSpeed * _speedMultiplier * Time.deltaTime;
+                _state = CharacterState.StrafeLeft;
+                horizontalMovement( value );
+            }
 
-                _speed.x += movement.x;
-                _speed.z += movement.z;
+            public void strafeRight( float value )
+            {
+                _state = CharacterState.StrafeRight;
+                horizontalMovement( value );
+            }
+
+            public void run( float value )
+            {
+                _state = CharacterState.Run;
+                verticalMovement( value );
+            }
+
+            public void runBackward( float value )
+            {
+                _state = CharacterState.RunBackward;
+                verticalMovement( value );
             }
 
             public void jump()
@@ -123,6 +126,41 @@ namespace Extinction
                 if ( !_controller.isGrounded ) return;
 
                 _speed.y = _jumpImpulse * Time.deltaTime;
+            }
+
+            public void fire()
+            {
+                _weapon.fire();
+            }
+
+            public void aim( bool aiming )
+            {
+                _aiming = aiming;
+            }
+
+            public void setOrientation( float verticalOrientation, float horizontalOrientation )
+            {
+                _orientation = Quaternion.Euler( -verticalOrientation, horizontalOrientation, 0 ) * Vector3.forward;
+            }
+
+            public override void turn( float angle )
+            {
+                transform.Rotate( Vector3.up, angle );
+            }
+
+            private void horizontalMovement( float horizontalValue )
+            {
+                Vector3 movement = new Vector3( _orientation.z, 0, -_orientation.x ) * horizontalValue * _defaultCharacterSpeed * _speedMultiplier * Time.deltaTime;
+
+                _speed.x += movement.x;
+                _speed.z += movement.z;
+            }
+            private void verticalMovement( float verticalValue )
+            {
+                Vector3 movement = new Vector3( _orientation.x, 0, _orientation.z ) * verticalValue * _defaultCharacterSpeed * _speedMultiplier * Time.deltaTime;
+
+                _speed.x += movement.x;
+                _speed.z += movement.z;
             }
 
             public void applyGravity()
@@ -134,16 +172,6 @@ namespace Extinction
                 }
 
                 _speed.y -= _gravity * Time.deltaTime;
-            }
-
-            public void fire()
-            {
-                _weapon.fire();
-            }
-
-            public void aim( bool aiming )
-            {
-                _aiming = aiming;
             }
         }
     }
