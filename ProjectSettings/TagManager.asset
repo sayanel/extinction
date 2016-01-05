@@ -8,6 +8,7 @@ TagManager:
   - detectionCollider
   - stealthCollider
   - waypoint
+  - rangeCollider
   layers:
   - Default
   - TransparentFX

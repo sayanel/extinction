@@ -27,7 +27,7 @@ namespace Extinction {
 
             [SerializeField] Character _target;
             GameObject _survivor;
-            GameObject[] _survivorsStealthCollider;
+            [SerializeField] GameObject[] _survivorsStealthCollider;
             NavMeshAgent _nav;              // Reference to the nav mesh agent.
             GameObject[] _waypoints;
 
@@ -63,19 +63,24 @@ namespace Extinction {
             void Update()
             {
                 // ... set the destination of the nav mesh agent to the survivor.
-                if (_AIstate == AIState.FOLLOW) {
+                if (_AIstate == AIState.FOLLOWSURVIVOR)
+                {
                     followTarget();
+                    Debug.Log("FOLLOWSURVIVOR");
                     // Debug.Log("pos: " + _survivor.transform.position+ " " + transform.position);
                 }
 
-                else if (_AIstate == AIState.WANDER){
+                else if (_AIstate == AIState.WANDER)
+                {
                     // We set a random destination to our creaker (TODO)
                     // He is moving toward the waypoint n°2
                     _nav.SetDestination(_waypoints[2].transform.position);
+                    Debug.Log("WANDER");
                     // Debug.Log("pos: " + _survivor.transform.position + " " + transform.position + " : WANDER");
                 }
 
-                else if (_AIstate == AIState.ATTACK){
+                else if (_AIstate == AIState.ATTACK)
+                {
                     attack();
                     Debug.Log("ATTACK");
                 }
@@ -86,7 +91,7 @@ namespace Extinction {
             // We check for any collider collision 
             public void OnTriggerEnter(Collider other)
             {
-                
+
                 Vector3 enemyPos = other.transform.position;
                 Vector3 direction = Vector3.Normalize(enemyPos - this._position);
                 //RaycastHit hit;
@@ -96,20 +101,24 @@ namespace Extinction {
 
                 // If the entering collider is the stealthCollider of the survivor we follow the survivor
                 // We need to cast a ray to check if the creaker can see the survivor 
-               
-                if (isAStealthCollider(other.gameObject) && _AIstate != AIState.FOLLOW){
-                    _AIstate = AIState.FOLLOW;
-                    setTarget(other.gameObject);
+
+                if (isAStealthCollider(other.gameObject) && _AIstate != AIState.FOLLOWSURVIVOR)
+                {
+                    _AIstate = AIState.FOLLOWSURVIVOR;
+                    setTarget(other.gameObject.transform.parent.gameObject);
                     followTarget();
-                    Debug.Log("Creaker.cs : I AM FOLLOWING THE SURVIVOR!"); 
+                    Debug.Log("Creaker.cs : I AM FOLLOWING THE SURVIVOR!");
                 }
-                
+
                 // If the entering collider is the survivor himself (we are on him) we change the state to ATTACK
-                if (other.gameObject.GetComponent<Survivor>() == _target && _AIstate != AIState.ATTACK){
+                if (other.gameObject.tag == "rangeCollider" && _AIstate != AIState.ATTACK && _AIstate == AIState.FOLLOWSURVIVOR)
+                {
                     _AIstate = AIState.ATTACK;
-                    followTarget();
+                    // followTarget();
                     Debug.Log("Creaker.cs : I AM ATTACKING THE SURVIVOR");
                 }
+
+               
 
 
             }
@@ -119,9 +128,9 @@ namespace Extinction {
 
 
                 // If the exiting collider is the survivor himself (we are not on him anymore) we follow him
-                if (other.gameObject == _target.GetComponent<Survivor>() && _AIstate == AIState.ATTACK)
+                if (other.gameObject.GetComponent<Survivor>() == _target && _AIstate == AIState.ATTACK)
                 {
-                    _AIstate = AIState.FOLLOW;
+                    _AIstate = AIState.FOLLOWSURVIVOR;
                     followTarget();
                     Debug.Log("Creaker.cs : I AM FOLLOWING <AGAIN> THE SURVIVOR");
                 }
@@ -129,7 +138,11 @@ namespace Extinction {
 
             private bool isAStealthCollider(GameObject gameObject)
             {
-                if (gameObject == _survivorsStealthCollider[0]) return true;
+                foreach (GameObject stealthCollider in _survivorsStealthCollider)
+                {
+                    if (gameObject == stealthCollider) return true;
+                }
+
                 return false;
             }
 
@@ -139,8 +152,8 @@ namespace Extinction {
             }
 
             public void followTarget()
-            { 
-                if(_target) _nav.SetDestination(_target.transform.position);
+            {
+                if (_target) _nav.SetDestination(_target.transform.position);
             }
 
             public void followTarget(GameObject target)
@@ -180,7 +193,7 @@ namespace Extinction {
 
             public override void attack()
             {
-                if(_target) _target.getDamage(5);
+                if (_target) _target.getDamage(5);
             }
 
             public override void move(Vector3 vec)

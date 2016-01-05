@@ -6,6 +6,9 @@ namespace Extinction {
     namespace AI {
         public abstract class UncontrolableRobot : Characters.Unit
         {
+            
+
+
 
         }
     }
