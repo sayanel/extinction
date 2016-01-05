@@ -8,6 +8,7 @@ using Extinction.HUD;
 using Extinction.Enums;
 using Extinction.Herbie;
 using Extinction.Skills;
+using Extinction.Cameras;
 
 namespace Extinction
 {
@@ -20,10 +21,18 @@ namespace Extinction
             // ----------------------------------------------------------------------------
 
             /// <summary>
-            /// GUI which will display the current selection
+            /// GUI which will display the current selection.
+            /// Is automatically find at runtime in the parameter isn't set.
             /// </summary>
             [SerializeField]
             private HUDHerbie _hudHerbie;
+
+            /// <summary>
+            /// Herbie's camera.
+            /// Is automatically find at runtime in the parameter isn't set.
+            /// </summary>
+            [SerializeField]
+            private CameraMOBA _cameraComponent;
 
             /// <summary>
             /// A list containing all CharacterType which could be considered as targets.
@@ -76,6 +85,10 @@ namespace Extinction
                 if (_hudHerbie == null)
                 {
                     _hudHerbie = FindObjectOfType<HUDHerbie>();
+                }
+                if(_cameraComponent == null)
+                {
+                    _cameraComponent = GetComponent<CameraMOBA>();
                 }
             }
 
@@ -214,6 +227,26 @@ namespace Extinction
 
                 //    newIconeGameObject.transform.SetParent( _GUISelection );
                 //}
+            }
+
+            /// <summary>
+            /// Move herbie's camera to the position given in parameters, without changing the y component.
+            /// </summary>
+            /// <param name="position">The new position of the camera, without taking y coordinate into account.</param>
+            public void translateCameraOnYPlane(Vector3 position)
+            {
+                float yComponent = _cameraComponent.transform.position.y;
+                _cameraComponent.transform.position = new Vector3( position.x, yComponent, position.z );
+            }
+
+            /// <summary>
+            /// return true if herbie has the robot given in parameter in its selection.
+            /// </summary>
+            /// <param name="robot"></param>
+            /// <returns></returns>
+            public bool isSelecting(SpecialRobot robot)
+            {
+                return _selected.Contains( robot );
             }
         }
     }
