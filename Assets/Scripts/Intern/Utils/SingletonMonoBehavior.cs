@@ -10,6 +10,14 @@ namespace Extinction {
             private static object _lock = new object();
             private static bool applicationIsQuitting = false;
 
+            /// <summary>
+            /// Very Important!
+            /// All sub classes must call: base.Awake() method inside Awake() method
+            /// </summary>
+            public void Awake() {
+                DontDestroyOnLoad(this);
+            }
+
             public static T Instance {
                 get {
                     if (applicationIsQuitting) {

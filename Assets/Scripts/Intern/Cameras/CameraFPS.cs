@@ -32,8 +32,12 @@ namespace Extinction
             [SerializeField]
             private Timer _timer;
 
-            private bool _zoomingIn = false;
-            private bool _zoomingOut = false;
+            private float _targetFOV;
+            private float _triggerFOV;
+
+
+            private bool _zoomingIn;
+            private bool _zoomingOut;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -43,6 +47,12 @@ namespace Extinction
             {
                 if ( _camera == null ) _camera = GetComponent<Camera>();
 
+                _zoomingIn = false;
+                _zoomingOut = false;
+
+                _targetFOV = 0;
+                _triggerFOV = 0;
+
                 _camera.fieldOfView = _normalFOV;
                 _currentFOV = _normalFOV;
             }
@@ -51,23 +61,27 @@ namespace Extinction
             {
                 transform.LookAt( transform.position + _survivor.orientation, Vector3.up );
 
-                if ( _survivor.isAiming && _currentFOV > _accurateFOV && ! _zoomingIn )
+                if ( _survivor.isAiming && !_zoomingIn )
                 {
-                    float time = (_currentFOV - _accurateFOV) / (_normalFOV - _accurateFOV) * _zoomTime;
-                    Debug.Log( "Zoom!!!" );
-                    _timer = new Timer( time, null, beubeu, null, null );
-                    _timer.Start();
+                    _zoomingOut = false;
+                    _zoomingIn = true;
+                    float time = ((_accurateFOV - _currentFOV)/(_accurateFOV - _normalFOV)) * _zoomTime;
+                    zoom( _accurateFOV, time );
                 }
-            }
 
-            public void beubeu()
-            {
-                Debug.Log( "haaa" );
+                if ( !_survivor.isAiming && ! _zoomingOut )
+                {
+                    _zoomingIn = false;
+                    _zoomingOut = true;
+                    float time = ( ( _normalFOV - _currentFOV ) / ( _normalFOV - _accurateFOV ) ) * _zoomTime;
+                    zoom( _normalFOV, time );
+                }
+
             }
 
             public override void setFieldOfView( float fieldOfView )
             {
-                _fieldOfView = fieldOfView;
+                _camera.fieldOfView = fieldOfView;
             }
 
             public override void setPosition( Vector3 position )
@@ -82,19 +96,17 @@ namespace Extinction
 
             public override void zoom( float targetFieldOfView, float time )
             {
-                throw new System.NotImplementedException();
+                _targetFOV = targetFieldOfView;
+                _triggerFOV = _currentFOV;
+                _timer.init( time, null, zoomRoutine, null, null );
+                _timer.start();
             }
 
-            public void zoomIn()
+            public void zoomRoutine()
             {
-
+                _currentFOV = Mathf.Lerp( _targetFOV, _triggerFOV, ( _timer.maxTime - _timer.currentTime ) / _timer.maxTime );
+                setFieldOfView( _currentFOV );
             }
-
-            public void zoomOut()
-            {
-
-            }
-            
-        }
+        }   
     }
 }

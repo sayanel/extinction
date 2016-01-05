@@ -65,11 +65,28 @@ namespace Extinction
                 _horizontalTranslation = Input.GetAxis( "Horizontal" );
                 _verticalTranslation = Input.GetAxis( "Vertical" );
 
-                if ( !Mathf.Approximately( 0, _horizontalTranslation ) )
-                    _survivor.horizontalMovement( _horizontalTranslation );
+                if ( _horizontalTranslation < 0 )
+                {
+                    _survivor.strafeLeft( _horizontalTranslation );
+                }
 
-                if ( !Mathf.Approximately( 0, _verticalTranslation ) )
-                    _survivor.verticalMovement( _verticalTranslation );
+                if ( _horizontalTranslation > 0 )
+                {
+                    _survivor.strafeRight( _horizontalTranslation );
+                }
+
+                if ( _verticalTranslation < 0 )
+                {
+                    _survivor.runBackward( _verticalTranslation );
+                }
+
+                if ( _verticalTranslation > 0 )
+                {
+                    _survivor.run( _verticalTranslation );
+                }
+
+                if ( Mathf.Approximately( 0, _horizontalTranslation ) && Mathf.Approximately( 0, _verticalTranslation ) )
+                    _survivor.idle();
             }
 
             public void rotate()
