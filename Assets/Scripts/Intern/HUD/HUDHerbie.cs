@@ -173,8 +173,17 @@ namespace Extinction
                     HUDProgressBar robotLifeBar = robotLifeBarTransform.GetComponent<HUDProgressBar>();
                     robot.setLifeBar( robotLifeBar );
 
-                    robotVisual.GetComponent<Image>().sprite = robot.Visual;
+                    //add tmpValues to avoid errors in lambdas : 
+                    Characters.Herbie tmpHerbie = herbie;
+                    SpecialRobot tmpRobot = robot;
 
+                    //set the visual of the robot
+                    robotVisual.GetComponent<Image>().sprite = robot.Visual;
+                    robotVisual.GetComponent<Button>().onClick.AddListener( () => {
+                        tmpHerbie.translateCameraOnYPlane( tmpRobot.transform.position );
+                    } );
+
+                    //set the skills buttons : 
                     for(int i = 0; i < Mathf.Min(robot.getActiveSkillCount(), 2); ++i)
                     {
                         Transform skillEmplacement = robotActiveSkills.GetChild(i);
@@ -193,9 +202,7 @@ namespace Extinction
                         //set the delay before displaying hud infos : 
                         hudSkillButton.setDelayBeforeDisplayingInfo(_delayBeforeDisplayInfo);
 
-                        SpecialRobot tmpRobot = robot;
                         int tmpIndex = i;
-                        Characters.Herbie tmpHerbie = herbie;
                         HUDSkillButton tmpSkillButton = hudSkillButton;
                         skillEmplacement.GetComponent<Button>().onClick.AddListener(() => {
 
