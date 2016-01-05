@@ -180,20 +180,22 @@ namespace Extinction
                     //set the visual of the robot
                     robotVisual.GetComponent<Image>().sprite = robot.Visual;
                     robotVisual.GetComponent<Button>().onClick.AddListener( () => {
-                        if( tmpHerbie.isSelecting( tmpRobot ) )
-                            tmpHerbie.translateCameraOnYPlane( tmpRobot.transform.position );
+
+                        if(Input.GetKey(KeyCode.LeftShift))
+                        {
+                            if( tmpHerbie.isSelecting( tmpRobot ) )
+                                tmpHerbie.removeFromSelection( tmpRobot );
+                            else
+                                tmpHerbie.addToSelection( tmpRobot );
+                        }
                         else
                         {
-                            if(Input.GetKey(KeyCode.LeftShift))
-                            {
-                                if( tmpHerbie.isSelecting( tmpRobot ) )
-                                    tmpHerbie.removeFromSelection( tmpRobot );
-                                else
-                                    tmpHerbie.addToSelection( tmpRobot );
-                            }
+                            if( tmpHerbie.isSelecting( tmpRobot ) )
+                                tmpHerbie.translateCameraOnYPlane( tmpRobot.transform.position );
                             else
-                                tmpHerbie.changeSelection( new List<SpecialRobot> { tmpRobot } );
+                                tmpHerbie.addToSelection( tmpRobot );
                         }
+                        
                     } );
 
                     //set the skills buttons : 
