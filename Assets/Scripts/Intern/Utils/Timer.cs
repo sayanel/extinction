@@ -24,7 +24,7 @@ namespace Extinction
             private float _currentTime;
 
             /// <summary>
-            /// Getter to return the current TIme of the TImer
+            /// Return the current TIme of the TImer
             /// </summary>
             public float currentTime { get { return _currentTime; } }
 
@@ -34,7 +34,7 @@ namespace Extinction
             private float _maxTime;
 
             /// <summary>
-            /// Getter to return the current TIme of the TImer
+            /// Return the max time of the Timer
             /// </summary>
             public float maxTime { get { return _maxTime; } }
 
@@ -45,6 +45,14 @@ namespace Extinction
             private TimerCallback _endCallback;
             private TimerCallback _stopCallback;
 
+            /// <summary>
+            /// Modify the properties of the timer
+            /// </summary>
+            /// <param name="maxTime">The time after the timer will stop</param>
+            /// <param name="start">Callback which is called when the timer starts </param>
+            /// <param name="step">Callback which is called at each loop step of the timer</param>
+            /// <param name="end">Callback which is called when the timer ends</param>
+            /// <param name="stop">Callback which is called when the timer is stopped before end</param>
             public void init( float maxTime, TimerCallback start, TimerCallback step, TimerCallback end, TimerCallback stop )
             {
                 if ( maxTime < 0 )
