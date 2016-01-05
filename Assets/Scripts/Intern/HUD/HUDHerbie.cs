@@ -193,7 +193,7 @@ namespace Extinction
                             if( tmpHerbie.isSelecting( tmpRobot ) )
                                 tmpHerbie.translateCameraOnYPlane( tmpRobot.transform.position );
                             else
-                                tmpHerbie.addToSelection( tmpRobot );
+                                tmpHerbie.changeSelection( new List<SpecialRobot>{ tmpRobot } );
                         }
                         
                     } );
