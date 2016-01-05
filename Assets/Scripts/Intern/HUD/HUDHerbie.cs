@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -232,6 +233,18 @@ namespace Extinction
 
                     _robotHudInfos.Add( robot.getCharacterName(), newRobotWidget.transform );
                 }
+
+                //mini map : 
+                EventTrigger.TriggerEvent trigger = new EventTrigger.TriggerEvent();
+                trigger.AddListener( ( eventData ) => moveOnMiniMap(eventData) );
+
+                _miniMap.GetComponent<EventTrigger>().triggers = new List<EventTrigger.Entry>() { new EventTrigger.Entry() { callback = trigger, eventID = EventTriggerType.PointerClick } };
+            }
+
+            public void moveOnMiniMap( BaseEventData data )
+            {
+                //TODO
+                Debug.Log("TODO : moveOnMiniMap ! ! ! ");
             }
 
             public void changeSelection(List<CharacterName> selectedNames)
