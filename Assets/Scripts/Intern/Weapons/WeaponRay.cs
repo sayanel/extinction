@@ -2,7 +2,9 @@
 
 using UnityEngine;
 using System.Collections;
+
 using Extinction.Characters;
+using Extinction.FX;
 
 namespace Extinction
 {
