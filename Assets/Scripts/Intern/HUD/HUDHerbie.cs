@@ -223,27 +223,19 @@ namespace Extinction
             {
                 foreach(KeyValuePair<CharacterName, Transform> robotInfo in _robotHudInfos)
                 {
-                    if( selectedNames.Contains( robotInfo.Key ) )
-                    {
-                        //change the visual to show a selected color on the robot hud info
-                        robotInfo.Value.GetComponent<Image>().color = _selectedColor;
+                    bool interactivity = selectedNames.Contains( robotInfo.Key );
+                    Color widgetColor = interactivity ? _selectedColor : _unselectedColor;
 
-                        Button[] skillButtons = robotInfo.Value.GetComponentsInChildren<Button>();
-                        foreach(Button button in skillButtons)
-                        {
-                            button.interactable = true;
-                        }
-                    }
-                    else
-                    {
-                        //change the visual to show an unselected color on the robot hud info
-                        robotInfo.Value.GetComponent<Image>().color = _unselectedColor;
+                    //change the visual to show a selected color on the robot hud info : 
+                    robotInfo.Value.GetComponent<Image>().color = widgetColor;
 
-                        Button[] skillButtons = robotInfo.Value.GetComponentsInChildren<Button>();
-                        foreach (Button button in skillButtons)
-                        {
-                            button.interactable = false;
-                        }
+                    //find the widget which contains the skill buttons : 
+                    Transform robotActiveSkillsWidget = robotInfo.Value.Find( _robotsActiveSkillsWidgetPath );
+                    //change skill button interactivity : 
+                    Button[] skillButtons = robotActiveSkillsWidget.GetComponentsInChildren<Button>();
+                    foreach( Button button in skillButtons )
+                    {
+                        button.interactable = interactivity;
                     }
                 }
             }
