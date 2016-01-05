@@ -180,7 +180,17 @@ namespace Extinction
                         if( tmpHerbie.isSelecting( tmpRobot ) )
                             tmpHerbie.translateCameraOnYPlane( tmpRobot.transform.position );
                         else
-                            tmpHerbie.changeSelection( new List<SpecialRobot> { tmpRobot } );
+                        {
+                            if(Input.GetKeyDown(KeyCode.LeftShift))
+                            {
+                                if( tmpHerbie.isSelecting( tmpRobot ) )
+                                    tmpHerbie.removeFromSelection( tmpRobot );
+                                else
+                                    tmpHerbie.addToSelection( tmpRobot );
+                            }
+                            else
+                                tmpHerbie.changeSelection( new List<SpecialRobot> { tmpRobot } );
+                        }
                     } );
 
                     //set the skills buttons : 
