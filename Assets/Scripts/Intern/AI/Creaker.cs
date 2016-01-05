@@ -13,22 +13,36 @@ namespace Extinction {
         {
             WAIT,
             ATTACK,
-            FOLLOW
+            FOLLOWSURVIVOR,
+            FOLLOW,
+            WANDER
         };
 
         public class Creaker : UncontrolableRobot
         {
-            Transform _target;               // Reference to the player's position.
+
+            // ----------------------------------------------------------------------------
+            // -------------------------------- ATTRIBUTES --------------------------------
+            // ----------------------------------------------------------------------------
+
+            [SerializeField] Character _target;
             GameObject _survivor;
+            GameObject[] _survivorsStealthCollider;
             NavMeshAgent _nav;              // Reference to the nav mesh agent.
+            GameObject[] _waypoints;
 
             [SerializeField] private float _speed = 1;
-            AIState _state;
+            [SerializeField] AIState _AIstate;
 
             const float min = .5f;
             const float max = 1.5f;
             //float detectionAngle = 40;
             float detectionRadius = 5;
+
+
+            // ----------------------------------------------------------------------------
+            // --------------------------------- METHODS ----------------------------------
+            // ----------------------------------------------------------------------------
 
             /// <summary>
             /// Initialize one creaker
@@ -36,10 +50,12 @@ namespace Extinction {
             public void Awake()
             {
 
-                _target = GameObject.FindGameObjectWithTag("target").transform;
-                _survivor = GameObject.FindGameObjectWithTag("Player");
+                //  _target = GameObject.FindGameObjectWithTag("target").transform;
+                //  _survivor = GameObject.FindGameObjectWithTag("Player");
+                _survivorsStealthCollider = GameObject.FindGameObjectsWithTag("stealthCollider");
                 _nav = GetComponent<NavMeshAgent>();
-                _state = AIState.WAIT;
+                _waypoints = GameObject.FindGameObjectsWithTag("waypoint");
+                _AIstate = AIState.WANDER;
                 //detectionAngle *= Random.Range(min, max);
                 detectionRadius *= UnityEngine.Random.Range(min, max);
             }
@@ -47,29 +63,89 @@ namespace Extinction {
             void Update()
             {
                 // ... set the destination of the nav mesh agent to the survivor.
-                if (_state == AIState.FOLLOW) {
-                    _nav.SetDestination(_survivor.transform.position);
+                if (_AIstate == AIState.FOLLOW) {
+                    followTarget();
+                    // Debug.Log("pos: " + _survivor.transform.position+ " " + transform.position);
+                }
+
+                else if (_AIstate == AIState.WANDER){
+                    // We set a random destination to our creaker (TODO)
+                    // He is moving toward the waypoint n°2
+                    _nav.SetDestination(_waypoints[2].transform.position);
+                    // Debug.Log("pos: " + _survivor.transform.position + " " + transform.position + " : WANDER");
+                }
+
+                else if (_AIstate == AIState.ATTACK){
+                    attack();
+                    Debug.Log("ATTACK");
                 }
 
 
             }
 
-            public void OnCollisionEnter(Collision collision)
+            // We check for any collider collision 
+            public void OnTriggerEnter(Collider other)
             {
-                Vector3 enemyPos = collision.transform.position;
+                
+                Vector3 enemyPos = other.transform.position;
                 Vector3 direction = Vector3.Normalize(enemyPos - this._position);
                 //RaycastHit hit;
                 //if(Physics.Raycast(this._position, direction, detectionRadius), hit){
 
                 //}
 
-                // If the entering collider is the player...
-                if (collision.gameObject == _survivor)
-                {
-                    _state = AIState.FOLLOW;
-                    _nav.SetDestination(_survivor.transform.position);
-                    Debug.Log("Creaker.cs : Je te suis !");
+                // If the entering collider is the stealthCollider of the survivor we follow the survivor
+                // We need to cast a ray to check if the creaker can see the survivor 
+               
+                if (isAStealthCollider(other.gameObject) && _AIstate != AIState.FOLLOW){
+                    _AIstate = AIState.FOLLOW;
+                    setTarget(other.gameObject);
+                    followTarget();
+                    Debug.Log("Creaker.cs : I AM FOLLOWING THE SURVIVOR!"); 
                 }
+                
+                // If the entering collider is the survivor himself (we are on him) we change the state to ATTACK
+                if (other.gameObject.GetComponent<Survivor>() == _target && _AIstate != AIState.ATTACK){
+                    _AIstate = AIState.ATTACK;
+                    followTarget();
+                    Debug.Log("Creaker.cs : I AM ATTACKING THE SURVIVOR");
+                }
+
+
+            }
+
+            public void OnTriggerExit(Collider other)
+            {
+
+
+                // If the exiting collider is the survivor himself (we are not on him anymore) we follow him
+                if (other.gameObject == _target.GetComponent<Survivor>() && _AIstate == AIState.ATTACK)
+                {
+                    _AIstate = AIState.FOLLOW;
+                    followTarget();
+                    Debug.Log("Creaker.cs : I AM FOLLOWING <AGAIN> THE SURVIVOR");
+                }
+            }
+
+            private bool isAStealthCollider(GameObject gameObject)
+            {
+                if (gameObject == _survivorsStealthCollider[0]) return true;
+                return false;
+            }
+
+            public void setTarget(GameObject target)
+            {
+                _target = target.GetComponent<Survivor>();
+            }
+
+            public void followTarget()
+            { 
+                if(_target) _nav.SetDestination(_target.transform.position);
+            }
+
+            public void followTarget(GameObject target)
+            {
+                _nav.SetDestination(target.transform.position);
             }
 
             public override void addPotentialTarget(Character target)
@@ -104,7 +180,7 @@ namespace Extinction {
 
             public override void attack()
             {
-                throw new NotImplementedException();
+                if(_target) _target.getDamage(5);
             }
 
             public override void move(Vector3 vec)
