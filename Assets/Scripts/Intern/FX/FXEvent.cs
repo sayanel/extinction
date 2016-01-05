@@ -10,10 +10,12 @@ namespace Extinction {
         /// On() and Off() must implement what components have to be enabled and disabled.
         /// </summary>
         public abstract class FXEvent: MonoBehaviour {
+
             /// <summary>
-            /// How long the FX must be "played"
+            /// How long the FX must be "played", in second. 
             /// </summary>
-            private float _duration;
+            [SerializeField]
+            protected float _duration = 1;
 
             public abstract void On();
             public abstract void Off();
