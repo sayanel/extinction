@@ -155,6 +155,26 @@ namespace Extinction
             }
 
             /// <summary>
+            /// Remove a robot from the current herbie's selection.
+            /// </summary>
+            /// <param name="robot"></param>
+            public void removeFromSelection(SpecialRobot robot)
+            {
+                _selected.Remove( robot );
+                updateSelectionGUI();
+            }
+
+            /// <summary>
+            /// Add a robot to herbie's selection.
+            /// </summary>
+            /// <param name="robot"></param>
+            public void addToSelection(SpecialRobot robot)
+            {
+                _selected.Add( robot );
+                updateSelectionGUI();
+            }
+
+            /// <summary>
             /// Give an order to units which are selected.
             /// </summary>
             /// <param name="command"> The order. </param>
