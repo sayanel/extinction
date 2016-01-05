@@ -56,8 +56,11 @@ namespace Extinction
 
             override
             public void fire() {
-                if (Time.time - _previousTime >= _fireRate)
+
+                if( ( Time.time - _previousTime >= _fireRate ) && //the fireRate is OK ?
+                    ( ( _useAmmo && _nbCurrentAmmo > 0 ) || !_useAmmo ) ) //the ammos are OK ?
                 {
+                    //fire ray
                     RaycastHit hitInfo;
                     if(Physics.Raycast(_anchor.position + _anchor.forward * _minDistance, 
                                         _anchor.forward,
@@ -68,8 +71,11 @@ namespace Extinction
                         onHit(target);
                     }
                     _nbCurrentAmmo--;
+                    _previousTime = Time.time;
+
+                    //launch FX
+                    FXManager.Activate( _fireFX, _anchor.position, _anchor.rotation );
                 }
-                _previousTime = Time.time;
             }
 
             public void onHit(GameObject obj)

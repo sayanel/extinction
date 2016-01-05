@@ -3,6 +3,8 @@
 using UnityEngine;
 using System.Collections;
 
+using Extinction.Enums;
+
 namespace Extinction
 {
     namespace Weapons
@@ -84,6 +86,18 @@ namespace Extinction
                 set { _targetLayer = value; }
             }
 
+            /// <summary>
+            /// Is this weapon consuming ammo when it is shooting.
+            /// </summary>
+            [SerializeField]
+            protected bool _useAmmo = true;
+
+
+            /// <summary>
+            /// The FX launched when we fire with this weapon.
+            /// </summary>
+            [SerializeField]
+            protected FXType _fireFX;
 
 
             // ----------------------------------------------------------------------------
