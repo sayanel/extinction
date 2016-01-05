@@ -74,7 +74,7 @@ namespace Extinction
                     _previousTime = Time.time;
 
                     //launch FX
-                    FXManager.Activate( _fireFX, _anchor.position, _anchor.rotation );
+                    FXManager.Instance.Activate( _fireFX, _anchor.position, _anchor.rotation );
                 }
             }
 
