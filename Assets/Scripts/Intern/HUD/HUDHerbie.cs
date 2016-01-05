@@ -181,7 +181,7 @@ namespace Extinction
                             tmpHerbie.translateCameraOnYPlane( tmpRobot.transform.position );
                         else
                         {
-                            if(Input.GetKeyDown(KeyCode.LeftShift))
+                            if(Input.GetKey(KeyCode.LeftShift))
                             {
                                 if( tmpHerbie.isSelecting( tmpRobot ) )
                                     tmpHerbie.removeFromSelection( tmpRobot );
