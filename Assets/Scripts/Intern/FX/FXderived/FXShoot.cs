@@ -18,6 +18,14 @@ public class FXShoot : FXEvent
     [SerializeField]
     private AudioSource _audioSource;
 
+    [SerializeField]
+    private float _lightOnDuration = 0.5f;
+
+    [SerializeField]
+    private float _lightMaxIntensty = 10;
+
+    private Coroutine _lightOnCoroutine;
+
     void Awake()
     {
         if( _particleSystem == null )
@@ -40,6 +48,17 @@ public class FXShoot : FXEvent
         {
             _audioSource.Play();
         }
+        if( _light != null )
+        {
+            _lightOnCoroutine = StartCoroutine(lightOn());
+        }
+    }
+
+    private IEnumerator lightOn()
+    {
+        _light.intensity = _lightMaxIntensty;
+        yield return new WaitForSeconds( _lightOnDuration );
+        _light.intensity = 0;
     }
 
     public override void Off()
@@ -51,6 +70,10 @@ public class FXShoot : FXEvent
         if( _audioSource != null )
         {
             _audioSource.Stop();
+        }
+        if(_lightOnCoroutine != null)
+        {
+            StopCoroutine( _lightOnCoroutine );
         }
     }
 }
