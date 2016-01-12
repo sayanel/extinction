@@ -54,6 +54,9 @@ namespace Extinction
             [SerializeField]
             private float _detectionRadius = 10;
 
+            [SerializeField]
+            private GameObject[] _detectionColliders;
+
             private bool _drivenByAI = true;
 
             /// <summary>
@@ -86,6 +89,18 @@ namespace Extinction
             /// </summary>
             [SerializeField]
             private List<ActiveSkill> _activeSkills = new List<ActiveSkill>();
+
+            /// <summary>
+            /// A reference to the FogManager owned by herbie.
+            /// </summary>
+            [SerializeField]
+            FogManager _fogManager;
+
+            public FogManager FogManager{
+                get{ return _fogManager; }
+                set{ _fogManager = value; }
+            }
+
 
 
             // ----------------------------------------------------------------------------
@@ -162,6 +177,42 @@ namespace Extinction
                 //todo
             }
 
+            private bool isADetectionCollider(GameObject gameObject)
+            {
+                foreach (GameObject trigger in _detectionColliders)
+                {
+                    if (gameObject == trigger) return true;
+                }
+
+                return false;
+            }
+
+            public void OnTriggerEnter(Collider other)
+            {
+                Character characterComponent = other.GetComponent<Character>();
+
+                if (characterComponent != null)
+                {
+                    if(characterComponent.getCharacterType() == CharacterType.Survivor)
+                    {
+                        addPotentialTarget(characterComponent);
+                    }
+                }
+            }
+
+            public void OnTriggerExit(Collider other)
+            {
+                Character characterComponent = other.GetComponent<Character>();
+
+                if (characterComponent != null)
+                {
+                    if (characterComponent.getCharacterType() == CharacterType.Survivor)
+                    {
+                        removePotentialTarget(characterComponent);
+                    }
+                }
+            }
+
             public override void addPotentialTarget( Character target )
             {
                 _potentialTargets.Add( target );
@@ -193,8 +244,10 @@ namespace Extinction
 
             public override Character getPriorityTarget()
             {
-                if( _potentialTargets.Count > 0 )
-                    return _potentialTargets[0];
+                _targets.Sort((a, b) => { return (a.transform.position - transform.position).magnitude.CompareTo((a.transform.position - transform.position).magnitude) ; } );
+
+                if( _targets.Count > 0 )
+                    return _targets[0];
                 else
                     return null;
             }
@@ -209,6 +262,7 @@ namespace Extinction
                 {
                     if( !Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _targets[i].transform.position, _detectionRadius ) )
                     {
+                        _fogManager.gameObjectLeaveFieldOfView(_targets[i].gameObject);
                         _hiddenTargets.Add( _targets[i] );
                         _targets.Remove( _targets[i] );
                     }
@@ -217,6 +271,7 @@ namespace Extinction
                 {
                     if( Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _hiddenTargets[i].transform.position, _detectionRadius ) )
                     {
+                        _fogManager.gameObjectEnterFieldOfView(_targets[i].gameObject);
                         _targets.Add( _hiddenTargets[i] );
                         _hiddenTargets.Remove( _hiddenTargets[i] );
                     }
