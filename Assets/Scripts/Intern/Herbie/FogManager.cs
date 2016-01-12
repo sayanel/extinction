@@ -8,7 +8,7 @@ using Extinction.Characters;
 
 namespace Extinction
 {
-    namespace MyNamespace
+    namespace Herbie
     {
         public class FogManager : MonoBehaviour
         {
