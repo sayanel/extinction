@@ -44,6 +44,9 @@ namespace Extinction
             [SerializeField]
             private Selector _selectorComponent = null;
 
+            [SerializeField]
+            private string[] _interactableMasks;
+
 
 
             // ----------------------------------------------------------------------------
@@ -162,7 +165,7 @@ namespace Extinction
             {
                 Ray selectionRay = Camera.main.ScreenPointToRay( Input.mousePosition );
                 RaycastHit hitInfo;
-                if( Physics.Raycast( selectionRay, out hitInfo ) )
+                if( Physics.Raycast( selectionRay, out hitInfo, LayerMask.GetMask(_interactableMasks) ) )
                 {
                     info.gameObject = hitInfo.collider.gameObject;
                     info.position = hitInfo.point;

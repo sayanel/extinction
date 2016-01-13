@@ -1,4 +1,4 @@
-﻿// @author : 
+﻿// @author : florian
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -164,7 +164,7 @@ namespace Extinction
             {
                 foreach( string tag in _selectableTags )
                 {
-                    if( other.CompareTag( tag ) )
+                    if( other.CompareTag( tag ) && !other.isTrigger )
                     {
                         SpecialRobot selectedAgent = other.GetComponent<SpecialRobot>();
                         if( selectedAgent != null && !_selected.Contains( selectedAgent ) )
@@ -179,7 +179,7 @@ namespace Extinction
             {
                 foreach( string tag in _selectableTags )
                 {
-                    if( other.CompareTag( tag ) )
+                    if( other.CompareTag( tag ) && !other.isTrigger )
                     {
                         SpecialRobot selectedAgent = other.GetComponent<SpecialRobot>();
                         if( selectedAgent != null )

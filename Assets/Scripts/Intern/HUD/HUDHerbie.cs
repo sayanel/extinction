@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿// @author : florian
+
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
