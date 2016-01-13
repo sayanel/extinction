@@ -48,8 +48,13 @@ namespace Extinction {
         /// </summary>
         public enum CharacterState
         {
-            IDLE
+            Idle,
+            StrafeLeft,
+            StrafeRight,
+            Run,
+            RunBackward,
+            Sprint,
+            Jump
         }
-
     }
 }
