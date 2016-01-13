@@ -201,6 +201,16 @@ namespace Extinction
                 }
             }
 
+            public void triggerEnter(Collider other, string tag)
+            {
+                triggerEnter(other);
+            }
+
+            public void triggerExit(Collider other, string tag)
+            {
+                triggerExit(other);
+            }
+
             public override void addPotentialTarget( Character target )
             {
                 _potentialTargets.Add( target );
