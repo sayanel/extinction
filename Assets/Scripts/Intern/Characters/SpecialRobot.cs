@@ -219,6 +219,7 @@ namespace Extinction
                 
                 if(Physics.Raycast( transform.forward + new Vector3(0,0,4), target.transform.position, rayLength))
                 {
+                    _fogManager.gameObjectEnterFieldOfView(target.gameObject);
                     _targets.Add( target );
                 }
                 else
@@ -229,6 +230,8 @@ namespace Extinction
 
             public override void removePotentialTarget( Character target )
             {
+                _fogManager.gameObjectLeaveFieldOfView(target.gameObject);
+
                 _potentialTargets.Remove( target );
                 _targets.Remove( target );
                 _hiddenTargets.Remove( target );
