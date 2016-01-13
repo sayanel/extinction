@@ -20,6 +20,14 @@ namespace Extinction
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
+
+            /// <summary>
+            /// The model of hud for herbie 
+            /// </summary>
+            [SerializeField]
+            private HUDHerbie _modelHudHerbie;
+
+
             /// <summary>
             /// GUI which will display the current selection.
             /// Is automatically find at runtime in the parameter isn't set.
@@ -89,6 +97,45 @@ namespace Extinction
                 if(_cameraComponent == null)
                 {
                     _cameraComponent = GetComponent<CameraMOBA>();
+                }
+
+                //TEMPORARY : 
+                initialize( new List<string>() { "Characters/RScout", "Characters/RTank", "Characters/RController" } , new List<Vector3>() { new Vector3(0,0,0), new Vector3(1, 0, 1), new Vector3(2, 0, 2) });
+            }
+
+            /// <summary>
+            /// This function intialyze all we need when we play as Herbie.
+            /// It instantiate and initialyze Herbie's hud and herbie's special robots.
+            /// We have to give as many spawnPosition as selectedRobotPath to be able to properly spawn robots. 
+            /// </summary>
+            /// <param name="selectedRobotsPaths"></param>
+            public void initialize(List<string> selectedRobotsPaths, List<Vector3> spawnPositions, int networkGroup = 0)
+            {
+                //automatically get herbie(s HUD from resources folder
+                GameObject herbieHud = Instantiate(Resources.Load<GameObject>("HUD/HerbieHUD"));
+                _hudHerbie = herbieHud.GetComponent<HUDHerbie>();
+                GameObject hud = GameObject.Find("HUD");
+                herbieHud.transform.SetParent(hud.transform);
+
+                //automatically get herbie's special robots from resources folder 
+                List<Vector3>.Enumerator itSpawnPos =  spawnPositions.GetEnumerator();
+                List<SpecialRobot> selectedRobots = new List<SpecialRobot>();
+                foreach (string robotPath in selectedRobotsPaths)
+                {
+                    GameObject robotPrefab = Instantiate(Resources.Load<GameObject>(robotPath));//PhotonNetwork.Instantiate(robotPath, itSpawnPos.Current, Quaternion.identity, 0); // instantiated on network
+                    selectedRobots.Add(robotPrefab.GetComponent<SpecialRobot>());
+
+                    if(!itSpawnPos.MoveNext())
+                        itSpawnPos = spawnPositions.GetEnumerator();
+                }
+
+                //initialyze herbie's hud
+                _hudHerbie.initUI(selectedRobots, this);
+
+                //initialyze herbie's special robots
+                foreach(SpecialRobot robot in selectedRobots)
+                {
+                    robot.FogManager = GetComponent<FogManager>();
                 }
             }
 

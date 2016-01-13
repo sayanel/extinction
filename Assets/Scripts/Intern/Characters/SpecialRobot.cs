@@ -177,16 +177,6 @@ namespace Extinction
                 //todo
             }
 
-            private bool isADetectionCollider(GameObject gameObject)
-            {
-                foreach (GameObject trigger in _detectionColliders)
-                {
-                    if (gameObject == trigger) return true;
-                }
-
-                return false;
-            }
-
             public void OnTriggerEnter(Collider other)
             {
                 Character characterComponent = other.GetComponent<Character>();
@@ -216,8 +206,10 @@ namespace Extinction
             public override void addPotentialTarget( Character target )
             {
                 _potentialTargets.Add( target );
+
+                float rayLength = (transform.position - target.transform.position).magnitude + 2;
                 
-                if(Physics.Raycast( transform.forward + new Vector3(0,0,4), target.transform.position, _detectionRadius))
+                if(Physics.Raycast( transform.forward + new Vector3(0,0,4), target.transform.position, rayLength))
                 {
                     _targets.Add( target );
                 }
