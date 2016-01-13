@@ -165,7 +165,7 @@ namespace Extinction
             {
                 Ray selectionRay = Camera.main.ScreenPointToRay( Input.mousePosition );
                 RaycastHit hitInfo;
-                if( Physics.Raycast( selectionRay, out hitInfo, LayerMask.GetMask(_interactableMasks) ) )
+                if( Physics.Raycast( selectionRay, out hitInfo, 10000, LayerMask.GetMask(_interactableMasks) ) )
                 {
                     info.gameObject = hitInfo.collider.gameObject;
                     info.position = hitInfo.point;

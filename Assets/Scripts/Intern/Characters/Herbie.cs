@@ -122,7 +122,7 @@ namespace Extinction
                 List<SpecialRobot> selectedRobots = new List<SpecialRobot>();
                 foreach (string robotPath in selectedRobotsPaths)
                 {
-                    GameObject robotPrefab = Instantiate(Resources.Load<GameObject>(robotPath));//PhotonNetwork.Instantiate(robotPath, itSpawnPos.Current, Quaternion.identity, 0); // instantiated on network
+                    GameObject robotPrefab = Instantiate(Resources.Load<GameObject>(robotPath), itSpawnPos.Current, Quaternion.identity) as GameObject;//PhotonNetwork.Instantiate(robotPath, itSpawnPos.Current, Quaternion.identity, 0); // instantiated on network
                     selectedRobots.Add(robotPrefab.GetComponent<SpecialRobot>());
 
                     if(!itSpawnPos.MoveNext())
