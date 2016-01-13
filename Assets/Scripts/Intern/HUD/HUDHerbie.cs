@@ -161,6 +161,10 @@ namespace Extinction
 
             public void initUI(List<SpecialRobot> robots, Characters.Herbie herbie)
             {
+                //fix widgets position at runtime : 
+                _selectionHUD.GetComponent<RectTransform>().anchoredPosition = new Vector2(Screen.width, 0);
+                _miniMap.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+
                 foreach (SpecialRobot robot in robots)
                 {
                     GameObject newRobotWidget = Instantiate(_robotWidgetModel);
