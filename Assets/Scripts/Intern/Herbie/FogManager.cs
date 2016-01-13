@@ -36,16 +36,12 @@ namespace Extinction
                 int objectReferences = 0;
                 if(_observedUnits.TryGetValue(gameObject, out objectReferences))
                 {
-                    if(objectReferences == 0)
-                    {
-                        revealGameObject(gameObject);
-                    }
-
-                    objectReferences++;
+                    _observedUnits[gameObject]++;
                 }
                 else
                 {
                     _observedUnits.Add(gameObject, 1);
+                    revealGameObject(gameObject);
                 }
             }
 
@@ -59,8 +55,8 @@ namespace Extinction
                 int objectReferences = 0;
                 if (_observedUnits.TryGetValue(gameObject, out objectReferences))
                 {
-                    objectReferences--;
-                    if(objectReferences == 0)
+                    _observedUnits[gameObject]--;
+                    if (objectReferences == 0)
                     {
                         hideGameObject(gameObject);
                         _observedUnits.Remove(gameObject);
