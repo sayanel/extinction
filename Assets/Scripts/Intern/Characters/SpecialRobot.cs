@@ -10,12 +10,13 @@ using Extinction.Enums;
 using Extinction.Weapons;
 using Extinction.HUD;
 using Extinction.Skills;
+using Extinction.Utils;
 
 namespace Extinction
 {
     namespace Characters
     {
-        public class SpecialRobot : Unit
+        public class SpecialRobot : Unit, ITriggerable
         {
             // ----------------------------------------------------------------------------
             // -------------------------------- ATTRIBUTES --------------------------------
@@ -104,6 +105,7 @@ namespace Extinction
             void Awake()
             {
                 _navMeshAgentComponent = GetComponent<NavMeshAgent>();
+                _potentialTargets = new List<Character>();
             }
 
             void Update()
@@ -171,7 +173,7 @@ namespace Extinction
                 //todo
             }
 
-            public void OnTriggerEnter(Collider other)
+            public void triggerEnter(Collider other)
             {
                 Character characterComponent = other.GetComponent<Character>();
 
@@ -184,7 +186,7 @@ namespace Extinction
                 }
             }
 
-            public void OnTriggerExit(Collider other)
+            public void triggerExit(Collider other)
             {
                 Character characterComponent = other.GetComponent<Character>();
 
