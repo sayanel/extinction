@@ -110,6 +110,8 @@ namespace Extinction
 
             void Update()
             {
+                updateTargets();
+
                 if(_drivenByAI)
                 {
                     AIUpdate();
