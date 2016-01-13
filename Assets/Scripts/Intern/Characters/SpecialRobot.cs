@@ -10,13 +10,12 @@ using Extinction.Enums;
 using Extinction.Weapons;
 using Extinction.HUD;
 using Extinction.Skills;
-using Extinction.Utils;
 
 namespace Extinction
 {
     namespace Characters
     {
-        public class SpecialRobot : Unit, ITriggerable
+        public class SpecialRobot : Unit
         {
             // ----------------------------------------------------------------------------
             // -------------------------------- ATTRIBUTES --------------------------------
@@ -51,12 +50,6 @@ namespace Extinction
 
             private List<Character> _targets = new List<Character>();
             private List<Character> _hiddenTargets = new List<Character>();
-
-            [SerializeField]
-            private float _detectionRadius = 10;
-
-            [SerializeField]
-            private GameObject[] _detectionColliders;
 
             private bool _drivenByAI = true;
 
@@ -111,7 +104,6 @@ namespace Extinction
             void Awake()
             {
                 _navMeshAgentComponent = GetComponent<NavMeshAgent>();
-                _potentialTargets = new List<Character>();
             }
 
             void Update()
@@ -179,21 +171,20 @@ namespace Extinction
                 //todo
             }
 
-
-            public void triggerEnter(Collider other)
+            public void OnTriggerEnter(Collider other)
             {
                 Character characterComponent = other.GetComponent<Character>();
 
                 if (characterComponent != null)
                 {
-                    if (characterComponent.getCharacterType() == CharacterType.Survivor)
+                    if(characterComponent.getCharacterType() == CharacterType.Survivor)
                     {
                         addPotentialTarget(characterComponent);
                     }
                 }
             }
 
-            public void triggerExit(Collider other)
+            public void OnTriggerExit(Collider other)
             {
                 Character characterComponent = other.GetComponent<Character>();
 
@@ -210,7 +201,7 @@ namespace Extinction
             {
                 _potentialTargets.Add( target );
 
-                float rayLength = (transform.position - target.transform.position).magnitude + 2;
+                float rayLength = (target.transform.position - transform.position).magnitude + 2; 
                 
                 if(Physics.Raycast( transform.forward + new Vector3(0,0,4), target.transform.position, rayLength))
                 {
@@ -253,20 +244,24 @@ namespace Extinction
             /// </summary>
             void updateTargets()
             {
-                for( int i = 0; i < _targets.Count; ++i )
+                for (int i = 0; i < _targets.Count; ++i)
                 {
-                    if( !Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _targets[i].transform.position, _detectionRadius ) )
+                    float rayLength = (_targets[i].transform.position - transform.position).magnitude + 2;
+
+                    if ( !Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _targets[i].transform.position, rayLength) )
                     {
                         _fogManager.gameObjectLeaveFieldOfView(_targets[i].gameObject);
                         _hiddenTargets.Add( _targets[i] );
                         _targets.Remove( _targets[i] );
                     }
                 }
-                for( int i = 0; i < _targets.Count; ++i )
+                for( int i = 0; i < _hiddenTargets.Count; ++i )
                 {
-                    if( Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _hiddenTargets[i].transform.position, _detectionRadius ) )
+                    float rayLength = (_hiddenTargets[i].transform.position - transform.position).magnitude + 2;
+
+                    if ( Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _hiddenTargets[i].transform.position, rayLength) )
                     {
-                        _fogManager.gameObjectEnterFieldOfView(_targets[i].gameObject);
+                        _fogManager.gameObjectEnterFieldOfView(_hiddenTargets[i].gameObject);
                         _targets.Add( _hiddenTargets[i] );
                         _hiddenTargets.Remove( _hiddenTargets[i] );
                     }
