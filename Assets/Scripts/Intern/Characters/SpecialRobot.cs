@@ -350,11 +350,6 @@ namespace Extinction
                 _navMeshAgentComponent.SetDestination( vec );
             }
 
-            public override void setOrientation( Vector3 orientation )
-            {
-                //nothing
-            }
-
             public override void stopWalking()
             {
                 _navMeshAgentComponent.Stop();
