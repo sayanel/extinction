@@ -30,8 +30,12 @@ namespace Extinction
             // Use this for initialization
             void Start()
             {
+                //set collider
+                _collider = GetComponent<Collider>();
                 if (_collider == null)
                     Debug.LogWarning("You have to place a collider on a GameObject which have a Detector Component ! ");
+
+                //set target
                 if (_target == null)
                     _target = transform.parent.gameObject;
 
