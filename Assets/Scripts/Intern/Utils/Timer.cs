@@ -24,7 +24,7 @@ namespace Extinction
             private float _currentTime;
 
             /// <summary>
-            /// Return the current TIme of the TImer
+            /// Return the current Time of the Timer
             /// </summary>
             public float currentTime { get { return _currentTime; } }
 
@@ -76,13 +76,14 @@ namespace Extinction
             {
                 _isStopped = false;
                 StopCoroutine( routine() );
+
                 _currentTime = 0;
 
                 if ( _startCallback != null )
                     _startCallback();
 
-                StartCoroutine( routine() );
-                Debug.Log( "Utils.Timer was started at: " + Time.time );
+                StartCoroutine(routine());
+                //Debug.Log( "Utils.Timer was started at: " + Time.time );
             }
 
 
@@ -93,17 +94,17 @@ namespace Extinction
             public void stop()
             {
                 StopCoroutine( routine() );
+
                 _isStopped = true;
 
                 if ( _stopCallback != null )
                     _stopCallback();
-                Debug.Log( "Utils.Timer was stoped at: " + Time.time );
+
+                //Debug.Log( "Utils.Timer was stoped at: " + Time.time );
             }
 
-            public IEnumerator routine()
-            {
-                while ( true )
-                {
+            public IEnumerator routine() {
+                while (true) {
                     if ( _isStopped ) yield break;
 
                     _currentTime += Time.deltaTime;
@@ -116,11 +117,11 @@ namespace Extinction
 
                     yield return null;
                 }
-
-                if ( _endCallback != null )
+                
+                if (_endCallback != null)
                     _endCallback();
 
-                Debug.Log( "Utils.Timer has ended at: " + Time.time );
+                //Debug.Log( "Utils.Timer has ended at: " + Time.time );
             }
         }
     }
