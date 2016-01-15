@@ -43,7 +43,6 @@ namespace Extinction
 
             public void weapon()
             {
-
                 _survivor.aim(Input.GetMouseButton(1) ? true:false);
 
                 if ( Input.GetMouseButton( 0 ) )
@@ -57,6 +56,16 @@ namespace Extinction
                 if ( Input.GetButton( "Jump" ) )
                 {
                     _survivor.jump();
+                }
+
+                if ( Input.GetKey( KeyCode.LeftShift ))
+                {
+                    _survivor.sprint(true);
+                }
+
+                if ( Input.GetKeyUp( KeyCode.LeftShift ) )
+                {
+                    _survivor.sprint(false);
                 }
             }
 

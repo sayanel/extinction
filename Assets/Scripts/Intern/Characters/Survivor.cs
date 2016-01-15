@@ -111,14 +111,29 @@ namespace Extinction
 
             public void run( float value )
             {
-                _state = CharacterState.Run;
+                if(_state != CharacterState.Sprint) 
+                    _state = CharacterState.Run;
+
                 verticalMovement( value );
             }
 
             public void runBackward( float value )
             {
+                if ( _state == CharacterState.Sprint )
+                {
+                    return;
+                }
+
                 _state = CharacterState.RunBackward;
                 verticalMovement( value );
+            }
+
+            public void sprint(bool sprinting)
+            {
+                if ( _state != CharacterState.Run && _state != CharacterState.Sprint && _state != CharacterState.Idle ) return;
+
+                _state = sprinting ? CharacterState.Sprint : CharacterState.Idle;
+                _aiming = false;
             }
 
             public void jump()
@@ -135,7 +150,7 @@ namespace Extinction
 
             public void aim( bool aiming )
             {
-                _aiming = aiming;
+                if(_state != CharacterState.Sprint) _aiming = aiming;
             }
 
             public void setOrientation( float verticalOrientation, float horizontalOrientation )
@@ -157,7 +172,12 @@ namespace Extinction
             }
             private void verticalMovement( float verticalValue )
             {
-                Vector3 movement = new Vector3( _orientation.x, 0, _orientation.z ) * verticalValue * _defaultCharacterSpeed * _speedMultiplier * Time.deltaTime;
+                float multiplier = _state == CharacterState.Sprint ? 2 : 1;
+                multiplier *= verticalValue;
+                multiplier *= _defaultCharacterSpeed;
+                multiplier *= _speedMultiplier;
+
+                Vector3 movement = new Vector3( _orientation.x, 0, _orientation.z ) * multiplier * Time.deltaTime;
 
                 _speed.x += movement.x;
                 _speed.z += movement.z;

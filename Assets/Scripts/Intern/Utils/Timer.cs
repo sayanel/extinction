@@ -69,7 +69,7 @@ namespace Extinction {
                     _startCallback();
 
                 StartCoroutine(routine());
-                Debug.Log( "Utils.Timer was started at: " + Time.time );
+                //Debug.Log( "Utils.Timer was started at: " + Time.time );
             }
 
 
@@ -83,7 +83,7 @@ namespace Extinction {
 
                 if (_stopCallback != null)
                     _stopCallback();
-                Debug.Log( "Utils.Timer was stoped at: " + Time.time );
+                //Debug.Log( "Utils.Timer was stoped at: " + Time.time );
             }
 
             public IEnumerator routine() {
@@ -104,7 +104,7 @@ namespace Extinction {
                 if (_endCallback != null)
                     _endCallback();
 
-                Debug.Log( "Utils.Timer has ended at: " + Time.time );
+                //Debug.Log( "Utils.Timer has ended at: " + Time.time );
             }
         }
     }
