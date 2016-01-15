@@ -31,7 +31,11 @@ namespace Extinction
             /// The length of the ray. Automatically deduced with the range of this weapon.
             /// </summary>
             protected float _rayLenght = 100f;
+<<<<<<< Updated upstream
+
+=======
             [SerializeField]
+>>>>>>> Stashed changes
             protected Transform _anchor;
 
             [SerializeField]

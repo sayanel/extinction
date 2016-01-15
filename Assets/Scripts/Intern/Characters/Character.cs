@@ -1,4 +1,4 @@
-﻿// Created by Florian, Mehdi-Antoine  & Pascale
+﻿// @author: Florian, Mehdi-Antoine  & Pascale
 
 using UnityEngine;
 using System.Collections;
@@ -54,13 +54,13 @@ namespace Extinction
             /// The current state of the character
             /// Can be used for the animation, sounds, etc. 
             /// </summary>
-            protected CharacterState _state = CharacterState.IDLE;
+            protected CharacterState _state = CharacterState.Idle;
 
             /// <summary>
             /// Default speed of a character, without any passive skill
             /// </summary>
             [SerializeField]
-            protected static float _defaultCharacterSpeed = 1;
+            protected static float _defaultCharacterSpeed = 2;
 
             /// <summary>
             /// The name of this character.
@@ -108,7 +108,6 @@ namespace Extinction
             /// </param>
             public abstract void turn( float angle );
 
-            /// <summary>
             /// Decreases character's health
             /// </summary>
             /// <param name="amount">quantity of health to decrease</param>

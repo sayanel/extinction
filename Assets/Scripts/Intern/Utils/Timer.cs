@@ -24,7 +24,7 @@ namespace Extinction
             private float _currentTime;
 
             /// <summary>
-            /// Return the current TIme of the TImer
+            /// Return the current Time of the Timer
             /// </summary>
             public float currentTime { get { return _currentTime; } }
 
@@ -39,6 +39,7 @@ namespace Extinction
             public float maxTime { get { return _maxTime; } }
 
             private bool _isStopped;
+            private bool _isDebugging;
 
             private TimerCallback _startCallback;
             private TimerCallback _stepCallback;
@@ -53,7 +54,7 @@ namespace Extinction
             /// <param name="step">Callback which is called at each loop step of the timer</param>
             /// <param name="end">Callback which is called when the timer ends</param>
             /// <param name="stop">Callback which is called when the timer is stopped before end</param>
-            public void init( float maxTime, TimerCallback start, TimerCallback step, TimerCallback end, TimerCallback stop )
+            public void init( float maxTime, TimerCallback start, TimerCallback step, TimerCallback end, TimerCallback stop, bool isDebugging=false )
             {
                 if ( maxTime < 0 )
                     throw new System.Exception( "Timer: maxTime must be greater than 0" );
@@ -65,6 +66,7 @@ namespace Extinction
                 _stepCallback = step;
                 _endCallback = end;
                 _stopCallback = stop;
+                _isDebugging = isDebugging;
             }
 
             /// <summary>
@@ -82,7 +84,9 @@ namespace Extinction
                     _startCallback();
 
                 StartCoroutine( routine() );
-                Debug.Log( "Utils.Timer was started at: " + Time.time );
+
+                if (_isDebugging)
+                    Debug.Log( "Utils.Timer was started at: " + Time.time );
             }
 
 
@@ -97,7 +101,9 @@ namespace Extinction
 
                 if ( _stopCallback != null )
                     _stopCallback();
-                Debug.Log( "Utils.Timer was stoped at: " + Time.time );
+
+                if (_isDebugging)
+                    Debug.Log( "Utils.Timer was stoped at: " + Time.time );
             }
 
             public IEnumerator routine()
@@ -116,11 +122,12 @@ namespace Extinction
 
                     yield return null;
                 }
-
-                if ( _endCallback != null )
+                
+                if (_endCallback != null)
                     _endCallback();
 
-                Debug.Log( "Utils.Timer has ended at: " + Time.time );
+                if (_isDebugging)
+                    Debug.Log("Utils.Timer has ended at: " + Time.time);
             }
         }
     }
