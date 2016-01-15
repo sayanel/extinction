@@ -9,7 +9,6 @@ namespace Extinction
 {
     namespace Weapons
     {
-
         public class WeaponProjectile : Weapon
         {
             // ----------------------------------------------------------------------------
