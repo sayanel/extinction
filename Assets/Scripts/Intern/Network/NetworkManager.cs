@@ -4,6 +4,7 @@ using System.Collections;
 
 namespace Extinction {
     namespace Network {
+
         /// <summary>
         /// NetworkManager: Singleton
         /// Entry point for network initialisation: started at the beginning of the game.
@@ -12,9 +13,6 @@ namespace Extinction {
         public class NetworkManager: Photon.PunBehaviour { 
             private static NetworkManager _instance = null;
             private static object _lock = new object();
-
-            private static string roomName_startMenu = "StartMenuRoom";
-            private static string roomName_mapAPO = "MapAPO";
 
             public void Awake() {
                 DontDestroyOnLoad(this);
@@ -49,8 +47,20 @@ namespace Extinction {
                 Debug.Log("Connection to Photon was initialized");
             }
 
+            public override void OnJoinedLobby() {
+                base.OnJoinedLobby();
+                //PhotonNetwork.JoinOrCreateRoom(roomName_startMenu, new RoomOptions() { maxPlayers = 50 }, TypedLobby.Default);
+                Debug.Log("Network: Lobby Was joined!");
+            }
+
             public void JoinRoom(string roomName) {
-                PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions() { maxPlayers = 5 }, TypedLobby.Default);
+                PhotonNetwork.JoinRoom(roomName);
+            }
+
+            public void CreateRoom() {
+                if (!PhotonNetwork.insideLobby)
+                    throw new System.Exception("Network: The client is not inside the lobby, fail to create room");
+                PhotonNetwork.CreateRoom(null, new RoomOptions() {maxPlayers = 5}, TypedLobby.Default);
             }
 
             public override void OnPhotonJoinRoomFailed(object[] codeAndMsg) {
@@ -60,11 +70,28 @@ namespace Extinction {
 
             public override void OnJoinedRoom() {
                 base.OnJoinedRoom();
-                Debug.Log(PhotonNetwork.player.name + " rejoined the room " + PhotonNetwork.room.name);
+                Debug.Log(PhotonNetwork.player.name + " player rejoined the room " + PhotonNetwork.room.name);
+                Application.LoadLevel(2);
+            }
+
+            public override void OnLeftRoom() {
+                base.OnLeftRoom();
+                if (PhotonNetwork.player.TagObject != null)
+                    Destroy((GameObject)PhotonNetwork.player.TagObject);
+                PhotonNetwork.player.TagObject = null;
+                Application.LoadLevel(1);
+            }
+
+            public override void OnCreatedRoom() {
+                base.OnCreatedRoom();
+                Debug.Log(PhotonNetwork.player.name + " player created the room " + PhotonNetwork.room.name);
+
             }
 
             public void CreateCharacter(string prefabName, Vector3 pos, Quaternion rot) {
                 GameObject go = PhotonNetwork.Instantiate(prefabName, pos, rot, 0);
+                DontDestroyOnLoad(go);
+                PhotonNetwork.player.TagObject = go;
                 //((INetworkInitializerPrefab)(go.GetComponent<Character>())).Activate();
             }
         }
