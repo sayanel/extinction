@@ -96,7 +96,12 @@ namespace Extinction
                 set{ _fogManager = value; }
             }
 
-
+            /// <summary>
+            /// Layer names of the objects which can block the visibility of the robot.
+            /// Set to Terrain by default.
+            /// </summary>   
+            [SerializeField]
+            private string[] _terrainMasks = new String[] { "Terrain" };
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -152,6 +157,9 @@ namespace Extinction
                 }
             }
 
+            /// <summary>
+            /// Update the AI of the robot.
+            /// </summary>
             void AIUpdate()
             {
                 if( _unitBehavior == UnitBehavior.Idle )
@@ -175,6 +183,11 @@ namespace Extinction
                 //todo
             }
 
+            /// <summary>
+            /// Implementation of ITriggerable function.
+            /// Can be called by SpecialRobot's detector, when something enter the collider of the detecto.
+            /// </summary>
+            /// <param name="other">the collider which enter into the detector collider.</param>
             public void triggerEnter(Collider other)
             {
                 Character characterComponent = other.GetComponent<Character>();
@@ -188,6 +201,11 @@ namespace Extinction
                 }
             }
 
+            /// <summary>
+            /// Implementation of ITriggerable function.
+            /// Can be called by SpecialRobot's detector, when something enter the collider of the detecto.
+            /// </summary>
+            /// <param name="other">the collider which enter into the detector collider.</param>
             public void triggerExit(Collider other)
             {
                 Character characterComponent = other.GetComponent<Character>();
@@ -201,25 +219,44 @@ namespace Extinction
                 }
             }
 
+            /// <summary>
+            /// Implementation of ITriggerable function.
+            /// Can be called by SpecialRobot's detector, when something enter the collider of the detecto.
+            /// </summary>
+            /// <param name="other">the collider which enter into the detector collider.</param>
+            /// <param name="tag">A string which can be send by the detector.</param>
             public void triggerEnter(Collider other, string tag)
             {
                 triggerEnter(other);
             }
 
+            /// <summary>
+            /// Implemtation of ITriggerable function.
+            /// Can be called by SpecialRobot's detector, when something leave the collider of the detecto.
+            /// </summary>
+            /// <param name="other">the collider which leave into the detector collider.</param>
+            /// <param name="tag">A string which can be send by the detector.</param>
             public void triggerExit(Collider other, string tag)
             {
                 triggerExit(other);
             }
 
+            /// <summary>
+            /// Add a character to the potential target list.
+            /// </summary>
+            /// <param name="target">Character to add to the potantial target list.</param>
             public override void addPotentialTarget( Character target )
             {
                 _potentialTargets.Add( target );
 
-                float rayLength = (target.transform.position - transform.position).magnitude + 2; 
-                
-                if(Physics.Raycast( transform.forward + new Vector3(0,0,4), target.transform.position, rayLength))
+                Vector3 rayDirection = target.transform.position - transform.position;
+                float rayLength = (rayDirection).magnitude;
+                rayDirection.Normalize();
+
+                if( !Physics.Raycast( transform.position, rayDirection, rayLength, LayerMask.GetMask( _terrainMasks ) ))
                 {
-                    _fogManager.gameObjectEnterFieldOfView(target.gameObject);
+                    if(_fogManager != null)
+                        _fogManager.gameObjectEnterFieldOfView(target.gameObject);
                     _targets.Add( target );
                 }
                 else
@@ -228,15 +265,25 @@ namespace Extinction
                 }
             }
 
+            /// <summary>
+            /// Remove one of the potential targetsfrom _potentialTarget.
+            /// </summary>
+            /// <param name="target">The character to remove.</param>
             public override void removePotentialTarget( Character target )
             {
-                _fogManager.gameObjectLeaveFieldOfView(target.gameObject);
+                if(_fogManager)
+                    _fogManager.gameObjectLeaveFieldOfView(target.gameObject);
 
                 _potentialTargets.Remove( target );
                 _targets.Remove( target );
                 _hiddenTargets.Remove( target );
             }
 
+            /// <summary>
+            /// Get a target from _potentialTargets, by index.
+            /// </summary>
+            /// <param name="index"></param>
+            /// <returns></returns>
             public override Character getTarget( int index )
             {
                 if( index < 0 || index >= _potentialTargets.Count )
@@ -245,6 +292,10 @@ namespace Extinction
                 return _potentialTargets[index];
             }
 
+            /// <summary>
+            /// Return the most "important" target. ie : The target which is the most dangerous for this special robot.
+            /// </summary>
+            /// <returns></returns>
             public override Character getPriorityTarget()
             {
                 _targets.Sort((a, b) => { return (a.transform.position - transform.position).magnitude.CompareTo((a.transform.position - transform.position).magnitude) ; } );
@@ -263,9 +314,11 @@ namespace Extinction
             {
                 for (int i = 0; i < _targets.Count; ++i)
                 {
-                    float rayLength = (_targets[i].transform.position - transform.position).magnitude + 2;
+                    Vector3 rayDirection = _targets[i].transform.position - transform.position;
+                    float rayLength = ( rayDirection ).magnitude;
+                    rayDirection.Normalize();
 
-                    if ( !Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _targets[i].transform.position, rayLength) )
+                    if( !Physics.Raycast( transform.position, rayDirection, rayLength, LayerMask.GetMask( _terrainMasks ) ) )
                     {
                         _fogManager.gameObjectLeaveFieldOfView(_targets[i].gameObject);
                         _hiddenTargets.Add( _targets[i] );
@@ -274,9 +327,11 @@ namespace Extinction
                 }
                 for( int i = 0; i < _hiddenTargets.Count; ++i )
                 {
-                    float rayLength = (_hiddenTargets[i].transform.position - transform.position).magnitude + 2;
+                    Vector3 rayDirection = _hiddenTargets[i].transform.position - transform.position;
+                    float rayLength = ( rayDirection ).magnitude;
+                    rayDirection.Normalize();
 
-                    if ( Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _hiddenTargets[i].transform.position, rayLength) )
+                    if( !Physics.Raycast( transform.position, rayDirection, rayLength, LayerMask.GetMask( _terrainMasks ) ) )
                     {
                         _fogManager.gameObjectEnterFieldOfView(_hiddenTargets[i].gameObject);
                         _targets.Add( _hiddenTargets[i] );
