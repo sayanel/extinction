@@ -1,0 +1,3 @@
+[submodule "Assets/Scripts/ThirdParty/JSONObject"]
+	path = Assets/Scripts/ThirdParty/JSONObject
+	url = http://github.com/mtschoen/JSONObject.git
