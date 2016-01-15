@@ -31,11 +31,6 @@ namespace Extinction
             /// The length of the ray. Automatically deduced with the range of this weapon.
             /// </summary>
             protected float _rayLenght = 100f;
-            [SerializeField]
-            protected Transform _anchor;
-
-            [SerializeField]
-            protected string[] _targetTag;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -67,7 +62,7 @@ namespace Extinction
                                         _anchor.forward,
                                         out hitInfo,
                                         _rayLenght,
-                                        LayerMask.GetMask(_targetTag))){
+                                        LayerMask.GetMask(_targetLayer))){
                         GameObject target = hitInfo.transform.gameObject;
                         onHit(target);
                     }

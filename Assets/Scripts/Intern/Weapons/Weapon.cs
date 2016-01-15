@@ -63,6 +63,27 @@ namespace Extinction
             /// </summary>
             protected float _previousTime;
 
+            /// <summary>
+            /// The position from which the ray/projectile will be launched.
+            /// If the anchor isn't set in the editor, it will automatically be the child transform of this gameObject.
+            /// If there is no child transform, it will be the transform of this gameObject.
+            /// </summary>
+            [SerializeField]
+            protected Transform _anchor;
+
+            /// <summary>
+            /// Only GameObjects which are on these layers can be hit by the ray.
+            /// Contains Default layer by default.
+            /// </summary>
+            [SerializeField]
+            protected string[] _targetLayer = { "Default" };
+
+            protected string[] TargetLayer
+            {
+                get { return _targetLayer; }
+                set { _targetLayer = value; }
+            }
+
 
 
             // ----------------------------------------------------------------------------
