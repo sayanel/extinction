@@ -33,8 +33,7 @@ namespace Extinction
             /// <param name="gameObject"></param>
             public void gameObjectEnterFieldOfView(GameObject gameObject)
             {
-                int objectReferences = 0;
-                if(_observedUnits.TryGetValue(gameObject, out objectReferences))
+                if(_observedUnits.ContainsKey(gameObject))
                 {
                     _observedUnits[gameObject]++;
                 }
@@ -52,11 +51,10 @@ namespace Extinction
             /// <param name="gameObject"></param>
             public void gameObjectLeaveFieldOfView(GameObject gameObject)
             {
-                int objectReferences = 0;
-                if (_observedUnits.TryGetValue(gameObject, out objectReferences))
+                if (_observedUnits.ContainsKey(gameObject))
                 {
                     _observedUnits[gameObject]--;
-                    if (objectReferences == 0)
+                    if ( _observedUnits[gameObject] == 0)
                     {
                         hideGameObject(gameObject);
                         _observedUnits.Remove(gameObject);

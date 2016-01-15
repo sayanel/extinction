@@ -96,6 +96,9 @@ namespace Extinction
                 set{ _fogManager = value; }
             }
 
+            [SerializeField]
+            private string[] slectableMasks = new String[] { "Terrain" };
+
 
 
             // ----------------------------------------------------------------------------
@@ -219,6 +222,7 @@ namespace Extinction
                 
                 if(Physics.Raycast( transform.forward + new Vector3(0,0,4), target.transform.position, rayLength))
                 {
+                    if( _fogManager != null)
                     _fogManager.gameObjectEnterFieldOfView(target.gameObject);
                     _targets.Add( target );
                 }
@@ -230,6 +234,7 @@ namespace Extinction
 
             public override void removePotentialTarget( Character target )
             {
+                if( _fogManager != null )
                 _fogManager.gameObjectLeaveFieldOfView(target.gameObject);
 
                 _potentialTargets.Remove( target );
@@ -263,10 +268,12 @@ namespace Extinction
             {
                 for (int i = 0; i < _targets.Count; ++i)
                 {
-                    float rayLength = (_targets[i].transform.position - transform.position).magnitude + 2;
+                    float rayLength = (_targets[i].transform.position - transform.position).magnitude ;
+                    Vector3 raydirection = _targets[i].transform.position - transform.position;
 
-                    if ( !Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _targets[i].transform.position, rayLength) )
+                    if ( Physics.Raycast( transform.position, raydirection, rayLength, LayerMask.GetMask(slectableMasks) ) )
                     {
+                        if( _fogManager != null)
                         _fogManager.gameObjectLeaveFieldOfView(_targets[i].gameObject);
                         _hiddenTargets.Add( _targets[i] );
                         _targets.Remove( _targets[i] );
@@ -274,10 +281,12 @@ namespace Extinction
                 }
                 for( int i = 0; i < _hiddenTargets.Count; ++i )
                 {
-                    float rayLength = (_hiddenTargets[i].transform.position - transform.position).magnitude + 2;
+                    float rayLength = (_hiddenTargets[i].transform.position - transform.position).magnitude;
+                    Vector3 raydirection = _hiddenTargets[i].transform.position - transform.position;
 
-                    if ( Physics.Raycast( transform.forward + new Vector3( 0, 0, 4 ), _hiddenTargets[i].transform.position, rayLength) )
+                    if( Physics.Raycast( transform.position, raydirection, rayLength, LayerMask.GetMask( slectableMasks ) ) )
                     {
+                        if( _fogManager !=null)
                         _fogManager.gameObjectEnterFieldOfView(_hiddenTargets[i].gameObject);
                         _targets.Add( _hiddenTargets[i] );
                         _hiddenTargets.Remove( _hiddenTargets[i] );
