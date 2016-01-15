@@ -86,8 +86,10 @@ namespace Extinction
             private float _jumpImpulse = 0.4f;
 
             private float _verticalSpeed = 0;
+
             private Vector3 _speed;
             private Vector3 _orientation = Vector3.forward;
+
             private bool _aiming = false;
 
             // ----------------------------------------------------------------------------

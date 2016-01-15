@@ -320,6 +320,7 @@ namespace Extinction
 
                     if( !Physics.Raycast( transform.position, rayDirection, rayLength, LayerMask.GetMask( _terrainMasks ) ) )
                     {
+                        if( _fogManager != null)
                         _fogManager.gameObjectLeaveFieldOfView(_targets[i].gameObject);
                         _hiddenTargets.Add( _targets[i] );
                         _targets.Remove( _targets[i] );
@@ -333,6 +334,7 @@ namespace Extinction
 
                     if( !Physics.Raycast( transform.position, rayDirection, rayLength, LayerMask.GetMask( _terrainMasks ) ) )
                     {
+                        if( _fogManager !=null)
                         _fogManager.gameObjectEnterFieldOfView(_hiddenTargets[i].gameObject);
                         _targets.Add( _hiddenTargets[i] );
                         _hiddenTargets.Remove( _hiddenTargets[i] );

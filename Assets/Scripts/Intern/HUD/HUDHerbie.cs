@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿// @author : florian
+
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
@@ -101,9 +103,12 @@ namespace Extinction
             [SerializeField]
             private float _delayBeforeDisplayInfo = 1;
 
-            //TEMPORARY
-            [SerializeField]
-            private List<SpecialRobot> _robotList = new List<SpecialRobot>();
+            ////TEMPORARY
+            //[SerializeField]
+            //private List<SpecialRobot> _robotList = new List<SpecialRobot>();
+            ////TEMPORARY
+            //[SerializeField]
+            //private Characters.Herbie _herbie;
 
 
             void Awake()
@@ -152,8 +157,8 @@ namespace Extinction
                 _floatingInfoHUD = Instantiate(_floatingInfoModel);
                 _floatingInfoHUD.transform.SetParent(transform);
 
-                //TEMPORARY
-                initUI(_robotList);
+                ////TEMPORARY
+                //initUI(_robotList, _herbie);
             }
 
             public void initUI(List<SpecialRobot> robots, Characters.Herbie herbie)

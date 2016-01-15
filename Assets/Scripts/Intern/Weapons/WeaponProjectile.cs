@@ -3,6 +3,8 @@
 using UnityEngine;
 using System.Collections;
 
+using Extinction.FX;
+
 namespace Extinction
 {
     namespace Weapons
@@ -47,8 +49,10 @@ namespace Extinction
             override
             public void fire()
             {
-                if (Time.time - _previousTime >= _fireRate)
+                if((Time.time - _previousTime >= _fireRate) && //the fireRate is OK ?
+                    ( (_useAmmo && _nbCurrentAmmo > 0) || !_useAmmo)) //the ammos are OK ?
                 {
+                    //fire projectile
                     Projectile p = Instantiate(_projectile, _anchor.position, _anchor.rotation) as Projectile;
                     p.Dammage = _damage;
                     p.TargetTag = _targetLayer;
@@ -57,6 +61,9 @@ namespace Extinction
                         pBody.AddForce(_anchor.forward * _velocity);
                     _previousTime = Time.time;
                     _nbCurrentAmmo--;
+
+                    //launch FX
+                    FXManager.Instance.Activate(_fireFX, _anchor.position, _anchor.rotation);
                 }
             }
 
