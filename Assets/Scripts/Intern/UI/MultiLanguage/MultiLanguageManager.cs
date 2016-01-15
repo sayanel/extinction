@@ -14,7 +14,7 @@ namespace Extinction {
 
         public class MultiLanguageManager : SingletonMonoBehavior<MultiLanguageManager> {
             [SerializeField]
-            public string jsonDirPath = "./Assets/Scripts/Intern/UI/MultiLanguage";
+            public string jsonDirPath = "";
 
             public string _code = "en";
             private JSONObject _elements;
@@ -22,6 +22,9 @@ namespace Extinction {
 
             new public void Awake() {
                 base.Awake();
+                if( jsonDirPath == "") {
+                   jsonDirPath = System.IO.Path.Combine(Application.dataPath, "Resources/MultiLanguage/");
+                }
                 ChangeLanguage(_code);
             }
 
