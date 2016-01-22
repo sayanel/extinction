@@ -27,8 +27,13 @@ namespace Extinction {
             public void JoinGame(string roomName) {
                 PhotonNetwork.LeaveRoom();
                 NetworkManager.Instance.JoinRoom(roomName);
-                loadRoomScript.Load();
+                if (loadRoomScript != null)
+                    loadRoomScript.Load();
             }
-        }
+
+            public void Join2() {
+                NetworkManager.Instance.JoinRoom(GetComponent<RoomInfoUI>().gameName.text);
+            }
+        }   
     }
 }

@@ -1,6 +1,8 @@
 ﻿// @author: Alex
 using UnityEngine;
 using System.Collections;
+using Extinction.Characters;
+using Extinction.Controllers;
 
 namespace Extinction {
     namespace Network {
@@ -71,7 +73,8 @@ namespace Extinction {
             public override void OnJoinedRoom() {
                 base.OnJoinedRoom();
                 Debug.Log(PhotonNetwork.player.name + " player rejoined the room " + PhotonNetwork.room.name);
-                Application.LoadLevel(2);
+                PhotonNetwork.LoadLevel(2);
+                CreateCharacter("FPSPlayer", Vector3.zero, Quaternion.identity);
             }
 
             public override void OnLeftRoom() {
@@ -92,7 +95,7 @@ namespace Extinction {
                 GameObject go = PhotonNetwork.Instantiate(prefabName, pos, rot, 0);
                 DontDestroyOnLoad(go);
                 PhotonNetwork.player.TagObject = go;
-                //((INetworkInitializerPrefab)(go.GetComponent<Character>())).Activate();
+                ((INetworkInitializerPrefab)(go.GetComponent<Survivor>())).Activate();
             }
         }
     }

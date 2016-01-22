@@ -13,25 +13,22 @@ namespace Extinction {
         /// </summary>
 
         public class MultiLanguageManager : SingletonMonoBehavior<MultiLanguageManager> {
-            [SerializeField]
-            public string jsonDirPath = "";
 
+            private string jsonDirPathResources = "MultiLanguage";
             public string _code = "en";
             private JSONObject _elements;
             private static string KEY_ELEMENTS = "elements";
 
             new public void Awake() {
                 base.Awake();
-                if( jsonDirPath == "") {
-                   jsonDirPath = System.IO.Path.Combine(Application.dataPath, "Resources/MultiLanguage/");
-                }
                 ChangeLanguage(_code);
             }
 
             public void ChangeLanguage(string code) {
                 _code = code;
-                string path = System.IO.Path.Combine(jsonDirPath, code + ".json");
-                JSONObject obj = new JSONObject(System.IO.File.ReadAllText(path));
+                TextAsset path = Resources.Load(jsonDirPathResources + "/" + code) as TextAsset;
+                Debug.Log(jsonDirPathResources + "/" + code);
+                JSONObject obj = new JSONObject(path.text);
                 _elements = obj[MultiLanguageManager.KEY_ELEMENTS];
             }
 

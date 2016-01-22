@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Collections;
 using Extinction.Weapons;
 using Extinction.Enums;
+using Extinction.Network;
+using Extinction.Controllers;
+using Extinction.Cameras;
 
 namespace Extinction
 {
@@ -12,7 +15,7 @@ namespace Extinction
         /// <summary>
         /// This class represents a survivor.
         /// </summary>
-        public class Survivor : Character
+        public class Survivor : Character, INetworkInitializerPrefab
         {
             // ----------------------------------------------------------------------------
             // -------------------------------- ATTRIBUTES --------------------------------
@@ -305,6 +308,13 @@ namespace Extinction
                 }
 
                 _speed.y -= _gravity * Time.deltaTime;
+            }
+
+            // INetworkInitializerPrefab method
+            public void Activate() {
+                Debug.Log("Activate !!");
+                GetComponent<InputControllerSurvivor>().enabled = true;
+                GetComponentInChildren<Camera>().enabled = true;
             }
         }
     }

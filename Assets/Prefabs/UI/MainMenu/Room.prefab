@@ -13,7 +13,7 @@ GameObject:
   - 114: {fileID: 11499406}
   - 114: {fileID: 11478744}
   - 114: {fileID: 11429362}
-  - 114: {fileID: 11449104}
+  - 114: {fileID: 11482730}
   m_Layer: 5
   m_Name: Room
   m_TagString: Untagged
@@ -177,17 +177,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Players Numbers
---- !u!114 &11449104
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef6cdec6b712a3845bab04cb9362b5dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11459758
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -238,6 +227,18 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
+--- !u!114 &11482730
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 119438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ead3bd79ddba8124495d88c9c2e8a901, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadRoomScript: {fileID: 0}
 --- !u!114 &11499406
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -276,7 +277,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11405154}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11482730}
+        m_MethodName: Join2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!222 &22233516
