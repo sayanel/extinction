@@ -42,6 +42,11 @@ namespace Extinction {
             ShootFX
         }
 
+        public enum ProjectileType
+        {
+            Missile
+        }
+
         /// <summary>
         /// The current state of the character
         /// Can be used for the animation, sounds, etc. 
