@@ -7,6 +7,7 @@ using Extinction.Controllers;
 namespace Extinction {
     namespace Network {
 
+
         /// <summary>
         /// NetworkManager: Singleton
         /// Entry point for network initialisation: started at the beginning of the game.
@@ -46,6 +47,7 @@ namespace Extinction {
                     return;
                 }
 
+                PhotonNetwork.automaticallySyncScene = true;
                 Debug.Log("Connection to Photon was initialized");
             }
 
@@ -79,8 +81,10 @@ namespace Extinction {
 
             public override void OnLeftRoom() {
                 base.OnLeftRoom();
+
                 if (PhotonNetwork.player.TagObject != null)
                     Destroy((GameObject)PhotonNetwork.player.TagObject);
+
                 PhotonNetwork.player.TagObject = null;
                 Application.LoadLevel(1);
             }
@@ -88,7 +92,6 @@ namespace Extinction {
             public override void OnCreatedRoom() {
                 base.OnCreatedRoom();
                 Debug.Log(PhotonNetwork.player.name + " player created the room " + PhotonNetwork.room.name);
-
             }
 
             public void CreateCharacter(string prefabName, Vector3 pos, Quaternion rot) {
