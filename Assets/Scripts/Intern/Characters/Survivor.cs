@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using Extinction.Weapons;
 using Extinction.Enums;
+using Extinction.Utils;
 
 namespace Extinction
 {
@@ -85,10 +86,14 @@ namespace Extinction
             [SerializeField]
             private float _jumpImpulse = 0.4f;
 
+            [SerializeField]
+            private Timer _aimingTimer;
+
             private float _verticalSpeed = 0;
             private Vector3 _speed;
             private Vector3 _orientation = Vector3.forward;
             private bool _aiming = false;
+            private Vector3 _trueOrientation = Vector3.forward;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -112,6 +117,15 @@ namespace Extinction
 
                 _speed.x = 0;
                 _speed.z = 0;
+
+                float minRange = -1;
+                float maxRange = 1;
+
+                Vector3 random = Vector3.Normalize( new Vector3( Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ) ) );
+                _trueOrientation = (0.3f * random + 1.7f * _orientation)/2;
+                Vector3 camPosition = GetComponentInChildren<Camera>().transform.position;
+                Debug.DrawLine( camPosition, camPosition + 10 * _orientation );
+                Debug.DrawLine( camPosition, camPosition + 10 * _trueOrientation, Color.blue );
             }
 
             /// <summary>
