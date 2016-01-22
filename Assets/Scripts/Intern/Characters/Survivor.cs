@@ -29,6 +29,9 @@ namespace Extinction
             /// </summary>
             public Vector3 orientation { get { return _orientation; } }
 
+
+            public Vector3 trueOrientation { get { return _trueOrientation; } }
+
             /// <summary>
             /// Returns the survivor's state.
             /// It can be used for animation.
@@ -62,6 +65,12 @@ namespace Extinction
             private float _speedMultiplier = 3;
 
             /// <summary>
+            /// Reduce or increase the survivor's accuracy
+            /// </summary>
+            [SerializeField]
+            private float _accuracyMultiplier = 0.5f;
+
+            /// <summary>
             /// A pointer to a Unity CharacterController
             /// The Controller Should be put in the same GameObject than this script
             /// </summary>
@@ -86,14 +95,26 @@ namespace Extinction
             [SerializeField]
             private float _jumpImpulse = 0.4f;
 
-            [SerializeField]
-            private Timer _aimingTimer;
 
             private float _verticalSpeed = 0;
             private Vector3 _speed;
             private Vector3 _orientation = Vector3.forward;
             private bool _aiming = false;
+
             private Vector3 _trueOrientation = Vector3.forward;
+            private Vector3 _lastOrientation = Vector3.forward;
+            private Vector3 _nextOrientation = Vector3.forward;
+
+            [SerializeField]
+            private AnimationCurve _accuracyInterpolation;
+
+            [SerializeField]
+            private float _maxAccuracyDeviation = 20;
+            [SerializeField]
+            private float _minAccuracyDeviation = -20;
+
+            [SerializeField]
+            private Timer _accuracyTimer;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -104,6 +125,9 @@ namespace Extinction
                 _orientation = Vector3.forward;
 
                 _speed = Vector3.zero;
+
+                _accuracyTimer.init( 3, startAccuracyRoutine, accuracyRoutine, endAccuracyRoutine, null );
+                _accuracyTimer.start();
 
                 if ( _controller != null ) return;
 
@@ -117,15 +141,34 @@ namespace Extinction
 
                 _speed.x = 0;
                 _speed.z = 0;
+            }
 
-                float minRange = -1;
-                float maxRange = 1;
+            private void accuracyRoutine()
+            {
+                float factor = _accuracyInterpolation.Evaluate( _accuracyTimer.currentTime / _accuracyTimer.maxTime );
 
-                Vector3 random = Vector3.Normalize( new Vector3( Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ) ) );
-                _trueOrientation = (0.3f * random + 1.7f * _orientation)/2;
+
+                Vector3 randomOrientation = Vector3.Normalize( ( factor * _nextOrientation + ( 1 - factor ) * _lastOrientation ) / 2 );
+                float multiplier = 0.3f * _accuracyMultiplier * (_aiming ? 0.2f : 1);
+                _trueOrientation = Vector3.Normalize( ( multiplier * randomOrientation + (1-multiplier) * _orientation ) / 2 );
+
                 Vector3 camPosition = GetComponentInChildren<Camera>().transform.position;
                 Debug.DrawLine( camPosition, camPosition + 10 * _orientation );
                 Debug.DrawLine( camPosition, camPosition + 10 * _trueOrientation, Color.blue );
+            }
+
+            private void startAccuracyRoutine()
+            {
+                float minRange = -20;
+                float maxRange = 20;
+                _lastOrientation = _nextOrientation;
+
+                _nextOrientation = Quaternion.Euler( Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ) ) * Vector3.forward;
+            }
+
+            private void endAccuracyRoutine()
+            {
+                _accuracyTimer.start();
             }
 
             /// <summary>

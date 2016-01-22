@@ -85,7 +85,7 @@ namespace Extinction
 
             public void Update()
             {
-                transform.LookAt( transform.position + _survivor.orientation, Vector3.up );
+                transform.LookAt( transform.position + _survivor.trueOrientation, Vector3.up );
 
                 if ( _survivor.isAiming && !_zoomingIn )
                 {
