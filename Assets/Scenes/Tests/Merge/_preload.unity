@@ -171,3 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2ee88794aab3a4c85f63cc18118e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  INDEX_SCENE_MAIN_MENU: 1
+  INDEX_SCENE_PLAYER_CHOICE: 2
+  INDEX_SCENE_GAME: 3
+  MAX_PLAYER: 5

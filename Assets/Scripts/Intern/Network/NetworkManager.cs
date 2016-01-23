@@ -17,6 +17,16 @@ namespace Extinction {
             private static NetworkManager _instance = null;
             private static object _lock = new object();
 
+
+            // scenes index use with PhotonNetwork.LoadLevel => change levels
+            // these index are mapped with current build settings
+            // INDEX_PRELOAD == 0
+            public int INDEX_SCENE_MAIN_MENU = 1;
+            public int INDEX_SCENE_PLAYER_CHOICE = 2;
+            public int INDEX_SCENE_GAME = 3;
+
+            public int MAX_PLAYER = 5;
+
             public void Awake() {
                 DontDestroyOnLoad(this);
             }
@@ -51,15 +61,23 @@ namespace Extinction {
                 Debug.Log("Connection to Photon was initialized");
             }
 
+            /// <summary>
+            /// A player need to be inside Lobby before any network interaction: debug
+            /// </summary>
             public override void OnJoinedLobby() {
                 base.OnJoinedLobby();
                 //PhotonNetwork.JoinOrCreateRoom(roomName_startMenu, new RoomOptions() { maxPlayers = 50 }, TypedLobby.Default);
                 Debug.Log("Network: Lobby Was joined!");
             }
 
+            /// <summary>
+            /// Wrapper method of PhotonNetwork.JoinRoom: Use NetworkManagerAPI
+            /// </summary>
+            /// <param name="roomName"></param>
             public void JoinRoom(string roomName) {
                 PhotonNetwork.JoinRoom(roomName);
             }
+
 
             public void CreateRoom() {
                 if (!PhotonNetwork.insideLobby)
@@ -75,8 +93,6 @@ namespace Extinction {
             public override void OnJoinedRoom() {
                 base.OnJoinedRoom();
                 Debug.Log(PhotonNetwork.player.name + " player rejoined the room " + PhotonNetwork.room.name);
-                PhotonNetwork.LoadLevel(2);
-                CreateCharacter("FPSPlayer", Vector3.zero, Quaternion.identity);
             }
 
             public override void OnLeftRoom() {
@@ -86,12 +102,13 @@ namespace Extinction {
                     Destroy((GameObject)PhotonNetwork.player.TagObject);
 
                 PhotonNetwork.player.TagObject = null;
-                Application.LoadLevel(1);
+                Application.LoadLevel(INDEX_SCENE_MAIN_MENU);
             }
 
             public override void OnCreatedRoom() {
                 base.OnCreatedRoom();
                 Debug.Log(PhotonNetwork.player.name + " player created the room " + PhotonNetwork.room.name);
+                Application.LoadLevel(INDEX_SCENE_GAME);
             }
 
             public void CreateCharacter(string prefabName, Vector3 pos, Quaternion rot) {
