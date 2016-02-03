@@ -205,7 +205,8 @@ namespace Extinction
                     _currentZoom -= _zoomStep;
                 }
 
-                setFieldOfView( _currentZoom );
+                transform.Translate( 0, 0, delta * _zoomStep, transform );
+                //setFieldOfView( _currentZoom );
             }
 
             /// <summary>
