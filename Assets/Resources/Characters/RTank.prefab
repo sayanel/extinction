@@ -351,7 +351,7 @@ MonoBehaviour:
   _projectileModel: {fileID: 0}
   _bulletCount: 20
   _damageArea: 10
-  _offsetFromCharacter: 0
+  _offsetFromCharacter: 1
   _fireFX: 0
   _damageFilter: []
   _damage: 10

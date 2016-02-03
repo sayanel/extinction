@@ -154,7 +154,7 @@ namespace Extinction
                 //directly cast the skill if the skill applies on the robot
                 if (skillToCast.SkillOnSelf)
                 {
-                    castSkill(_skillCaster.transform.position, Input.GetKeyDown(KeyCode.LeftShift));
+                    castSkill( _skillCaster.transform.position, Input.GetKeyDown(KeyCode.LeftShift));
                     return;
                 }
 
