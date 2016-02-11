@@ -51,7 +51,7 @@ GameObject:
   - 4: {fileID: 472220}
   - 114: {fileID: 11417304}
   - 135: {fileID: 13593242}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}

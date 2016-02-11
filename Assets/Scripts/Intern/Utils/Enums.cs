@@ -19,7 +19,8 @@ namespace Extinction {
             Survivor,
             SpecialRobot,
             Creaker,
-            Herbie
+            Herbie,
+            MiniRobot
         }
 
         public enum CharacterName {
@@ -31,7 +32,9 @@ namespace Extinction {
             RTank,
             RScout,
             Creaker,
-            Herbie
+            Herbie,
+            RNinja,
+            RCamera
         }
 
         public enum AmmoType {

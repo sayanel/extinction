@@ -23,7 +23,7 @@ namespace Extinction
             /// <summary>
             /// The unit which will follow the order
             /// </summary>
-            protected SpecialRobot _actor;
+            protected Unit _actor;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -38,9 +38,9 @@ namespace Extinction
             //properly end the command
             public abstract void End();
 
-            public virtual void setActor(SpecialRobot specialRobot)
+            public virtual void setActor(Unit actor)
             {
-                _actor = specialRobot;
+                _actor = actor;
             }
 
             /// <summary>

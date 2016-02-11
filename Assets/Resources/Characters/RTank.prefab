@@ -79,7 +79,7 @@ GameObject:
   - 4: {fileID: 400930}
   - 114: {fileID: 11458328}
   - 135: {fileID: 13514218}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -351,7 +351,7 @@ MonoBehaviour:
   _projectileModel: {fileID: 0}
   _bulletCount: 20
   _damageArea: 10
-  _offsetFromCharacter: 1
+  _offsetFromCharacter: 2
   _fireFX: 0
   _damageFilter: []
   _damage: 10
@@ -425,8 +425,10 @@ MonoBehaviour:
   _coolDown: 5
   _projectileModel: {fileID: 160950, guid: c53d74c25f8068247a3540018d3dc021, type: 2}
   _projectileCount: 5
-  _projectileHeight: 10
-  _damageArea: 3
+  _projectileHeight: 8
+  _projectileSpeed: .100000001
+  _damageRadius: 3
+  _damage: 10
   _launcher: {fileID: 432526}
   _launchingFX: 0
 --- !u!114 &11458328

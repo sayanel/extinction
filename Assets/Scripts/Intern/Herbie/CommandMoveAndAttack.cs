@@ -35,7 +35,7 @@ namespace Extinction
             /// <summary>
             /// create the command with all the informations : 
             /// </summary>
-            public CommandMoveAndAttack( SpecialRobot actor, Character target, float aiDelay = 1 )
+            public CommandMoveAndAttack( Unit actor, Character target, float aiDelay = 1 )
             {
                 _actor = actor;
                 _target = target;
