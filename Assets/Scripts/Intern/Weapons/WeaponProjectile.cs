@@ -54,7 +54,7 @@ namespace Extinction
                 {
                     //fire projectile
                     Projectile p = Instantiate(_projectile, _anchor.position, _anchor.rotation) as Projectile;
-                    p.Dammage = _damage;
+                    p.Damage = _damage;
                     p.TargetTag = _targetLayer;
                     Rigidbody pBody = p.GetComponent<Rigidbody>();
                     if (pBody != null)

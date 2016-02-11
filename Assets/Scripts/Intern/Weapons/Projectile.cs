@@ -15,11 +15,11 @@ namespace Extinction
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
             protected float _lifeTime = 10f;
-            protected int _dammage = 1;
-            public int Dammage
+            protected float _damage = 1;
+            public float Damage
             {
-                get { return _dammage; }
-                set { _dammage = value; }
+                get { return _damage; }
+                set { _damage = value; }
             }
 
             protected string[] _targetTag;
@@ -28,9 +28,17 @@ namespace Extinction
                 get { return _targetTag; }
                 set { _targetTag = value; }
             }
-            private bool _isAlive = true;
-            private Renderer _renderer;
-            private Collider _collider;
+            protected bool _isAlive = true;
+            protected Renderer _renderer;
+            protected Collider _collider;
+
+            [SerializeField]
+            float _speed = 1;
+
+            public float Speed{
+                get { return _speed; }
+                set { _speed = value; }
+            }
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -41,29 +49,48 @@ namespace Extinction
                 _collider = GetComponent<Collider>();
             }
 
-            public void OnTriggerEnter(Collider other)
-            {
-                foreach (string tag in _targetTag)
-                {
-                    if (other.CompareTag(tag))
-                    {
-                        GameObject target = other.gameObject;
-                        onHit(target);
-                        _lifeTime = 0;
-                    }
-                }
-            }
+            //public void OnTriggerEnter(Collider other)
+            //{
+            //    foreach (string tag in _targetTag)
+            //    {
+            //        if (other.CompareTag(tag))
+            //        {
+            //            GameObject target = other.gameObject;
+            //            onHit(target);
+            //            _lifeTime = 0;
+            //        }
+            //    }
+            //}
 
             public void onHit(GameObject obj)
             {
                 Character o = obj.GetComponent<Character>();
-                o.getDamage(_dammage);
+
+                //TODO : deal with float for character life
+                o.getDamage((int)_damage);
+            }
+
+            /// <summary>
+            /// Decrements the lifeTime, and hide the projectile after the lifeTime reach 0.
+            /// </summary>
+            public void updateLifeTime()
+            {
+                _lifeTime -= Time.deltaTime;
+                if( _lifeTime < 0 ) destroy();
+            }
+
+            /// <summary>
+            /// Make the projectile fly toward it's destination
+            /// </summary>
+            public void fly()
+            {
+                transform.position += _speed * transform.forward;
             }
 
             public void Update()
             {
-                _lifeTime -= Time.deltaTime;
-                if (_lifeTime < 0) destroy();
+                updateLifeTime();
+                fly();
             }
 
             public bool isAlive()

@@ -39,7 +39,8 @@ namespace Extinction {
         }
 
         public enum FXType {
-            ShootFX
+            ShootFX,
+            ExplosionFX
         }
 
         /// <summary>
