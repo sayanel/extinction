@@ -69,6 +69,11 @@ namespace Extinction
                     yield return new WaitForSeconds(Random.Range(0.1f, 0.8f));
                 }
             }
+
+            public override void init( SpecialRobot robot )
+            {
+                //nothing
+            }
         }
     }
 }

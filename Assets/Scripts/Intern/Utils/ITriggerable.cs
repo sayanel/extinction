@@ -11,9 +11,6 @@ namespace Extinction
         /// </summary>
         public interface ITriggerable
         {
-            void triggerEnter(Collider other);
-            void triggerExit(Collider other);
-
             void triggerEnter(Collider other, string tag);
             void triggerExit(Collider other, string tag);
         }

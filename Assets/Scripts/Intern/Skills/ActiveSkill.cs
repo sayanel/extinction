@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Extinction.Characters;
+
 namespace Extinction
 {
     namespace Skills
@@ -71,6 +73,9 @@ namespace Extinction
             public bool Activable {
                 get { return _activable; }
             }
+
+            //few skills need to be initialyzed based on values stored on the caster (i.e the robot) : 
+            public abstract void init( SpecialRobot robot );
 
             /// <summary>
             /// Prepare the active skill to be launched (change mouse cursor,...).

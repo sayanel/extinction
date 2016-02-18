@@ -53,8 +53,12 @@ namespace Extinction
             /// Layer names of the objects which can block the visibility of the robot.
             /// Set to Terrain by default.
             /// </summary>   
-            [SerializeField]
             private string[] _terrainMasks = new string[] { "Terrain" };
+
+            public string[] TerrainMasks{
+                get{ return _terrainMasks; }
+                set{ _terrainMasks = value; }
+            }
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
