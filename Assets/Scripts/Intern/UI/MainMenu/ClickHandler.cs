@@ -12,6 +12,7 @@ namespace Extinction {
         public class ClickHandler : MonoBehaviour {
 
             public LoadRoomList loadRoomScript;
+            public AsyncLoading asyncLoadingScript;
 
             public void ExitGame() {
                 Application.Quit();
@@ -20,19 +21,16 @@ namespace Extinction {
             public void CreateGame() {
                 if (PhotonNetwork.inRoom)
                     throw new System.Exception("Player already in room: cannot create a new Room!");
+                NetworkManager.Instance.asyncLoadingScript = asyncLoadingScript;
                 NetworkManager.Instance.CreateRoom();
                 loadRoomScript.Load();
             }
 
-            public void JoinGame(string roomName) {
+            public void JoinGame() {
                 PhotonNetwork.LeaveRoom();
-                NetworkManager.Instance.JoinRoom(roomName);
+                NetworkManager.Instance.JoinRoom(GetComponent<RoomInfoUI>().gameName.text);
                 if (loadRoomScript != null)
                     loadRoomScript.Load();
-            }
-
-            public void Join2() {
-                NetworkManager.Instance.JoinRoom(GetComponent<RoomInfoUI>().gameName.text);
             }
         }   
     }

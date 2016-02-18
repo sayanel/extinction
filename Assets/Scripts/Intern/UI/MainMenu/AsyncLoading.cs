@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Extinction.Network;
 
 namespace Extinction {
     namespace UI {
@@ -12,23 +13,23 @@ namespace Extinction {
         /// </summary>
 
         public class AsyncLoading : MonoBehaviour {
-            public GameObject loadingImage;
+            public GameObject wrapperBackground;
             public Slider loadingBar;
             private AsyncOperation _loadingProgression;
 
-            public void StartLoading(string levelName) {
-                loadingImage.SetActive(true);
-                StartCoroutine(UpdateLoadingBar(levelName));
+            public void StartLoading(int levelIndex) {
+                wrapperBackground.SetActive(true);
+                StartCoroutine(UpdateLoadingBar(levelIndex));
             }
 
-            IEnumerator UpdateLoadingBar(string levelName) {
-                _loadingProgression = Application.LoadLevelAsync(levelName);
+            IEnumerator UpdateLoadingBar(int levelIndex) {
+                _loadingProgression = Application.LoadLevelAsync(levelIndex);
 
                 while (! _loadingProgression.isDone ) {
                     loadingBar.value = _loadingProgression.progress;
-                    yield return null;
+                    yield return _loadingProgression.isDone;
                 }
-                loadingImage.SetActive(false);
+                wrapperBackground.SetActive(false);
             }
         }
     }
