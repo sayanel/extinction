@@ -239,6 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadRoomScript: {fileID: 0}
+  asyncLoadingScript: {fileID: 0}
 --- !u!114 &11499406
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -279,7 +280,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11482730}
-        m_MethodName: Join2
+        m_MethodName: JoinGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
