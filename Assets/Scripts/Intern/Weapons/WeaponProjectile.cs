@@ -63,7 +63,7 @@ namespace Extinction
                     _nbCurrentAmmo--;
 
                     //launch FX
-                    FXManager.Instance.Activate(_fireFX, _anchor.position, _anchor.rotation);
+                    FXManager.Instance.Activate((int)_fireFX, _anchor.position, _anchor.rotation);
                 }
             }
 

@@ -58,16 +58,16 @@ namespace Extinction
             override
             public void fire() {
 
-                if( ( Time.time - _previousTime >= _fireRate ) && //the fireRate is OK ?
-                    ( ( _useAmmo && _nbCurrentAmmo > 0 ) || !_useAmmo ) ) //the ammos are OK ?
+                if ((Time.time - _previousTime >= _fireRate) && //the fireRate is OK ?
+                    ((_useAmmo && _nbCurrentAmmo > 0) || !_useAmmo)) //the ammos are OK ?
                 {
                     //fire ray
                     RaycastHit hitInfo;
-                    if(Physics.Raycast(_anchor.position + _anchor.forward * _minDistance, 
+                    if (Physics.Raycast(_anchor.position + _anchor.forward * _minDistance,
                                         _anchor.forward,
                                         out hitInfo,
                                         _rayLenght,
-                                        LayerMask.GetMask(_targetLayer))){
+                                        LayerMask.GetMask(_targetLayer))) {
                         GameObject target = hitInfo.transform.gameObject;
                         onHit(target);
                     }
@@ -75,7 +75,7 @@ namespace Extinction
                     _previousTime = Time.time;
 
                     //launch FX
-                    FXManager.Instance.Activate( _fireFX, _anchor.position, _anchor.rotation );
+                    FXManager.Instance.GetComponent<PhotonView>().RPC("Activate", PhotonTargets.All, (int)Enums.FXType.ShootFX, _anchor.position, _anchor.rotation);
                 }
             }
 

@@ -30,6 +30,10 @@ namespace Extinction {
             /// </summary>
             private PhotonView _photonView;
 
+            public void Awake() {
+                DontDestroyOnLoad(this);
+            }
+
             public void Start() {
                 _FXPools = new Dictionary<Enums.FXType, FXPool>();
                 foreach (FXModelsEntry model in _FXModels) {
@@ -45,8 +49,8 @@ namespace Extinction {
             /// <param name="pos"></param>
             /// <param name="rot"></param>
             [PunRPC]
-            public void Activate(Enums.FXType FXType, Vector3 pos, Quaternion rot) {
-                GameObject go = _FXPools[FXType].Get();
+            public void Activate(int FXType, Vector3 pos, Quaternion rot) {
+                GameObject go = _FXPools[(Enums.FXType) FXType].Get();
                 go.transform.position = pos;
                 go.transform.rotation = rot;
                 go.SetActive(true);

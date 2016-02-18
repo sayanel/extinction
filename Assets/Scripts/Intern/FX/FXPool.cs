@@ -35,6 +35,7 @@ namespace Extinction {
                 for (int i = 0; i < _poolSize; ++i) {
                     GameObject go = (GameObject)Instantiate(_fxObjectType);
                     go.SetActive(false);
+                    DontDestroyOnLoad(go);
                     _FXObjects.Add(go);
                 }
             }

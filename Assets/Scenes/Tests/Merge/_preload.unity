@@ -97,6 +97,7 @@ GameObject:
   - 114: {fileID: 1223108307}
   - 114: {fileID: 1223108308}
   - 114: {fileID: 1223108306}
+  - 114: {fileID: 1223108309}
   m_Layer: 5
   m_Name: Managers
   m_TagString: Untagged
@@ -173,5 +174,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   INDEX_SCENE_MAIN_MENU: 1
   INDEX_SCENE_PLAYER_CHOICE: 2
-  INDEX_SCENE_GAME: 3
+  INDEX_SCENE_GAME: 2
   MAX_PLAYER: 5
+  asyncLoadingScript: {fileID: 0}
+--- !u!114 &1223108309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1223108303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 1223108307}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 1
+  instantiationId: 1
+  isRuntimeInstantiated: 0

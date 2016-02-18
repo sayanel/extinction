@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using Extinction.Characters;
 using Extinction.Controllers;
+using Extinction.UI;
 
 namespace Extinction {
     namespace Network {
@@ -17,15 +18,16 @@ namespace Extinction {
             private static NetworkManager _instance = null;
             private static object _lock = new object();
 
-
             // scenes index use with PhotonNetwork.LoadLevel => change levels
             // these index are mapped with current build settings
-            // INDEX_PRELOAD == 0
+            //INDEX_PRELOAD == 0
             public int INDEX_SCENE_MAIN_MENU = 1;
             public int INDEX_SCENE_PLAYER_CHOICE = 2;
-            public int INDEX_SCENE_GAME = 3;
+            public int INDEX_SCENE_GAME = 2;
 
             public int MAX_PLAYER = 5;
+
+            public AsyncLoading asyncLoadingScript;
 
             public void Awake() {
                 DontDestroyOnLoad(this);
@@ -93,6 +95,7 @@ namespace Extinction {
             public override void OnJoinedRoom() {
                 base.OnJoinedRoom();
                 Debug.Log(PhotonNetwork.player.name + " player rejoined the room " + PhotonNetwork.room.name);
+                CreateCharacter("FPSPlayer", new Vector3(100,100,100), Quaternion.identity);
             }
 
             public override void OnLeftRoom() {
@@ -102,13 +105,16 @@ namespace Extinction {
                     Destroy((GameObject)PhotonNetwork.player.TagObject);
 
                 PhotonNetwork.player.TagObject = null;
-                Application.LoadLevel(INDEX_SCENE_MAIN_MENU);
+                PhotonNetwork.LoadLevel(INDEX_SCENE_MAIN_MENU);
             }
 
             public override void OnCreatedRoom() {
                 base.OnCreatedRoom();
                 Debug.Log(PhotonNetwork.player.name + " player created the room " + PhotonNetwork.room.name);
-                Application.LoadLevel(INDEX_SCENE_GAME);
+                //Application.LoadLevel(INDEX_SCENE_GAME);
+                if(asyncLoadingScript != null)
+                    asyncLoadingScript.StartLoading(INDEX_SCENE_GAME);
+                //CreateCharacter("FPSPlayer", new Vector3(1000,1000,1000), Quaternion.identity);
             }
 
             public void CreateCharacter(string prefabName, Vector3 pos, Quaternion rot) {

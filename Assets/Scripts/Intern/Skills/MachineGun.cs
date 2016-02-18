@@ -56,7 +56,7 @@ namespace Extinction
                     Vector3 instantiatedPosition = new Vector3(position.x + fireOffset.x, position.y, position.z + fireOffset.y);
 
                     //activates FX on network
-                    FXManager.Instance.Activate(_fireFX, instantiatedPosition, Quaternion.LookRotation(fireDirection, Vector3.up));
+                    FXManager.Instance.Activate((int)_fireFX, instantiatedPosition, Quaternion.LookRotation(fireDirection, Vector3.up));
 
                     //deals damage to hit characters 
                     RaycastHit hitInfo;
