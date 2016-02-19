@@ -45,14 +45,16 @@ namespace Extinction
             void OnTriggerEnter(Collider other)
             {
                 if (_target != null)
-                    _triggerableTarget.triggerEnter(other);
+                    _triggerableTarget.triggerEnter(other, _tag);
             }
 
             void OnTriggerExit(Collider other)
             {
                 if (_target != null)
-                    _triggerableTarget.triggerExit(other);
+                    _triggerableTarget.triggerExit(other, _tag);
             }
+
+
 
         }
     }
