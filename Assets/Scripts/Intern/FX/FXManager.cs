@@ -33,6 +33,8 @@ namespace Extinction {
             public void Awake() {
                 DontDestroyOnLoad(this);
             }
+            public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+            }
 
             public void Start() {
                 _FXPools = new Dictionary<Enums.FXType, FXPool>();
