@@ -34,6 +34,11 @@ namespace Extinction
             /// </summary>
             private PhotonView _photonView;
 
+            public void Awake()
+            {
+                DontDestroyOnLoad( this );
+            }
+
             public void Start()
             {
                 _ProjectilePools = new Dictionary<Enums.ProjectileType, ProjectilePool>();
@@ -51,9 +56,9 @@ namespace Extinction
             /// <param name="pos"></param>
             /// <param name="rot"></param>
             [PunRPC]
-            public void Activate( Enums.ProjectileType projectileType, Vector3 pos, Quaternion rot )
+            public void Activate( int projectileType, Vector3 pos, Quaternion rot )
             {
-                GameObject go = _ProjectilePools[projectileType].Get();
+                GameObject go = _ProjectilePools[(Enums.ProjectileType)projectileType].Get();
                 go.transform.position = pos;
                 go.transform.rotation = rot;
                 go.SetActive( true );
