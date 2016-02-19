@@ -90,7 +90,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100220}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.65771198, y: .279999971, z: 2.31596661}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 469448}
@@ -115,7 +115,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 171320}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.25771236, y: .850000024, z: 3.93403339}
+  m_LocalPosition: {x: -4.40999985, y: .850000024, z: 11.0571375}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 456142}
@@ -255,8 +255,6 @@ MonoBehaviour:
   _weapons:
   - {fileID: 11434362}
   _rotationSmoothFactor: 0
-  _terrainMasks:
-  - Terrain
 --- !u!135 &13589054
 SphereCollider:
   m_ObjectHideFlags: 1

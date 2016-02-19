@@ -98,6 +98,11 @@ namespace Extinction
                 _endPointScreenSpace.x = Input.mousePosition.x;
                 _endPointScreenSpace.y = Input.mousePosition.y;
 
+                _beginPoint.x = _beginPointScreenSpace.x;
+                _beginPoint.y = _beginPointScreenSpace.y;
+                _endPoint.x = _endPointScreenSpace.x;
+                _endPoint.y = _endPointScreenSpace.y;
+
                 clearSelection();
 
                 Ray selectionRay = Camera.main.ScreenPointToRay( Input.mousePosition );
@@ -108,7 +113,7 @@ namespace Extinction
 
                     transform.position = _triggerAnchor;
 
-                    transform.localScale = new Vector3( 1, _triggerHeight, 1 );
+                    transform.localScale = new Vector3( 0.01f, _triggerHeight, 1.01f );
                 }
 
                 _thisTrigger.enabled = true;
@@ -116,12 +121,16 @@ namespace Extinction
 
             public void UpdateSelection()
             {
-                Vector3 cameraPosBegin = Camera.main.WorldToScreenPoint(_cameraBeginPosition);
-                Vector3 cameraPosEnd = Camera.main.WorldToScreenPoint(_cameraTransform.position);
-                Vector3 cameraOffset = cameraPosEnd - cameraPosBegin;
+                Vector3 a = Camera.main.ScreenToWorldPoint( new Vector3( 1, 1, 1 ) );
 
-                _beginPoint.x = _beginPointScreenSpace.x - cameraOffset.x;
-                _beginPoint.y = _beginPointScreenSpace.y - cameraOffset.y;
+                Vector3 cameraPosBegin = _cameraBeginPosition;
+                Vector3 cameraPosEnd = _cameraTransform.position;
+                Debug.Log( "cameraPosBegin : " + cameraPosBegin );
+                Debug.Log( "cameraPosEnd : " + cameraPosEnd );
+                Vector3 cameraOffset = Vector3.Scale( cameraPosEnd - cameraPosBegin, a);
+
+                _beginPoint.x = Mathf.Abs(-_beginPointScreenSpace.x + cameraOffset.x);
+                _beginPoint.y = Mathf.Abs(-_beginPointScreenSpace.y + cameraOffset.z);
 
                 _endPointScreenSpace.x = Input.mousePosition.x;
                 _endPointScreenSpace.y = Input.mousePosition.y;
