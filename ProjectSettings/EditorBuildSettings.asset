@@ -10,4 +10,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Tests/Merge/StartGame.unity
   - enabled: 1
+    path: Assets/Scenes/Tests/Merge/ChoosePlayer.unity
+  - enabled: 1
     path: Assets/Scenes/Tests/Merge/GameApo.unity
+  - enabled: 1
+    path: Assets/Scenes/Tests/Merge/Game.unity

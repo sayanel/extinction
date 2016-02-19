@@ -174,9 +174,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   INDEX_SCENE_MAIN_MENU: 1
   INDEX_SCENE_PLAYER_CHOICE: 2
-  INDEX_SCENE_GAME: 2
+  INDEX_SCENE_GAME: 3
   MAX_PLAYER: 5
-  asyncLoadingScript: {fileID: 0}
 --- !u!114 &1223108309
 MonoBehaviour:
   m_ObjectHideFlags: 0

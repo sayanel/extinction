@@ -1,6 +1,7 @@
 ﻿// @author: Alex
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Extinction.Characters;
 using Extinction.Controllers;
 using Extinction.UI;
@@ -24,10 +25,7 @@ namespace Extinction {
             public int INDEX_SCENE_MAIN_MENU = 1;
             public int INDEX_SCENE_PLAYER_CHOICE = 2;
             public int INDEX_SCENE_GAME = 2;
-
             public int MAX_PLAYER = 5;
-
-            public AsyncLoading asyncLoadingScript;
 
             public void Awake() {
                 DontDestroyOnLoad(this);
@@ -84,7 +82,17 @@ namespace Extinction {
             public void CreateRoom() {
                 if (!PhotonNetwork.insideLobby)
                     throw new System.Exception("Network: The client is not inside the lobby, fail to create room");
-                PhotonNetwork.CreateRoom(null, new RoomOptions() {maxPlayers = 5}, TypedLobby.Default);
+
+
+                ExitGames.Client.Photon.Hashtable customProp = new ExitGames.Client.Photon.Hashtable() {
+                    {"anton", 0},
+                    {"red", 0},
+                    {"hal", 0},
+                    {"herbie", 0},
+                    {"malik", 0},
+                };
+
+                PhotonNetwork.CreateRoom(null, new RoomOptions() {maxPlayers = 5, customRoomProperties = customProp}, TypedLobby.Default);
             }
 
             public override void OnPhotonJoinRoomFailed(object[] codeAndMsg) {
@@ -95,7 +103,6 @@ namespace Extinction {
             public override void OnJoinedRoom() {
                 base.OnJoinedRoom();
                 Debug.Log(PhotonNetwork.player.name + " player rejoined the room " + PhotonNetwork.room.name);
-                CreateCharacter("FPSPlayer", new Vector3(100,100,100), Quaternion.identity);
             }
 
             public override void OnLeftRoom() {
@@ -111,13 +118,18 @@ namespace Extinction {
             public override void OnCreatedRoom() {
                 base.OnCreatedRoom();
                 Debug.Log(PhotonNetwork.player.name + " player created the room " + PhotonNetwork.room.name);
-                //Application.LoadLevel(INDEX_SCENE_GAME);
-                if(asyncLoadingScript != null)
-                    asyncLoadingScript.StartLoading(INDEX_SCENE_GAME);
+                Application.LoadLevel(INDEX_SCENE_PLAYER_CHOICE);
+                //asyncLoadingScript.StartLoading(INDEX_SCENE_GAME);
                 //CreateCharacter("FPSPlayer", new Vector3(1000,1000,1000), Quaternion.identity);
             }
 
-            public void CreateCharacter(string prefabName, Vector3 pos, Quaternion rot) {
+            public void LaunchGame(AsyncLoading asyncLoadingScript) {
+                asyncLoadingScript.StartLoading(INDEX_SCENE_GAME);
+                if(PhotonNetwork.player.name != "herbie")
+                    CreateSurvivor("FPSPlayer", new Vector3(500, 200,500), Quaternion.identity);
+            }
+
+            public void CreateSurvivor(string prefabName, Vector3 pos, Quaternion rot) {
                 GameObject go = PhotonNetwork.Instantiate(prefabName, pos, rot, 0);
                 DontDestroyOnLoad(go);
                 PhotonNetwork.player.TagObject = go;

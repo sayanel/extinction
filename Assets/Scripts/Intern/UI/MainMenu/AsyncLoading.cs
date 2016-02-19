@@ -23,11 +23,12 @@ namespace Extinction {
             }
 
             IEnumerator UpdateLoadingBar(int levelIndex) {
-                _loadingProgression = Application.LoadLevelAsync(levelIndex);
-
+                // TODO: see with photon equivalent Application.LoadLevelAsync
+                PhotonNetwork.LoadLevel(levelIndex);
+                yield return true;
                 while (! _loadingProgression.isDone ) {
                     loadingBar.value = _loadingProgression.progress;
-                    yield return _loadingProgression.isDone;
+                    yield return null;
                 }
                 wrapperBackground.SetActive(false);
             }

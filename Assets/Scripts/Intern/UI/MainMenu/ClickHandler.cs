@@ -21,7 +21,6 @@ namespace Extinction {
             public void CreateGame() {
                 if (PhotonNetwork.inRoom)
                     throw new System.Exception("Player already in room: cannot create a new Room!");
-                NetworkManager.Instance.asyncLoadingScript = asyncLoadingScript;
                 NetworkManager.Instance.CreateRoom();
                 loadRoomScript.Load();
             }

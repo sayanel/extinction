@@ -8,6 +8,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 436550}
+  - 114: {fileID: 11426912}
+  - 114: {fileID: 11401264}
+  - 114: {fileID: 11407866}
   m_Layer: 0
   m_Name: RootPlayerSelection
   m_TagString: Untagged
@@ -814,7 +817,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.2930031, y: -1.17999983, z: 5.88415909}
+  m_LocalPosition: {x: -26.7999992, y: 3.70000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 22435986}
@@ -890,6 +893,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11401264
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667ef51c48cff0d4fbb8125d2ed69121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData: {fileID: 11426912}
+  toggleSelectPlayer: {fileID: 11461978}
 --- !u!114 &11407800
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -935,6 +951,31 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 1
+--- !u!114 &11407866
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 11401264}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
 --- !u!114 &11409340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1119,7 +1160,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 22447544}
   m_Direction: 2
   m_Value: .99999994
-  m_Size: .513424575
+  m_Size: .513424635
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1292,6 +1333,23 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11426912
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 902d7923ef2a63a409d6fdfbf253274d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  namePrefab: red
+  isSelected: 0
+  activeSkill1: 
+  activeSkill2: 
+  activeSkillChoices1: []
+  activeSkillChoices2: []
 --- !u!114 &11427258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1335,23 +1393,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'dqkjnijqsncijqsicsqiuciqscbiqsc
-
-    dddddddddddddddddddddd
-
-    dddddddddddddddddddddd
-
-    ddddddddddddddddddddd
-
-    dddddddddddddddddddddddddd
-
-    dddddddddddddddddddd
-
-    ddddddddddddddddddddddddddd
-
-    ddddddddddddddddddddddd
-
-    ddddddddddddddddddddddd'
+  m_Text: RED
 --- !u!114 &11429672
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1820,7 +1862,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11494372}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11401264}
+        m_MethodName: clickButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11463340

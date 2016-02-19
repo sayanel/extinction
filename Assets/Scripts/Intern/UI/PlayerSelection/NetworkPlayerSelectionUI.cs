@@ -2,41 +2,52 @@
 
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
+using ExitGames.Client.Photon;
 
 namespace Extinction {
     namespace UI {
-        public class NetworkPlayerSelectionUI : MonoBehaviour {
+        public class NetworkPlayerSelectionUI : Photon.PunBehaviour {
             public NetworkPlayerSelectionData playerData;
             public Button toggleSelectPlayer;
-            public PhotonView pView;
 
             void Awake() {
-                pView = GetComponent<PhotonView>();
+                toggleSelectPlayer.interactable = (int) PhotonNetwork.room.customProperties[playerData.namePrefab] == 0;
             }
 
-            [PunRPC]
-            void changeSelection(bool isSelected) {
+            public void changeSelection(bool isSelected) {
+                string oldSelectedPrefab = PhotonNetwork.player.name;
                 playerData.isSelected = isSelected;
-                toggleSelectPlayer.enabled = !isSelected;
+                toggleSelectPlayer.interactable = !isSelected;
+                Hashtable changedProperties = new Hashtable() { { playerData.namePrefab, isSelected ? 1 : 0 } };
+
+                // Deselect previous prefab
+                if (oldSelectedPrefab != null && oldSelectedPrefab != playerData.namePrefab)
+                    changedProperties.Add(oldSelectedPrefab, 0);
+
+                PhotonNetwork.room.SetCustomProperties(changedProperties);
                 PhotonNetwork.player.name = playerData.namePrefab;
             }
 
-            [PunRPC]
+            public void clickButton() {
+                changeSelection(true);
+            }
+
             void changeActiveSkill1(string value) {
                 playerData.activeSkill1 = value;
             }
 
-            [PunRPC]
             void changeActiveSkill2(string value) {
                 playerData.activeSkill2 = value;
             }
 
-            public void changeSelectionLocal() {
-                Debug.Log("lol");
-                pView.RPC("changeSelection", PhotonTargets.All, !toggleSelectPlayer.enabled);
-                // deactivate all others buttons
+            public override void OnPhotonCustomRoomPropertiesChanged(ExitGames.Client.Photon.Hashtable propertiesThatChanged) {
+                base.OnPhotonCustomRoomPropertiesChanged(propertiesThatChanged);
+                if(propertiesThatChanged.ContainsKey(playerData.namePrefab)) {
+                    toggleSelectPlayer.interactable = (int)propertiesThatChanged[playerData.namePrefab] == 0;
+                }
+            }
+
+            public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
             }
         }
     }
