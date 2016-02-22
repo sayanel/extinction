@@ -16,6 +16,7 @@ namespace Extinction
 
             void triggerEnter(Collider other, string tag);
             void triggerExit(Collider other, string tag);
+            //void triggerStay(Collider other, string _tag); 
         }
     }
 }

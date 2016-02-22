@@ -5,10 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - target
-  - detectionCollider
-  - stealthCollider
+  - creakerDetectionCollider
+  - playerDetectionCollider
   - waypoint
-  - rangeCollider
+  - playerRangeCollider
+  - creakerRangeCollider
   layers:
   - Default
   - TransparentFX

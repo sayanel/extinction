@@ -15,7 +15,11 @@ namespace Extinction
             private int _nbCreakersToUpdate;
             private static GameObject[] _waypoints;
 
+            protected NavMeshAgent _nav; // Reference to the nav mesh agent.
 
+            //protected static Horde instance;
+            //[SerializeField] public GameObject creakerPrefab;
+            [SerializeField] public GameObject creakerPrefab;
 
             //Gestion de la horde
             private static List<int> _groups = new List<int>();
@@ -24,14 +28,21 @@ namespace Extinction
             private static List<Character> _groupCharacterTarget = new List<Character>();
             private static List<int> _targetLost = new List<int>();
 
+            private GameObject creakerGO;
+
+
+
 
             public void Awake()
             {
                 _groups.Add(0);
                 _waypoints = GameObject.FindGameObjectsWithTag("waypoint");
                 _groupCharacterTarget.Add(null);
-                _groupTarget.Add(_waypoints[0].transform);
+                _groupTarget.Add(_waypoints[UnityEngine.Random.Range(0, _waypoints.Length)].transform);
                 _targetLost.Add(0);
+                _nav = GetComponent<NavMeshAgent>();
+
+                createHorde(20);
 
             }
 
@@ -46,18 +57,49 @@ namespace Extinction
                         _groupCharacterTarget[i] = null;
                         _targetLost[i] = 0;
                         _groupTarget[i] = _waypoints[UnityEngine.Random.Range(0, _waypoints.Length)].transform;
-                    }
+                    } 
                        
                     if (_groupCharacterTarget[i] != null) _groupTarget[i] = _groupCharacterTarget[i].transform;
                     //if (_groupCharacterTarget[i] == null) _groupTarget[i] = _waypoints[UnityEngine.Random.Range(0, _waypoints.Length)].transform;
                     //Debug.LogError("group n°: " + i + " nombre: " + _groups[i]);
                     //Debug.LogError("character target: " + i + " --> " + _groupCharacterTarget[i]);
-                    Debug.LogError("wayPoint: " + i + " --> " + _groupTarget[i].position);
                     
-        
-                    
+                    //Debug.LogError("wayPoint: " + i + " --> " + _groupTarget[i].position);
+    
                 }
 
+            }
+
+            public Vector3 getSpawnPos()
+            {
+                int layerMask = (1 << NavMesh.GetAreaFromName("Walkable"));
+                var position = new Vector3(Random.Range(-300f, 300f), 0, Random.Range(-300f, 300f));
+
+                NavMeshHit hit;
+                NavMesh.SamplePosition(position, out hit, 50f, layerMask);
+                
+                return hit.position;
+            }
+
+            public Creaker createCreaker()
+            {
+                //GameObject CreakerGO = Instantiate(creakerPrefab) as GameObject;
+                //Creaker creaker = Object.Instantiate(newCreakerGO, Vector3.zero, Quaternion.identity).GetComponent<Creaker>();
+                
+                creakerGO = Instantiate(creakerPrefab, getSpawnPos(), Quaternion.identity) as GameObject;
+                
+                Creaker creaker = creakerGO.GetComponent<Creaker>();
+
+
+                return creaker;
+            }
+
+            public void createHorde(int nbCreakers)
+            {
+                for(int i=0; i<nbCreakers; ++i)
+                {
+                    _creakers.Add(createCreaker());
+                }
             }
 
             static public int getGroupSize(int idGroup)
@@ -110,7 +152,7 @@ namespace Extinction
             {
                 
                 _targetLost[idGroup]--;
-                Debug.LogError("target lost " + idGroup + " --> " + _targetLost[idGroup]);
+                //Debug.LogError("target lost " + idGroup + " --> " + _targetLost[idGroup]);
             }
 
             static public void targetFound(int idGroup)
@@ -125,7 +167,7 @@ namespace Extinction
 
             static public void setNewWaypoint(int idGroup)
             {
-                Debug.LogError("NEW WP");
+                //Debug.LogError("NEW WP");
                 _groupTarget[idGroup] = _waypoints[UnityEngine.Random.Range(0, _waypoints.Length)].transform;
             }
 
