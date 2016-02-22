@@ -37,7 +37,6 @@ namespace Extinction
 
             public override void beginActivation()
             {
-
             }
 
             public override void activate(Vector3 position)
@@ -52,7 +51,7 @@ namespace Extinction
                 for (int i = 0; i < _bulletCount; i++)
                 {
                     Vector2 fireDirection = Random.insideUnitCircle.normalized;
-                    Vector2 fireOffset = fireDirection * _offsetFromCharacter;
+                    Vector2 fireOffset = Vector3.Normalize(fireDirection) * _offsetFromCharacter;
                     Vector3 instantiatedPosition = new Vector3(position.x + fireOffset.x, position.y, position.z + fireOffset.y);
 
                     //activates FX on network
@@ -69,6 +68,11 @@ namespace Extinction
 
                     yield return new WaitForSeconds(Random.Range(0.1f, 0.8f));
                 }
+            }
+
+            public override void init( SpecialRobot robot )
+            {
+                //nothing
             }
         }
     }

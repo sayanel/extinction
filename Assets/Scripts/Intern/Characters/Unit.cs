@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Extinction.Enums;
 
 namespace Extinction
 {
@@ -19,9 +20,39 @@ namespace Extinction
             /// </summary>
             protected List<Character> _potentialTargets;
 
+            protected UnitBehavior _unitBehavior;
+
+            public UnitBehavior UnitBehaviour
+            {
+                get { return _unitBehavior; }
+                set { _unitBehavior = value; }
+            }
+
+            /// <summary>
+            /// canAttack is false if the special robot can't attack (robot shut down, destroy,...)
+            /// </summary>
+            [SerializeField]
+            protected bool _canAttack = true;
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
+
+            /// <summary>
+            /// return true if this agent is able to attack this a weapon
+            /// </summary>
+            public virtual bool canAttack()
+            {
+                return _canAttack;
+            }
+
+            /// <summary>
+            /// return true if this agent can directly attack the target
+            /// </summary>
+            public virtual bool canAttack( Character target )
+            {
+                return _canAttack;
+            }
 
             /// <summary>
             /// Add a potential target to potentialTargets List

@@ -43,7 +43,7 @@ namespace Extinction
 
             public void weapon()
             {
-                _survivor.aim(Input.GetMouseButton(1) ? true:false);
+                _survivor.aim(Input.GetMouseButton(1));
 
                 if ( Input.GetMouseButton( 0 ) )
                 {

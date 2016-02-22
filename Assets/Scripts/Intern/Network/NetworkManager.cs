@@ -119,14 +119,10 @@ namespace Extinction {
                 base.OnCreatedRoom();
                 Debug.Log(PhotonNetwork.player.name + " player created the room " + PhotonNetwork.room.name);
                 Application.LoadLevel(INDEX_SCENE_PLAYER_CHOICE);
-                //asyncLoadingScript.StartLoading(INDEX_SCENE_GAME);
-                //CreateCharacter("FPSPlayer", new Vector3(1000,1000,1000), Quaternion.identity);
             }
 
             public void LaunchGame(AsyncLoading asyncLoadingScript) {
                 asyncLoadingScript.StartLoading(INDEX_SCENE_GAME);
-                if(PhotonNetwork.player.name != "herbie")
-                    CreateSurvivor("FPSPlayer", new Vector3(500, 200,500), Quaternion.identity);
             }
 
             public void CreateSurvivor(string prefabName, Vector3 pos, Quaternion rot) {
@@ -134,6 +130,28 @@ namespace Extinction {
                 DontDestroyOnLoad(go);
                 PhotonNetwork.player.TagObject = go;
                 ((INetworkInitializerPrefab)(go.GetComponent<Survivor>())).Activate();
+            }
+
+            public void CreateHerbie(Vector3 posCamera, Quaternion rot) {
+                GameObject herbieGO = Instantiate(Resources.Load<GameObject>("Characters/Herbie/Herbie"), posCamera, rot) as GameObject;
+                if (herbieGO == null)
+                    throw new System.Exception("Fail when creating Herbie prefab");
+
+                Characters.Herbie herbie = herbieGO.GetComponent<Characters.Herbie>();
+                herbie.initialize(new List<string>() { "Characters/RScout", "Characters/RTank", "Characters/RController" }, new List<Vector3>() { new Vector3(0, 0, 0), new Vector3(1, 0, 1), new Vector3(2, 0, 2) }, 0, true);
+                PhotonNetwork.player.TagObject = herbieGO;
+            }
+
+            void OnLevelWasLoaded(int level) {
+                if (level != INDEX_SCENE_GAME)
+                    return;
+
+                Debug.Log("LAUNCH GAME");
+
+                if (PhotonNetwork.player.name != "herbie")
+                    CreateSurvivor("FPSPlayer", new Vector3(500, 200, 500), Quaternion.identity);
+                else
+                    CreateHerbie(new Vector3(500, 200, 500), Quaternion.identity);
             }
         }
     }

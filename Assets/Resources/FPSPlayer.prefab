@@ -16,7 +16,7 @@ GameObject:
   - 114: {fileID: 11442834}
   - 23: {fileID: 2378292}
   - 33: {fileID: 3397026}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FPSPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   - 81: {fileID: 8157624}
   - 114: {fileID: 11482580}
   - 114: {fileID: 11442244}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   - 4: {fileID: 451928}
   - 114: {fileID: 11402800}
   - 114: {fileID: 11462310}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,8 +82,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 160550}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .0440954715, y: -.422358334, z: -.167284921}
-  m_LocalScale: {x: 1, y: .28169015, z: 1}
+  m_LocalPosition: {x: 0, y: .86500001, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 436478}
   m_RootOrder: 0
@@ -189,15 +189,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27cdd1d3fde87934dbcba401fd1eed0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nbCurrentAmmo: 10
+  _nbCurrentAmmo: 100
   _isAutomatic: 0
   _fireRate: .100000001
   _damage: 1
   _friendlyFire: 1
-  _range: 1
+  _range: 1000
   _anchor: {fileID: 461584}
   _targetLayer:
-  - Default
+  - SpecialRobot
   _useAmmo: 0
   _fireFX: 0
   _minDistance: 1
@@ -292,7 +292,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 160550}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5e9eb784b2f07d429e89ca66b7680d6, type: 3}
   m_Name: 
@@ -317,7 +317,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 145872}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f7c5651c66e5ac4284bcfaffa69c4fb, type: 3}
   m_Name: 

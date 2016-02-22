@@ -38,6 +38,7 @@ namespace Extinction
 
             public float Health{
                 get { return _health; }
+                set { _health = value; }
             }
 
             /// <summary>
@@ -112,6 +113,11 @@ namespace Extinction
             /// </summary>
             /// <param name="amount">quantity of health to decrease</param>
             public abstract void getDamage( int amount );
+
+            [PunRPC]
+            public void SetHealth(float life) {
+                _health = life;
+            }
 
             /// <summary>
             /// Activates skill1

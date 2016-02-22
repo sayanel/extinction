@@ -16,15 +16,13 @@ namespace Extinction
 {
     namespace Controllers
     {
-        public class InputControllerHerbie : InputController
-        {
+        public class InputControllerHerbie : InputController {
             // ----------------------------------------------------------------------------
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
             //small struct to retrieve the information of the entity the mouse has clicked on
-            struct MouseTargetInfo
-            {
+            struct MouseTargetInfo {
                 public Vector3 position;
                 public GameObject gameObject;
                 public string tag;
@@ -43,7 +41,10 @@ namespace Extinction
 
             [SerializeField]
             private Selector _selectorComponent = null;
-
+            public Selector SelectorComponent {
+                get { return _selectorComponent; }
+                set { _selectorComponent = value; }
+            }
             [SerializeField]
             private string[] _interactableMasks;
 

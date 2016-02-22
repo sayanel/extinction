@@ -159,6 +159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _poolsSize: 10
   _FXModels:
+  - type: 1
+    prefab: {fileID: 165218, guid: 6fac3eff353cfce439efcfcfc167d4ca, type: 2}
   - type: 0
     prefab: {fileID: 164782, guid: 91b147b15a7b4c64e8ff2bbdcf047e13, type: 2}
 --- !u!114 &1223108308

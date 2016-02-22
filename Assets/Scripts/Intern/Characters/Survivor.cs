@@ -7,6 +7,8 @@ using Extinction.Enums;
 using Extinction.Network;
 using Extinction.Controllers;
 using Extinction.Utils;
+using Extinction.HUD;
+using Extinction.Cameras;
 
 namespace Extinction
 {
@@ -138,7 +140,11 @@ namespace Extinction
             /// <param name="amount">The health that will be removed</param>
             public override void getDamage( int amount )
             {
-                _health -= amount * _armorMultiplier;
+                float health = _health - amount * _armorMultiplier;
+                GetComponent<PhotonView>().RPC("SetHealth", PhotonTargets.All, health);
+
+                if(_health < 0)
+                    Debug.Log("DEAD");
             }
 
             /// <summary>
@@ -327,6 +333,8 @@ namespace Extinction
             public void Activate() {
                 GetComponent<InputControllerSurvivor>().enabled = true;
                 GetComponentInChildren<Camera>().enabled = true;
+                GetComponentInChildren<CameraFPS>().enabled = true;
+                GetComponentInChildren<Weapon>().GetComponent<HUDWeaponMarker>().enabled = true;
             }
         }
     }

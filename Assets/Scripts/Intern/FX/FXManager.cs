@@ -50,9 +50,13 @@ namespace Extinction {
             /// <param name="FXType"></param>
             /// <param name="pos"></param>
             /// <param name="rot"></param>
-            [PunRPC]
             public void Activate(int FXType, Vector3 pos, Quaternion rot) {
-                GameObject go = _FXPools[(Enums.FXType) FXType].Get();
+                FXManager.Instance.GetComponent<PhotonView>().RPC("ActivateRPC", PhotonTargets.All, FXType, pos, rot);
+            }
+
+            [PunRPC]
+            public void ActivateRPC(int FXType, Vector3 pos, Quaternion rot) {
+                GameObject go = _FXPools[(Enums.FXType)FXType].Get();
                 go.transform.position = pos;
                 go.transform.rotation = rot;
                 go.SetActive(true);

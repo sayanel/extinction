@@ -37,7 +37,7 @@ namespace Extinction
             /// <summary>
             /// create the command with all the informations : 
             /// </summary>
-            public CommandSkillCast(SpecialRobot actor, ActiveSkill skillToCast, Vector3 targetPosition, float aiDelay = 1)
+            public CommandSkillCast(Unit actor, ActiveSkill skillToCast, Vector3 targetPosition, float aiDelay = 1)
             {
                 _actor = actor;
                 _targetPosition = targetPosition;

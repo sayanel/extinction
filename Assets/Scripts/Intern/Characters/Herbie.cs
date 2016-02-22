@@ -9,6 +9,7 @@ using Extinction.Enums;
 using Extinction.Herbie;
 using Extinction.Skills;
 using Extinction.Cameras;
+using Extinction.Controllers;
 
 namespace Extinction
 {
@@ -98,9 +99,6 @@ namespace Extinction
                 {
                     _cameraComponent = GetComponent<CameraMOBA>();
                 }
-
-                //TEMPORARY : 
-                initialize( new List<string>() { "Characters/RScout", "Characters/RTank", "Characters/RController" } , new List<Vector3>() { new Vector3(0,0,0), new Vector3(1, 0, 1), new Vector3(2, 0, 2) });
             }
 
             /// <summary>
@@ -109,12 +107,22 @@ namespace Extinction
             /// We have to give as many spawnPosition as selectedRobotPath to be able to properly spawn robots. 
             /// </summary>
             /// <param name="selectedRobotsPaths"></param>
-            public void initialize(List<string> selectedRobotsPaths, List<Vector3> spawnPositions, int networkGroup = 0)
+            public void initialize(List<string> selectedRobotsPaths, List<Vector3> spawnPositions, int networkGroup = 0, bool createOverNetwork=false)
             {
+                transform.rotation = Quaternion.Euler(90, 0, 0);
+                //initialize minimap
+                GameObject miniMap = Instantiate(Resources.Load<GameObject>("Characters/Herbie/MiniMapCamera"), new Vector3(0,116,0), Quaternion.Euler(90,0,0)) as GameObject;
+
+                //initialize selector
+                GameObject selector = Instantiate(Resources.Load<GameObject>("Characters/Herbie/Selector")) as GameObject;
+                selector.GetComponent<Selector>().CameraTransform = transform;
+                selector.GetComponent<Selector>().Herbie = this;
+                GetComponent<InputControllerHerbie>().SelectorComponent = selector.GetComponent<Selector>();
+
                 //automatically get herbie(s HUD from resources folder
                 GameObject herbieHud = Instantiate(Resources.Load<GameObject>("HUD/HerbieHUD"));
                 _hudHerbie = herbieHud.GetComponent<HUDHerbie>();
-                GameObject hud = GameObject.Find("HUD");
+                GameObject hud = Instantiate(Resources.Load<GameObject>("Characters/HUD")) as GameObject;
                 herbieHud.transform.SetParent(hud.transform);
 
                 //automatically get herbie's special robots from resources folder 
@@ -122,21 +130,27 @@ namespace Extinction
                 List<SpecialRobot> selectedRobots = new List<SpecialRobot>();
                 foreach (string robotPath in selectedRobotsPaths)
                 {
-                    GameObject robotPrefab = Instantiate(Resources.Load<GameObject>(robotPath), itSpawnPos.Current, Quaternion.identity) as GameObject;//PhotonNetwork.Instantiate(robotPath, itSpawnPos.Current, Quaternion.identity, 0); // instantiated on network
+                    GameObject robotPrefab;
+                    if (createOverNetwork)
+                        robotPrefab = PhotonNetwork.Instantiate(robotPath, new Vector3(510,41,489), Quaternion.identity, 0); // instantiated on network
+                    else
+                        robotPrefab = Instantiate(Resources.Load<GameObject>(robotPath), itSpawnPos.Current, Quaternion.identity) as GameObject;
+
                     selectedRobots.Add(robotPrefab.GetComponent<SpecialRobot>());
 
                     if(!itSpawnPos.MoveNext())
                         itSpawnPos = spawnPositions.GetEnumerator();
                 }
 
-                //initialyze herbie's hud
+                //initialize herbie's hud
                 _hudHerbie.initUI(selectedRobots, this);
 
-                //initialyze herbie's special robots
-                foreach(SpecialRobot robot in selectedRobots)
+                //initialize herbie's special robots
+                foreach (SpecialRobot robot in selectedRobots)
                 {
                     robot.FogManager = GetComponent<FogManager>();
                 }
+            
             }
 
             public void prepareSkillCast(ActiveSkill skillToCast, SpecialRobot skillCaster, HUDSkillButton skillButton)
@@ -154,7 +168,7 @@ namespace Extinction
                 //directly cast the skill if the skill applies on the robot
                 if (skillToCast.SkillOnSelf)
                 {
-                    castSkill(_skillCaster.transform.position, Input.GetKeyDown(KeyCode.LeftShift));
+                    castSkill( _skillCaster.transform.position, Input.GetKeyDown(KeyCode.LeftShift));
                     return;
                 }
 

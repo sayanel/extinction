@@ -22,25 +22,11 @@ namespace Extinction
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
-            /// <summary>
-            /// canAttack is false if the special robot can't attack (robot shut down, destroy,...)
-            /// </summary>
-            [SerializeField]
-            private bool _canAttack = true;
-
             [SerializeField]
             private List<Weapon> _weapons;
 
             [SerializeField]
             private HUDProgressBar _lifeBar;
-
-            private UnitBehavior _unitBehavior;
-
-            public UnitBehavior UnitBehaviour
-            {
-                get { return _unitBehavior; }
-                set { _unitBehavior = value; }
-            }
 
             private NavMeshAgent _navMeshAgentComponent;
 
@@ -102,6 +88,10 @@ namespace Extinction
             /// </summary>   
             [SerializeField]
             private string[] _terrainMasks = new String[] { "Terrain" };
+            public string[] TerrainMasks{
+                get{ return _terrainMasks; }
+                set{ _terrainMasks = value; }
+            }
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -111,6 +101,12 @@ namespace Extinction
             {
                 _navMeshAgentComponent = GetComponent<NavMeshAgent>();
                 _potentialTargets = new List<Character>();
+            }
+
+            void Start()
+            {
+                foreach( ActiveSkill skill in _activeSkills )
+                    skill.init(this);
             }
 
             void Update()
@@ -188,46 +184,18 @@ namespace Extinction
             /// Can be called by SpecialRobot's detector, when something enter the collider of the detecto.
             /// </summary>
             /// <param name="other">the collider which enter into the detector collider.</param>
-            public void triggerEnter(Collider other)
-            {
-                Character characterComponent = other.GetComponent<Character>();
-
-                if (characterComponent != null)
-                {
-                    if(characterComponent.getCharacterType() == CharacterType.Survivor)
-                    {
-                        addPotentialTarget(characterComponent);
-                    }
-                }
-            }
-
-            /// <summary>
-            /// Implementation of ITriggerable function.
-            /// Can be called by SpecialRobot's detector, when something enter the collider of the detecto.
-            /// </summary>
-            /// <param name="other">the collider which enter into the detector collider.</param>
-            public void triggerExit(Collider other)
-            {
-                Character characterComponent = other.GetComponent<Character>();
-
-                if (characterComponent != null)
-                {
-                    if (characterComponent.getCharacterType() == CharacterType.Survivor)
-                    {
-                        removePotentialTarget(characterComponent);
-                    }
-                }
-            }
-
-            /// <summary>
-            /// Implementation of ITriggerable function.
-            /// Can be called by SpecialRobot's detector, when something enter the collider of the detecto.
-            /// </summary>
-            /// <param name="other">the collider which enter into the detector collider.</param>
             /// <param name="tag">A string which can be send by the detector.</param>
             public void triggerEnter(Collider other, string tag)
             {
-                triggerEnter(other);
+                Character characterComponent = other.GetComponent<Character>();
+
+                if( characterComponent != null )
+                {
+                    if( characterComponent.getCharacterType() == CharacterType.Survivor )
+                    {
+                        addPotentialTarget( characterComponent );
+                    }
+                }
             }
 
             /// <summary>
@@ -238,7 +206,15 @@ namespace Extinction
             /// <param name="tag">A string which can be send by the detector.</param>
             public void triggerExit(Collider other, string tag)
             {
-                triggerExit(other);
+                Character characterComponent = other.GetComponent<Character>();
+
+                if( characterComponent != null )
+                {
+                    if( characterComponent.getCharacterType() == CharacterType.Survivor )
+                    {
+                        removePotentialTarget( characterComponent );
+                    }
+                }
             }
 
             /// <summary>
@@ -345,7 +321,7 @@ namespace Extinction
             /// <summary>
             /// return true if this agent is able to attack this a weapon
             /// </summary>
-            public bool canAttack()
+            public override bool canAttack()
             {
                 if( _weapons.Count == 0 )
                     return false;
@@ -358,7 +334,7 @@ namespace Extinction
             /// <summary>
             /// return true if this agent can directly attack the target
             /// </summary>
-            public bool canAttack( Character target )
+            public override bool canAttack( Character target )
             {
                 if( _weapons.Count == 0 )
                     return false;
@@ -392,9 +368,11 @@ namespace Extinction
                 attack();
             }
 
+            [PunRPC]
             public override void getDamage( int amount )
             {
-                _health -= amount;
+                float health = _health - amount;
+                GetComponent<PhotonView>().RPC("SetHealth", PhotonTargets.All, health);
 
                 if(_lifeBar != null)
                 {

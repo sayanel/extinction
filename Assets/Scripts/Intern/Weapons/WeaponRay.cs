@@ -61,6 +61,7 @@ namespace Extinction
                 if ((Time.time - _previousTime >= _fireRate) && //the fireRate is OK ?
                     ((_useAmmo && _nbCurrentAmmo > 0) || !_useAmmo)) //the ammos are OK ?
                 {
+                    Debug.DrawRay(_anchor.position + _anchor.forward * _minDistance, _anchor.forward*100, Color.red, 10, false);
                     //fire ray
                     RaycastHit hitInfo;
                     if (Physics.Raycast(_anchor.position + _anchor.forward * _minDistance,
@@ -75,7 +76,7 @@ namespace Extinction
                     _previousTime = Time.time;
 
                     //launch FX
-                    FXManager.Instance.GetComponent<PhotonView>().RPC("Activate", PhotonTargets.All, (int)Enums.FXType.ShootFX, _anchor.position, _anchor.rotation);
+                    FXManager.Instance.Activate((int)Enums.FXType.ShootFX, _anchor.position, _anchor.rotation);
                 }
             }
 

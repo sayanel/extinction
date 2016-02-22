@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using Extinction.Characters;
 
 namespace Extinction {
     namespace Network {
@@ -15,8 +16,13 @@ namespace Extinction {
             Vector3 m_correctPlayerPos; //< smooth
             Quaternion m_correctPlayerRot; //< smooth
             static float speedSmooth = 5;
+            Character character;
 
             void Start() {
+            }
+
+            void Awake() {
+                character = GetComponent<Character>();
             }
 
             /// <summary>
@@ -46,12 +52,14 @@ namespace Extinction {
                     // we handle this character: send to others the transform data
                     stream.SendNext(transform.position);
                     stream.SendNext(transform.rotation);
+                    stream.SendNext(character.Health);
                     //stream.SendNext(m_playerController.state);
                 }
                 else {
                     // Network player, receive data (this object viewed into other windows game over network)
                     m_correctPlayerPos = (Vector3)stream.ReceiveNext();
                     m_correctPlayerRot = (Quaternion)stream.ReceiveNext();
+                    character.Health = (float)stream.ReceiveNext();
                     //m_playerController.state = (CharacterState)stream.ReceiveNext();
                 }
             }

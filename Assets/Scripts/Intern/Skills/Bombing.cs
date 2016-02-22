@@ -4,6 +4,7 @@ using System.Collections;
 using Extinction.FX;
 using Extinction.Enums;
 using Extinction.Characters;
+using Extinction.Weapons;
 
 namespace Extinction
 {
@@ -22,7 +23,13 @@ namespace Extinction
             private float _projectileHeight = 10;
 
             [SerializeField]
-            private float _damageArea = 3;
+            private float _projectileSpeed = 0.1F;
+
+            [SerializeField]
+            private float _damageRadius = 3;
+
+            [SerializeField]
+            private float _damage = 10;
 
             [SerializeField]
             private Transform _launcher;
@@ -46,8 +53,9 @@ namespace Extinction
             {
                 for (int i = 0; i < _projectileCount; i++)
                 {
-                    Vector2 randomPositionOffset = Random.insideUnitCircle * _damageArea;
+                    Vector2 randomPositionOffset = Random.insideUnitCircle;
                     Vector3 instantiatedPosition = new Vector3(_launcher.position.x + randomPositionOffset.x, _launcher.position.y , _launcher.position.z + randomPositionOffset.y);
+                    
                     //activate the FX on network
                     FXManager.Instance.Activate((int)_launchingFX, instantiatedPosition, _launcher.rotation);
 
@@ -58,13 +66,26 @@ namespace Extinction
 
                 for(int i = 0; i < _projectileCount; i++)
                 {
-                    Vector2 randomPositionOffset = Random.insideUnitCircle * _damageArea;
+                    Vector2 randomPositionOffset = Random.insideUnitCircle * _damageRadius;
                     Vector3 instantiatedPosition = new Vector3(position.x + randomPositionOffset.x, position.y + _projectileHeight, position.z + randomPositionOffset.y);
+                    
                     //TODO : make the instantiation synchonized on the network
-                    Instantiate(_projectileModel, instantiatedPosition, Quaternion.identity);
+                    GameObject newProjectile = Instantiate(_projectileModel, instantiatedPosition, Quaternion.LookRotation(new Vector3(0,-1,0))) as GameObject;
+                    Missile missileComponent = newProjectile.GetComponent<Missile>();
+                    if( missileComponent != null )
+                    {
+                        missileComponent.Speed = _projectileSpeed;
+                        missileComponent.Damage = _damage;
+                        missileComponent.DamageRadius = _damageRadius;
+                    }
 
                     yield return new WaitForSeconds(Random.Range(0.1f, 0.8f));
                 }
+            }
+
+            public override void init( SpecialRobot robot )
+            {
+                //nothing to init
             }
         }
     }

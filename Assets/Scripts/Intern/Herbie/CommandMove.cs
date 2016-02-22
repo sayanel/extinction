@@ -31,7 +31,7 @@ namespace Extinction
             /// <summary>
             /// create the command with all the informations : 
             /// </summary>
-            public CommandMove( SpecialRobot actor, Vector3 targetPosition )
+            public CommandMove( Unit actor, Vector3 targetPosition )
             {
                 _actor = actor;
                 _targetPosition = targetPosition;
