@@ -49,6 +49,7 @@ Assets/Textures*
 Assets/Standard Assets*
 Assets/Plugins*
 Bin
+Builds/*
 
 # ===================================== #
 # Extinction Language Tool Kit (python) #
