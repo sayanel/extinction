@@ -32,6 +32,10 @@ namespace Extinction
             private Renderer _renderer;
             private Collider _collider;
 
+            // If this parameter is set to false, this projectile can't dammage anything on scene. 
+            // It allows us to control dammage RPC in photon.
+            private bool _dealsDamage = false;
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -56,8 +60,12 @@ namespace Extinction
 
             public void onHit(GameObject obj)
             {
-                Character o = obj.GetComponent<Character>();
-                o.getDamage(_dammage);
+                //apply damage to target only if it can deals damage.
+                if(_dealsDamage)
+                {
+                    Character o = obj.GetComponent<Character>();
+                    o.getDamage(_dammage);
+                }
             }
 
             public void Update()
@@ -77,6 +85,11 @@ namespace Extinction
                 _collider.enabled = false;
                 _renderer.enabled = false;
                 Destroy(this.gameObject, 1);
+            }
+
+            public void ActivateLocal()
+            {
+                _dealsDamage = true; // active dealsDamage only on local instance to avoid multiple call to the same RPC.
             }
 
         }
