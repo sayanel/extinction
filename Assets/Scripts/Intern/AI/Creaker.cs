@@ -11,15 +11,6 @@ using Extinction.Utils;
 namespace Extinction {
     namespace AI {
 
-        public enum AIState
-        {
-            ATTACK,
-            FOLLOWSURVIVOR,
-            FOLLOWCREAKER,
-            WANDER,
-            DEAD
-        };
-
         public class Creaker : UncontrolableRobot, ITriggerable
         {
 
@@ -28,58 +19,32 @@ namespace Extinction {
             // ----------------------------------------------------------------------------
 
             [SerializeField] protected Transform _target;
-            [SerializeField] protected Character _characterTarget;
-            [SerializeField] protected GameObject[] _survivorsStealthCollider;
             protected NavMeshAgent _nav; // Reference to the nav mesh agent.
-            protected GameObject[] _waypoints;
 
-            [SerializeField] protected float _speed = 1;
-            [SerializeField] protected AIState _AIstate;
-
-            const float min = .5f;
-            const float max = 1.5f;
-            //float detectionAngle = 40;
-            protected float detectionRadius = 5;
-
+            [SerializeField] protected float _speed = 40;
+            [SerializeField] protected float _life = 100;
+            [SerializeField] public bool _isDead = false;
             [SerializeField] private int idGroup = 0;
             private Boolean isSeeingTarget = false;
             private int lambdaDist = 10;
 
-            [SerializeField] private float delayAttackTime;
-            [SerializeField] private bool canAttack;
-            [SerializeField] private float nextAttack;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
 
-            public Creaker()
-            {
-               
-            }
-
             /// <summary>
             /// Initialize one creaker
             /// </summary>
-            public void Awake()
+            public void init()
             {
-
-                //  _target = GameObject.FindGameObjectWithTag("target").transform;
-                //  _survivor = GameObject.FindGameObjectWithTag("Player");
-                _survivorsStealthCollider = GameObject.FindGameObjectsWithTag("playerDetectionCollider");
                 _nav = GetComponent<NavMeshAgent>();
-                _waypoints = GameObject.FindGameObjectsWithTag("waypoint");
-                _AIstate = AIState.WANDER;
-                _target = _waypoints[UnityEngine.Random.Range(0, _waypoints.Length)].transform;
-                //detectionAngle *= Random.Range(min, max);
-                detectionRadius *= UnityEngine.Random.Range(min, max);
-
-                canAttack = true;
-                delayAttackTime = 2f;
-                nextAttack = 0f;
+                _nav.speed = UnityEngine.Random.Range(12, 18);
+                _nav.acceleration = UnityEngine.Random.Range(12, 18);
+                _target = Horde.getWayPoint();
             }
 
-            void Update()
+            public void UpdateCreaker()
             {
                 if (this.idGroup != 0)
                 {
@@ -92,7 +57,7 @@ namespace Extinction {
                 else
                 {
                     if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(Horde.getGroupTarget(this.idGroup).position, transform.position) <= lambdaDist)
-                        _target = _waypoints[UnityEngine.Random.Range(0, _waypoints.Length)].transform;
+                        _target = Horde.getWayPoint(); 
                     followTarget(_target);
                 }
                     
@@ -106,8 +71,7 @@ namespace Extinction {
                     if (other.gameObject.tag == "creakerDetectionCollider") // if the collider we collide with is creaker
                     {
                         Creaker c = other.gameObject.transform.parent.GetComponent<Creaker>();
-                        //if (c.getIdGroup() != this.idGroup)
-                        //{
+
                             if (this.idGroup == 0 && c.getIdGroup() == 0) // We do not belong to any group
                             {
                                 int id = Horde.createNewGroup();
@@ -128,7 +92,6 @@ namespace Extinction {
                                     Horde.addOneCreaker(this.idGroup);
                                 }
                             }
-                        //}
                     }
                     else if (other.gameObject.tag == "playerDetectionCollider") // if the collider we collide with is a player
                     {
@@ -137,6 +100,7 @@ namespace Extinction {
                         Horde.setCharacterTarget(c, this.idGroup);
                         if (!this.isSeeingTarget) Horde.targetFound(this.idGroup); //verifier que la nouvelle target est identique à celle du groupe
                         this.isSeeingTarget = true;
+                        _nav.speed += 10;
                     }
 
                    
@@ -144,13 +108,10 @@ namespace Extinction {
 
                 else if (tag == "CreakerRangeCollider") // if its our range colliger which collides
                 {
-                    //Debug.LogError("CreakerRangeColliderCollides");
                     if(other.gameObject.tag == "playerRangeCollider") // if our range collider collides with a player range collider
                     {
                         Survivor s = other.gameObject.transform.parent.GetComponent<Survivor>();
                         attackSurvivor(s);
-                        //InvokeRepeating("attackSurvivor(s)", 0f, delayAttackTime);
-                        //Debug.LogError("trigger enter touch");
                     }
                 }
             }
@@ -161,36 +122,12 @@ namespace Extinction {
                 { 
                     if (other.gameObject.tag == "stealthCollider" && this.isSeeingTarget) // if a survivor get out of the collider
                     {          
-                        //Horde.setCharacterTarget(null, this.idGroup);
                         Horde.addTargetLost(this.idGroup);
-                        this.isSeeingTarget = false;      
+                        this.isSeeingTarget = false;
+                        _nav.speed -= 10;      
                     }
                 }
             }
-
-            //public void triggerStay(Collider other, string tag)
-            //{
-            //    if (tag == "CreakerRangeCollider") // if its our range colliger which collides
-            //    {
-            //        //Debug.LogError("CreakerRangeColliderCollides");
-            //        if (other.gameObject.tag == "playerRangeCollider" && Time.time > nextAttack) // if our range collider collides with a player range collider
-            //        {
-            //            Survivor s = other.gameObject.transform.parent.GetComponent<Survivor>();
-            //            attackSurvivor(s);
-
-            //            nextAttack = Time.time + delayAttackTime;
-            //            //canAttack = false;
-            //            //yield return new WaitForSeconds(1);
-            //            //canAttack = true;
-            //        }
-            //    }
-            //}
-
-            //public void OnTriggerStay(Collider other)
-            //{
-
-            //}
-
 
             public int getIdGroup()
             {
@@ -202,15 +139,6 @@ namespace Extinction {
                 this.idGroup = id;
             }
 
-            private bool isAStealthCollider(GameObject gameObject)
-            {
-                foreach (GameObject stealthCollider in _survivorsStealthCollider)
-                {
-                    if (gameObject == stealthCollider) return true;
-                }
-
-                return false;
-            }
 
             private bool isACreakerCollider(GameObject gameObject)
             {
@@ -250,16 +178,21 @@ namespace Extinction {
                 return this._target;
             }
 
-            public AIState getState()
-            {
-                return this._AIstate;
-            }
-
             public void attackSurvivor(Survivor survivor)
             {
-                //if (_target) _target.getDamage(5);
-                //Debug.LogError("kikoo");
                 survivor.getDamage(5);
+            }
+
+            public void getDamage(float damage)
+            {
+                _life -= damage;
+
+                if (_life <= 0)
+                {
+                    _isDead = true;
+                    Horde.removeOneCreaker(this.idGroup);
+                }
+                    
             }
 
             public override void addPotentialTarget(Character target)

@@ -10,15 +10,15 @@ namespace Extinction
     {
         public class Horde : MonoBehaviour
         {
+            private int nbCreaker = 1000;
+            static protected NavMeshAgent _nav; // Reference to the nav mesh agent.
 
             private List<Creaker> _creakers = new List<Creaker>();
-            private int _nbCreakersToUpdate;
-            private static GameObject[] _waypoints;
+            private int _nbCreakersToUpdate = 250;
+            private int creakerIndex = 0;
+            [SerializeField]
+            private static GameObject[] _waypoints;         
 
-            protected NavMeshAgent _nav; // Reference to the nav mesh agent.
-
-            //protected static Horde instance;
-            //[SerializeField] public GameObject creakerPrefab;
             [SerializeField] public GameObject creakerPrefab;
 
             //Gestion de la horde
@@ -33,7 +33,7 @@ namespace Extinction
 
 
 
-            public void Awake()
+            public void Start()
             {
                 _groups.Add(0);
                 _waypoints = GameObject.FindGameObjectsWithTag("waypoint");
@@ -42,7 +42,7 @@ namespace Extinction
                 _targetLost.Add(0);
                 _nav = GetComponent<NavMeshAgent>();
 
-                createHorde(20);
+                createHorde(nbCreaker);
 
             }
 
@@ -60,21 +60,40 @@ namespace Extinction
                     } 
                        
                     if (_groupCharacterTarget[i] != null) _groupTarget[i] = _groupCharacterTarget[i].transform;
-                    //if (_groupCharacterTarget[i] == null) _groupTarget[i] = _waypoints[UnityEngine.Random.Range(0, _waypoints.Length)].transform;
-                    //Debug.LogError("group n°: " + i + " nombre: " + _groups[i]);
-                    //Debug.LogError("character target: " + i + " --> " + _groupCharacterTarget[i]);
                     
-                    //Debug.LogError("wayPoint: " + i + " --> " + _groupTarget[i].position);
-    
                 }
+                int j;
+                for(j = 0; j < creakerIndex + _nbCreakersToUpdate; ++j)
+                {
+                    if (_creakers[(j + creakerIndex) % nbCreaker]._isDead)
+                    {
+                        _creakers.RemoveAt(j + creakerIndex);
+                        --j;
+                        continue;
+                    }
 
+                    _creakers[(j+creakerIndex)%nbCreaker].UpdateCreaker();
+                }
+                creakerIndex = (creakerIndex + j)%nbCreaker;
+                //Debug.LogError("Index: " + creakerIndex);
+                //seeGroups();
+            }
+
+            public void seeGroups()
+            {
+                for(int i=0; i<_groups.Count; ++i)
+                {
+                    if (_groups[i] > 1)
+                        Debug.LogError("Groupe n° " + i + " with " + _groups[i] + " creakers");
+                 }
+               
             }
 
             public Vector3 getSpawnPos()
             {
                 int layerMask = (1 << NavMesh.GetAreaFromName("Walkable"));
-                var position = new Vector3(Random.Range(-300f, 300f), 0, Random.Range(-300f, 300f));
-
+                var position = new Vector3(Random.Range(-2000f, 2000f), 0, Random.Range(-2000f, 2000f));
+            
                 NavMeshHit hit;
                 NavMesh.SamplePosition(position, out hit, 50f, layerMask);
                 
@@ -83,14 +102,10 @@ namespace Extinction
 
             public Creaker createCreaker()
             {
-                //GameObject CreakerGO = Instantiate(creakerPrefab) as GameObject;
-                //Creaker creaker = Object.Instantiate(newCreakerGO, Vector3.zero, Quaternion.identity).GetComponent<Creaker>();
-                
                 creakerGO = Instantiate(creakerPrefab, getSpawnPos(), Quaternion.identity) as GameObject;
-                
+               
                 Creaker creaker = creakerGO.GetComponent<Creaker>();
-
-
+                creaker.init();
                 return creaker;
             }
 
@@ -137,6 +152,10 @@ namespace Extinction
                 return _groups.Count - 1;   
             }
 
+            static public Transform getWayPoint()
+            {
+                return _waypoints[UnityEngine.Random.Range(0, _waypoints.Length)].transform;
+            }
 
             static public Transform getGroupTarget(int idGroup)
             {

@@ -39,9 +39,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 484014}
   - 135: {fileID: 13526852}
-  - 114: {fileID: 11444562}
   - 114: {fileID: 11482494}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: rangeCollider
   m_TagString: creakerRangeCollider
   m_Icon: {fileID: 0}
@@ -103,7 +102,7 @@ GameObject:
   - 4: {fileID: 441568}
   - 135: {fileID: 13513832}
   - 114: {fileID: 11498282}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: detectionCollider
   m_TagString: creakerDetectionCollider
   m_Icon: {fileID: 0}
@@ -748,7 +747,7 @@ Rigidbody:
   m_Drag: Infinity
   m_AngularDrag: Infinity
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
@@ -765,28 +764,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 0
   _target: {fileID: 0}
-  _characterTarget: {fileID: 0}
-  _survivorsStealthCollider: []
   _speed: 1
-  _AIstate: 0
-  idGroup: 0
---- !u!114 &11444562
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 106802}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 619d9d910198cec468bbc28131cf996a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _health: 100
-  _target: {fileID: 0}
-  _characterTarget: {fileID: 0}
-  _survivorsStealthCollider: []
-  _speed: 1
-  _AIstate: 0
+  _life: 100
+  _isDead: 0
   idGroup: 0
 --- !u!114 &11482494
 MonoBehaviour:
@@ -824,7 +804,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 18.6700001
+  m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &13526852
 SphereCollider:
@@ -916,8 +896,8 @@ NavMeshAgent:
   m_GameObject: {fileID: 168364}
   m_Enabled: 1
   m_Radius: 1.49000001
-  m_Speed: 11.3800001
-  m_Acceleration: 8
+  m_Speed: 20
+  m_Acceleration: 50
   avoidancePriority: 50
   m_AngularSpeed: 120.07
   m_StoppingDistance: 3.53999996
@@ -938,6 +918,30 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_TagString
       value: creakerDetectionCollider
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Radius
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Acceleration
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Speed
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
