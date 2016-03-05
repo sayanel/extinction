@@ -20,6 +20,7 @@ GameObject:
   - 114: {fileID: 11443268}
   - 114: {fileID: 11465100}
   - 114: {fileID: 11453142}
+  - 114: {fileID: 11493342}
   m_Layer: 8
   m_Name: RController
   m_TagString: SpecialRobot
@@ -484,6 +485,7 @@ MonoBehaviour:
   _friendlyFire: 1
   _range: 2
   _anchor: {fileID: 0}
+  _anchorFX: {fileID: 0}
   _targetLayer:
   - Default
   - SpecialRobot
@@ -522,12 +524,24 @@ MonoBehaviour:
   _friendlyFire: 1
   _range: 2
   _anchor: {fileID: 0}
+  _anchorFX: {fileID: 0}
   _targetLayer:
   - Default
   - SpecialRobot
   _useAmmo: 0
   _fireFX: 0
   _minDistance: 1
+--- !u!114 &11493342
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102124}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd3ae2165692dd34891f0a451ca0320e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &13560404
 SphereCollider:
   m_ObjectHideFlags: 1

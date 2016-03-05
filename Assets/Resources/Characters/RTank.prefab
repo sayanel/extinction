@@ -36,6 +36,7 @@ GameObject:
   - 114: {fileID: 11416316}
   - 114: {fileID: 11421966}
   - 114: {fileID: 11414570}
+  - 114: {fileID: 11428046}
   m_Layer: 8
   m_Name: RTank
   m_TagString: SpecialRobot
@@ -489,6 +490,17 @@ MonoBehaviour:
   viewIdField: 0
   instantiationId: -1
   isRuntimeInstantiated: 0
+--- !u!114 &11428046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109128}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd3ae2165692dd34891f0a451ca0320e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11436408
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -507,6 +519,7 @@ MonoBehaviour:
   _friendlyFire: 1
   _range: 7
   _anchor: {fileID: 0}
+  _anchorFX: {fileID: 0}
   _targetLayer:
   - Default
   - SpecialRobot
@@ -568,6 +581,7 @@ MonoBehaviour:
   _friendlyFire: 1
   _range: 7
   _anchor: {fileID: 0}
+  _anchorFX: {fileID: 0}
   _targetLayer:
   - Default
   - SpecialRobot

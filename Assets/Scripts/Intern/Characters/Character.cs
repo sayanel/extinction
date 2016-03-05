@@ -116,6 +116,8 @@ namespace Extinction
             /// <param name="stateName"></param>
             public virtual void setAnimationState(string stateName)
             {
+                _currentAnimationState = stateName;
+
                 if (_animator != null)
                     _animator.SetTrigger(stateName);
             }
@@ -128,6 +130,8 @@ namespace Extinction
             /// <param name="newState"></param>
             public virtual void changeAnimationState(string oldState, string newState)
             {
+                _currentAnimationState = newState;
+
                 if (_animator != null)
                     _animator.SetTrigger(newState);
             }
