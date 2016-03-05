@@ -61,14 +61,9 @@ namespace Extinction
             /// <summary>
             /// The name of the current animation played by this character.
             /// </summary>
-            protected string _currentAnimation;
-            public string CurrentAnimation{
-                get{ return _currentAnimation; }
-                set{
-                    _currentAnimation = value;
-                    if(_animator !=null)
-                        _animator.SetTrigger(value);
-                }
+            protected string _currentAnimationState;
+            public string CurrentAnimationState{
+                get{ return _currentAnimationState; }
             }
 
 
@@ -112,6 +107,29 @@ namespace Extinction
             public CharacterType getCharacterType()
             {
                 return _characterType;
+            }
+
+            /// <summary>
+            /// Use this function to play an animation with name : stateName.
+            /// By default, it uses trigger animator value. Override the function to use different value type.
+            /// </summary>
+            /// <param name="stateName"></param>
+            public virtual void setAnimationState(string stateName)
+            {
+                if (_animator != null)
+                    _animator.SetTrigger(stateName);
+            }
+
+            /// <summary>
+            /// Use this function to change animation played by this character.
+            /// By default, it uses trigger animator value. Override the function to use different value type.
+            /// </summary>
+            /// <param name="oldState"></param>
+            /// <param name="newState"></param>
+            public virtual void changeAnimationState(string oldState, string newState)
+            {
+                if (_animator != null)
+                    _animator.SetTrigger(newState);
             }
 
             /// <summary>
