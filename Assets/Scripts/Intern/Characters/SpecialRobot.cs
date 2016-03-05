@@ -107,6 +107,10 @@ namespace Extinction
             {
                 foreach( ActiveSkill skill in _activeSkills )
                     skill.init(this);
+
+                //If animator isn't set, try to find an animator component : 
+                if( _animator == null )
+                    _animator = GetComponent<Animator>();
             }
 
             void Update()
@@ -353,6 +357,17 @@ namespace Extinction
 
             public override void attack()
             {
+                bool willShoot = true;
+                foreach( Weapon weapon in _weapons )
+                {
+                    if( !weapon.canShoot() )
+                        willShoot = false;
+                }
+
+                //We trigger the animation only if we are sure that all weapons can shoot : 
+                if( willShoot && _animator != null )
+                    _animator.SetTrigger( "Shoot" );
+
                 foreach(Weapon weapon in _weapons)
                 {
                     weapon.fire();
@@ -390,12 +405,20 @@ namespace Extinction
                 _navMeshAgentComponent.updateRotation = true;
                 _navMeshAgentComponent.Resume();
                 _navMeshAgentComponent.SetDestination( vec );
+
+                //animation : 
+                if( _animator != null )
+                    _animator.SetTrigger( "Walk" );
             }
 
             public override void stopWalking()
             {
                 _navMeshAgentComponent.Stop();
                 _navMeshAgentComponent.updateRotation = false;
+
+                //animation : 
+                if( _animator != null )
+                    _animator.SetTrigger( "Idle" );
             }
 
             public override void turn( float angle )
@@ -481,6 +504,10 @@ namespace Extinction
             {
                 _unitBehavior = UnitBehavior.Idle;
                 _drivenByAI = true;
+
+                //animation : 
+                if( _animator != null )
+                    _animator.SetTrigger( "Idle" );
             }
 
             /// <summary>

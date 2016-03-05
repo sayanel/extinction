@@ -32,9 +32,10 @@ GameObject:
   - 114: {fileID: 11442642}
   - 114: {fileID: 11414948}
   - 54: {fileID: 5478580}
-  - 205: {fileID: 20536322}
   - 114: {fileID: 11427548}
   - 114: {fileID: 11416316}
+  - 114: {fileID: 11421966}
+  - 114: {fileID: 11414570}
   m_Layer: 8
   m_Name: RTank
   m_TagString: SpecialRobot
@@ -51,7 +52,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 473974}
   - 212: {fileID: 21246556}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: MiniMapIcone_specialRobot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -364,6 +365,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11414570
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: badf0b5e51ffbad4a8a1d8bf86e5b9b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11414948
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -411,6 +423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _isAlive: 1
+  _animator: {fileID: 0}
   _characterName: 5
   _characterType: 1
   _canAttack: 1
@@ -426,6 +439,31 @@ MonoBehaviour:
   _fogManager: {fileID: 0}
   _terrainMasks:
   - Terrain
+--- !u!114 &11421966
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 11414570}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
 --- !u!114 &11427548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -582,35 +620,6 @@ NavMeshAgent:
   m_BaseOffset: .5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!205 &20536322
-LODGroup:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 109128}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: 0, y: .550000072, z: -4.76837158e-07}
-  m_Size: 5.11999989
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LODs:
-  - screenRelativeHeight: .600000024
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 2372872}
-    - renderer: {fileID: 2390624}
-    - renderer: {fileID: 2344114}
-  - screenRelativeHeight: .220703021
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 2372872}
-    - renderer: {fileID: 2390624}
-    - renderer: {fileID: 2344114}
-  - screenRelativeHeight: .0328082889
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 21246556}
-  m_Enabled: 1
 --- !u!212 &21246556
 SpriteRenderer:
   m_ObjectHideFlags: 1

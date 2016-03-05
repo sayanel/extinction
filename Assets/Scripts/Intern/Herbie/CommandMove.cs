@@ -58,7 +58,12 @@ namespace Extinction
             public override bool IsFinished()
             {
                 //if the agent is near the targeted position 
-                if( Vector3.SqrMagnitude( _actor.transform.position - _targetPosition ) < 1 )
+                NavMeshAgent navMeshAgentComponent = _actor.GetComponent<NavMeshAgent>();
+                float verticalOffset = 0;
+                if (navMeshAgentComponent != null)
+                    verticalOffset = navMeshAgentComponent.baseOffset;
+
+                if ( Vector3.SqrMagnitude( (_actor.transform.position - new Vector3(0,verticalOffset,0)) - _targetPosition ) < 2 )
                     return true;
                 else
                     return false;
