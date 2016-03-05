@@ -44,13 +44,16 @@ namespace Extinction
                         _anchor = transform;
                     }
                 }
+
+                if( _anchorFX == null ){
+                    _anchorFX = _anchor;
+                }
             }
 
             override
             public void fire()
             {
-                if((Time.time - _previousTime >= _fireRate) && //the fireRate is OK ?
-                    ( (_useAmmo && _nbCurrentAmmo > 0) || !_useAmmo)) //the ammos are OK ?
+                if(canShoot())
                 {
                     //fire projectile
                     Projectile p = Instantiate(_projectile, _anchor.position, _anchor.rotation) as Projectile;
@@ -63,8 +66,16 @@ namespace Extinction
                     _nbCurrentAmmo--;
 
                     //launch FX
-                    FXManager.Instance.Activate((int)_fireFX, _anchor.position, _anchor.rotation);
+                    FXManager.Instance.Activate((int)_fireFX, _anchorFX.position, _anchorFX.rotation);
+
                 }
+            }
+
+            override 
+            public bool canShoot()
+            {
+                return (( Time.time - _previousTime >= _fireRate ) && //the fireRate is OK ?
+                        ( ( _useAmmo && _nbCurrentAmmo > 0 ) || !_useAmmo )); //the ammos are OK ?
             }
 
             override

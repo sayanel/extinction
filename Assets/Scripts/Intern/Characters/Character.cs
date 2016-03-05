@@ -51,6 +51,27 @@ namespace Extinction
                 get{ return _isAlive; }
             }
 
+
+            /// <summary>
+            /// The animator attached to this Character.
+            /// </summary>
+            [SerializeField]
+            protected Animator _animator;
+
+            /// <summary>
+            /// The name of the current animation played by this character.
+            /// </summary>
+            protected string _currentAnimation;
+            public string CurrentAnimation{
+                get{ return _currentAnimation; }
+                set{
+                    _currentAnimation = value;
+                    if(_animator !=null)
+                        _animator.SetTrigger(value);
+                }
+            }
+
+
             /// <summary>
             /// The current state of the character
             /// Can be used for the animation, sounds, etc. 

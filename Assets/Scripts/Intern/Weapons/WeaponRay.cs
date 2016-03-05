@@ -53,13 +53,16 @@ namespace Extinction
                         _anchor = transform;
                     }
                 }
+
+                if(_anchorFX == null ){
+                    _anchorFX = _anchor;
+                }
             }
 
             override
             public void fire() {
 
-                if ((Time.time - _previousTime >= _fireRate) && //the fireRate is OK ?
-                    ((_useAmmo && _nbCurrentAmmo > 0) || !_useAmmo)) //the ammos are OK ?
+                if (canShoot())
                 {
                     Debug.DrawRay(_anchor.position + _anchor.forward * _minDistance, _anchor.forward*100, Color.red, 10, false);
                     //fire ray
@@ -76,8 +79,16 @@ namespace Extinction
                     _previousTime = Time.time;
 
                     //launch FX
-                    FXManager.Instance.Activate((int)Enums.FXType.ShootFX, _anchor.position, _anchor.rotation);
+                    FXManager.Instance.Activate((int)Enums.FXType.ShootFX, _anchorFX.position, _anchorFX.rotation);
+
                 }
+            }
+
+            override 
+            public bool canShoot()
+            {
+                return ( ( Time.time - _previousTime >= _fireRate ) && //the fireRate is OK ?
+                    ( ( _useAmmo && _nbCurrentAmmo > 0 ) || !_useAmmo ) ); //the ammos are OK ?
             }
 
             public void onHit(GameObject obj)
