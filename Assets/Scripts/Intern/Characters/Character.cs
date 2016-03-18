@@ -52,6 +52,12 @@ namespace Extinction
             }
 
             /// <summary>
+            /// The animator attached to this Character.
+            /// </summary>
+            [SerializeField]
+            protected Animator _animator;
+
+            /// <summary>
             /// The current state of the character
             /// Can be used for the animation, sounds, etc. 
             /// </summary>
