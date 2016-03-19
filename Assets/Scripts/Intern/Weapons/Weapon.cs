@@ -73,6 +73,9 @@ namespace Extinction
             [SerializeField]
             protected Transform _anchor;
 
+            [SerializeField]
+            protected Transform _anchorFX;
+
             /// <summary>
             /// Only GameObjects which are on these layers can be hit by the ray.
             /// Contains Default layer by default.
@@ -114,6 +117,12 @@ namespace Extinction
             /// Fire with the weapon.
             /// </summary>
             public abstract void fire();
+
+            /// <summary>
+            /// check if the weapon can shoot.
+            /// </summary>
+            /// <returns></returns>
+            public abstract bool canShoot();
         }
     }
 }
