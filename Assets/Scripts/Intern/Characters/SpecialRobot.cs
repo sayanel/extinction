@@ -113,11 +113,11 @@ namespace Extinction
                     _animator = GetComponent<Animator>();
             }
 
-            void Update()
+            public void updateLocal()
             {
                 updateTargets();
 
-                if(_drivenByAI)
+                if (_drivenByAI)
                 {
                     AIUpdate();
                 }
@@ -366,7 +366,7 @@ namespace Extinction
 
                 //We trigger the animation only if we are sure that all weapons can shoot : 
                 if( willShoot && _animator != null )
-                    _animator.SetTrigger( "Shoot" );
+                    setAnimationState( "Shoot" );
 
                 foreach(Weapon weapon in _weapons)
                 {
@@ -408,7 +408,7 @@ namespace Extinction
 
                 //animation : 
                 if( _animator != null )
-                    _animator.SetTrigger( "Walk" );
+                    setAnimationState( "Walk" );
             }
 
             public override void stopWalking()
@@ -418,7 +418,7 @@ namespace Extinction
 
                 //animation : 
                 if( _animator != null )
-                    _animator.SetTrigger( "Idle" );
+                    setAnimationState( "Idle" );
             }
 
             public override void turn( float angle )
@@ -507,7 +507,7 @@ namespace Extinction
 
                 //animation : 
                 if( _animator != null )
-                    _animator.SetTrigger( "Idle" );
+                    setAnimationState( "Idle" );
             }
 
             /// <summary>
