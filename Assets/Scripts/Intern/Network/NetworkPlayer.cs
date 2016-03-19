@@ -53,6 +53,7 @@ namespace Extinction {
                     stream.SendNext(transform.position);
                     stream.SendNext(transform.rotation);
                     stream.SendNext(character.Health);
+                    stream.SendNext(character.CurrentAnimationState);
                     //stream.SendNext(m_playerController.state);
                 }
                 else {
@@ -61,6 +62,11 @@ namespace Extinction {
                     m_correctPlayerRot = (Quaternion)stream.ReceiveNext();
                     character.Health = (float)stream.ReceiveNext();
                     //m_playerController.state = (CharacterState)stream.ReceiveNext();
+
+
+                    string synchronizedAnim = (string)stream.ReceiveNext();
+                    if (synchronizedAnim != character.CurrentAnimationState)
+                        character.changeAnimationState(character.CurrentAnimationState, synchronizedAnim);
                 }
             }
         }
