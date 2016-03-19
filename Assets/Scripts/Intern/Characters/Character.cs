@@ -68,12 +68,6 @@ namespace Extinction
 
 
             /// <summary>
-            /// The animator attached to this Character.
-            /// </summary>
-            [SerializeField]
-            protected Animator _animator;
-
-            /// <summary>
             /// The current state of the character
             /// Can be used for the animation, sounds, etc. 
             /// </summary>
@@ -122,7 +116,9 @@ namespace Extinction
             /// <param name="stateName"></param>
             public virtual void setAnimationState(string stateName)
             {
-                if (_animator != null)
+                _currentAnimationState = stateName;
+
+                if( _animator != null)
                     _animator.SetTrigger(stateName);
             }
 
@@ -134,6 +130,8 @@ namespace Extinction
             /// <param name="newState"></param>
             public virtual void changeAnimationState(string oldState, string newState)
             {
+                _currentAnimationState = newState;
+
                 if (_animator != null)
                     _animator.SetTrigger(newState);
             }

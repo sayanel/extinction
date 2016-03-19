@@ -1119,7 +1119,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 109128}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .400000006, y: 1.42999995, z: 6.25}
+  m_LocalPosition: {x: .400000006, y: .400000006, z: 6.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 432526}
@@ -1324,8 +1324,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 5, z: 3}
-  m_Center: {x: 0, y: 3, z: 0}
+  m_Size: {x: 2.25, y: 5, z: 2.25}
+  m_Center: {x: 0, y: 2.73000002, z: 0}
 --- !u!95 &9526672
 Animator:
   serializedVersion: 3
@@ -1448,8 +1448,8 @@ MonoBehaviour:
   _damage: 10
   _friendlyFire: 1
   _range: 7
-  _anchor: {fileID: 0}
-  _anchorFX: {fileID: 0}
+  _anchor: {fileID: 480654}
+  _anchorFX: {fileID: 457292}
   _targetLayer:
   - Default
   - SpecialRobot
@@ -1510,8 +1510,8 @@ MonoBehaviour:
   _damage: 10
   _friendlyFire: 1
   _range: 7
-  _anchor: {fileID: 0}
-  _anchorFX: {fileID: 0}
+  _anchor: {fileID: 460864}
+  _anchorFX: {fileID: 428266}
   _targetLayer:
   - Default
   - SpecialRobot
@@ -1628,7 +1628,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 6.3499999
-  m_BaseOffset: .5
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!212 &21246556
