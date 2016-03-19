@@ -20,23 +20,26 @@ namespace Extinction
             // ----------------------------------------------------------------------------
 
             /// <summary>
-            /// Returns if the survivor is aiming or not
-            /// </summary>
-            public bool isAiming { get { return _aiming; } }
-
-            /// <summary>
             /// Returns the survivor's orientation, i.e the vector which describes where he is looking at
             /// </summary>
-            public Vector3 orientation { get { return _orientation; } }
-
-
-            public Vector3 trueOrientation { get { return _trueOrientation; } }
+            public Vector3 orientation { get { return _accuracyDeviation ? _trueOrientation : _orientation; } }
 
             /// <summary>
             /// Returns the survivor's state.
             /// It can be used for animation.
             /// </summary>
             public CharacterState state { get { return _state; } }
+
+            /// <summary>
+            /// Return the survivor's hand state.
+            /// It can be used for animation.
+            /// </summary>
+            public HandState handState { get { return _handState; } }
+
+            /// <summary>
+            /// Return if the survivor is aiming or not
+            /// </summary>
+            public bool isAiming { get { return _isAiming; } }
 
             /// <summary>
             /// Reduce or increase the survivor's lifebar
@@ -99,14 +102,22 @@ namespace Extinction
             private float _verticalSpeed = 0;
             private Vector3 _speed;
             private Vector3 _orientation = Vector3.forward;
-            private bool _aiming = false;
+
+            private HandState _handState = HandState.Idle;
+            private bool _isAiming = false;
 
             private Vector3 _trueOrientation = Vector3.forward;
             private Vector3 _lastOrientation = Vector3.forward;
             private Vector3 _nextOrientation = Vector3.forward;
 
             [SerializeField]
+            private bool _accuracyDeviation = true;
+
+            [SerializeField]
             private AnimationCurve _accuracyInterpolation;
+
+            [SerializeField]
+            private float _accuracyDeviationTime = 2;
 
             [SerializeField]
             private float _maxAccuracyDeviation = 20;
@@ -115,6 +126,10 @@ namespace Extinction
 
             [SerializeField]
             private Timer _accuracyTimer;
+
+            private Quaternion _orientationQuaternion;
+
+            public Quaternion orientationQuaternion { get { return _orientationQuaternion; } }
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -126,8 +141,12 @@ namespace Extinction
 
                 _speed = Vector3.zero;
 
-                _accuracyTimer.init( 3, startAccuracyRoutine, accuracyRoutine, endAccuracyRoutine, null );
-                _accuracyTimer.start();
+                if ( _accuracyDeviation )
+                {
+                    _accuracyTimer.init( _accuracyDeviationTime, startAccuracyRoutine, accuracyRoutine, endAccuracyRoutine, null );
+                    _accuracyTimer.start();
+                }
+                
 
                 if ( _controller != null ) return;
 
@@ -147,9 +166,8 @@ namespace Extinction
             {
                 float factor = _accuracyInterpolation.Evaluate( _accuracyTimer.currentTime / _accuracyTimer.maxTime );
 
-
                 Vector3 randomOrientation = Vector3.Normalize( ( factor * _nextOrientation + ( 1 - factor ) * _lastOrientation ) / 2 );
-                float multiplier = 0.3f * _accuracyMultiplier * (_aiming ? 0.2f : 1);
+                float multiplier = 0.3f * _accuracyMultiplier * (_isAiming ? 0.2f : 1);
                 _trueOrientation = Vector3.Normalize( ( multiplier * randomOrientation + (1-multiplier) * _orientation ) / 2 );
 
                 Vector3 camPosition = GetComponentInChildren<Camera>().transform.position;
@@ -269,7 +287,7 @@ namespace Extinction
                 if ( _state != CharacterState.Run && _state != CharacterState.Sprint && _state != CharacterState.Idle ) return;
 
                 _state = sprinting ? CharacterState.Sprint : CharacterState.Idle;
-                _aiming = false;
+                _handState = HandState.Idle;
             }
 
             /// <summary>
@@ -287,9 +305,10 @@ namespace Extinction
             /// <summary>
             /// The survivor uses his weapon
             /// </summary>
-            public void fire()
+            public void fire(bool fire)
             {
-                _weapon.fire();
+                //_weapon.fire();
+                _handState = fire ? HandState.Fire : HandState.Idle;
             }
 
             /// <summary>
@@ -298,7 +317,7 @@ namespace Extinction
             /// <param name="aiming">True or false</param>
             public void aim( bool aiming )
             {
-                if(_state != CharacterState.Sprint) _aiming = aiming;
+                if ( _state != CharacterState.Sprint ) _isAiming = aiming;
             }
 
             /// <summary>
@@ -308,7 +327,9 @@ namespace Extinction
             /// <param name="horizontalOrientation">The new horizontal angle in degrees</param>
             public void setOrientation( float verticalOrientation, float horizontalOrientation )
             {
-                _orientation = Quaternion.Euler( -verticalOrientation, horizontalOrientation, 0 ) * Vector3.forward;
+                Quaternion quat = Quaternion.Euler( -verticalOrientation, horizontalOrientation, 0 );
+                _orientationQuaternion = quat;
+                _orientation = quat * Vector3.forward;
             }
 
             /// <summary>

@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using Extinction.Characters;
+using Extinction.Enums;
 using UnityEngine.UI;
 
 namespace Extinction

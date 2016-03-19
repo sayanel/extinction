@@ -2,50 +2,38 @@
 
 using UnityEngine;
 using System.Collections;
-using Extinction.Characters;
-using Extinction.Enums;
 
-namespace Extinction
-{
-    namespace HUD
+namespace Extinction {
+    namespace Characters
     {
-        public class HUDWeaponMarker : MonoBehaviour
+        public class SurvivorAnimationProcedural : MonoBehaviour
         {
             // ----------------------------------------------------------------------------
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
             [SerializeField]
-            private Texture2D _accurateMarker;
-            [SerializeField]
-            private Texture2D _normalMarker;
-            [SerializeField]
             private Survivor _survivor;
-
-            private Rect _position;
+            [SerializeField]
+            private float _angleOffsetY = 60;
+            [SerializeField]
+            private float _angleOffsetX = 0;
+            [SerializeField]
+            private float _angleOffsetZ = 0;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
 
-            
-
-            // Use this for initialization
-            void Start()
+            public void LateUpdate()
             {
-                _position = new Rect( Screen.width / 2 - 16, Screen.height / 2 - 16, 32, 32 );
+                transform.LookAt( transform.position + _survivor.orientation, Vector3.up );
+                transform.Rotate( Vector3.up, _angleOffsetY );
+                transform.Rotate( Vector3.right, _angleOffsetX );
+                transform.Rotate( Vector3.forward, _angleOffsetZ );
             }
 
-            // Update is called once per frame
-            void Update()
-            {
-
-            }
-
-            void OnGUI()
-            {
-                GUI.DrawTexture( _position, _survivor.isAiming  ? _accurateMarker : _normalMarker );
-            }
         }
     }
 }
+
