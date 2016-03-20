@@ -112,6 +112,9 @@ namespace Extinction
 
             public Quaternion orientationQuaternion { get { return _orientationQuaternion; } }
 
+            [SerializeField]
+            private HUDLifeBar _lifeBar;
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -119,6 +122,7 @@ namespace Extinction
             public void Start()
             {
                 _speed = Vector3.zero;
+                _lifeBar.changeHealth( _health, _maxHealth );
 
                 if ( _controller != null ) return;
 
@@ -142,6 +146,7 @@ namespace Extinction
             {
                 float health = _health - amount * _armorMultiplier;
                 GetComponent<PhotonView>().RPC("SetHealth", PhotonTargets.All, health);
+                _lifeBar.changeHealth( _health, _maxHealth );
 
                 if(_health < 0)
                     Debug.Log("DEAD");

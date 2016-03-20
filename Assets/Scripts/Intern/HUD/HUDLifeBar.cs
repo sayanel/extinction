@@ -49,7 +49,8 @@ public class HUDLifeBar : MonoBehaviour
 	
 	void Update() 
 	{
-        transform.rotation = Camera.main.transform.rotation;
+        if(Camera.main != null)
+            transform.rotation = Camera.main.transform.rotation;
 	}
 
     public void changeHealth(float currentHealth, float maxHealth )
