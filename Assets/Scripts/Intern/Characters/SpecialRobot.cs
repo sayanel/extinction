@@ -26,7 +26,10 @@ namespace Extinction
             private List<Weapon> _weapons;
 
             [SerializeField]
-            private HUDProgressBar _lifeBar;
+            private HUDProgressBar _lifeBar; // HUD life bar
+
+            [SerializeField]
+            private HUDLifeBar _worldLifeBar; // WORLD life bar
 
             private NavMeshAgent _navMeshAgentComponent;
 
@@ -111,6 +114,10 @@ namespace Extinction
                 //If animator isn't set, try to find an animator component : 
                 if( _animator == null )
                     _animator = GetComponent<Animator>();
+
+                //try to automatically fill this field, searching for a HUDLifeBarComponent in children : 
+                if( _worldLifeBar == null )
+                    _worldLifeBar = GetComponentInChildren<HUDLifeBar>();
             }
 
             public void updateLocal()
@@ -392,6 +399,11 @@ namespace Extinction
                 if(_lifeBar != null)
                 {
                     _lifeBar.setProgression( (_health / (float)_maxHealth) );
+                }
+
+                if(_worldLifeBar != null)
+                {
+                    _worldLifeBar.changeHealth(_health, _maxHealth);
                 }
 
                 if(_health <= 0)
