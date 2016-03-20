@@ -205,6 +205,10 @@ Prefab:
       propertyPath: instantiationId
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 109128, guid: 6c88ec1f1f9ca174b9e226a584dc61ca, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6c88ec1f1f9ca174b9e226a584dc61ca, type: 2}
   m_IsPrefabParent: 0
@@ -327,6 +331,10 @@ Prefab:
     - target: {fileID: 11443268, guid: 84c2aa5de041aa54f8eec64ca842cf13, type: 2}
       propertyPath: instantiationId
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 102124, guid: 84c2aa5de041aa54f8eec64ca842cf13, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 84c2aa5de041aa54f8eec64ca842cf13, type: 2}
@@ -530,6 +538,60 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!1001 &1324550770
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 483338, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 483338, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 483338, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 483338, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 483338, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 483338, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 483338, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 483338, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 11469982, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: viewIdField
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11469982, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: instantiationId
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400128, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+      propertyPath: _angleOffsetZ
+      value: -14
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 1faad272ca873d547aa066ee68cbf39c, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1426371684
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,6 +757,10 @@ Prefab:
       propertyPath: instantiationId
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 150030, guid: ff4de7f944ea8f54c883fb2edc2b3d5c, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ff4de7f944ea8f54c883fb2edc2b3d5c, type: 2}
   m_IsPrefabParent: 0
@@ -809,6 +875,10 @@ Prefab:
     - target: {fileID: 408822, guid: 0a821a7ccaabfc14cb7c031cb2015fd1, type: 2}
       propertyPath: m_RootOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 168766, guid: 0a821a7ccaabfc14cb7c031cb2015fd1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0a821a7ccaabfc14cb7c031cb2015fd1, type: 2}

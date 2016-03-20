@@ -27,7 +27,7 @@ namespace Extinction
 
             public void Update()
             {
-                _survivorStateField.text = "State : " + _survivor.state;
+                _survivorStateField.text = "State : " + _survivor.CurrentAnimationState;
                 _survivorAimingField.text = "Aiming : " + _survivor.isAiming;
             }
 

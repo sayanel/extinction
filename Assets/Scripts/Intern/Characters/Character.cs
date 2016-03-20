@@ -20,6 +20,13 @@ namespace Extinction
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
+            protected Vector3 _orientation = Vector3.forward;
+
+            /// <summary>
+            /// Returns the character's orientation, i.e the vector which describes where he is looking at
+            /// </summary>
+            public Vector3 orientation { get { return _orientation; } set { _orientation = value; } }
+
             /// <summary>
             /// Max health that can have the character
             /// </summary>
@@ -51,7 +58,6 @@ namespace Extinction
                 get{ return _isAlive; }
             }
 
-
             /// <summary>
             /// The animator attached to this Character.
             /// </summary>
@@ -65,13 +71,6 @@ namespace Extinction
             public string CurrentAnimationState{
                 get{ return _currentAnimationState; }
             }
-
-
-            /// <summary>
-            /// The current state of the character
-            /// Can be used for the animation, sounds, etc. 
-            /// </summary>
-            protected CharacterState _state = CharacterState.Idle;
 
             /// <summary>
             /// Default speed of a character, without any passive skill

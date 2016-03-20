@@ -2531,8 +2531,6 @@ GameObject:
   - 143: {fileID: 14388908}
   - 114: {fileID: 11480654}
   - 114: {fileID: 11467792}
-  - 114: {fileID: 11402356}
-  - 114: {fileID: 11465150}
   - 114: {fileID: 11465778}
   - 114: {fileID: 11494890}
   - 114: {fileID: 11469982}
@@ -5419,7 +5417,7 @@ Animator:
   m_GameObject: {fileID: 182718}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: f2a3b6d0e05e52a4c9d9db9b6b5d37fe, type: 3}
-  m_Controller: {fileID: 9100000, guid: 30030650baf565547ad9f1f28247ad49, type: 2}
+  m_Controller: {fileID: 9100000, guid: d714863b9d56dd64d969bd1022fe8673, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -5436,7 +5434,7 @@ Animator:
   m_GameObject: {fileID: 144922}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: e3b34b618ddce544aa41d98970219561, type: 3}
-  m_Controller: {fileID: 9100000, guid: 13c9357b71ac3554595be796f987d366, type: 2}
+  m_Controller: {fileID: 9100000, guid: fd1937560b900a146b55e7daaa2fb1c2, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -5458,18 +5456,7 @@ MonoBehaviour:
   _survivor: {fileID: 11480654}
   _angleOffsetY: 55
   _angleOffsetX: 0
-  _angleOffsetZ: -14
---- !u!114 &11402356
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 194470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85482f688598f884c917fb39b8971106, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _angleOffsetZ: -23
 --- !u!114 &11440480
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5484,20 +5471,6 @@ MonoBehaviour:
   _accurateMarker: {fileID: 2800000, guid: 536e723ee812d774cb5618243958a3b4, type: 3}
   _normalMarker: {fileID: 2800000, guid: c53cce14c61d60842ab26873aab9ea75, type: 3}
   _survivor: {fileID: 11480654}
---- !u!114 &11465150
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 194470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 366e188349d59c144b4daa05874707c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _survivor: {fileID: 11480654}
-  _bodyAnimator: {fileID: 9558468}
-  _handsAnimator: {fileID: 9580426}
 --- !u!114 &11465778
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5510,6 +5483,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _firstPersonMode: 0
+  _offlineMode: 0
 --- !u!114 &11467210
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5573,25 +5547,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _isAlive: 1
-  _animator: {fileID: 0}
+  _animator: {fileID: 9558468}
   _characterName: 0
   _characterType: 0
   _speedMultiplier: 5
-  _accuracyMultiplier: .5
   _controller: {fileID: 14388908}
   _weapon: {fileID: 0}
   _gravity: 1
   _jumpImpulse: 15
-  _accuracyDeviation: 0
-  _accuracyInterpolation:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  _accuracyDeviationTime: 2
-  _maxAccuracyDeviation: 20
-  _minAccuracyDeviation: -20
-  _accuracyTimer: {fileID: 11402356}
+  _weaponAnimator: {fileID: 9580426}
 --- !u!114 &11494890
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -15,6 +15,7 @@ namespace Extinction {
 
             Vector3 m_correctPlayerPos; //< smooth
             Quaternion m_correctPlayerRot; //< smooth
+            Vector3 m_correctPlayerOrientation; //< smooth
             static float speedSmooth = 5;
             Character character;
 
@@ -35,6 +36,7 @@ namespace Extinction {
 
                 transform.position = Vector3.Lerp(transform.position, m_correctPlayerPos, Time.deltaTime * speedSmooth);
                 transform.rotation = Quaternion.Lerp(transform.rotation, m_correctPlayerRot, Time.deltaTime * speedSmooth);
+                character.orientation = Vector3.Lerp( character.orientation, m_correctPlayerOrientation, Time.deltaTime * speedSmooth * 2 );
             }
 
             /// <summary>
@@ -52,17 +54,16 @@ namespace Extinction {
                     // we handle this character: send to others the transform data
                     stream.SendNext(transform.position);
                     stream.SendNext(transform.rotation);
+                    stream.SendNext(character.orientation);
                     stream.SendNext(character.Health);
                     stream.SendNext(character.CurrentAnimationState);
-                    //stream.SendNext(m_playerController.state);
                 }
                 else {
                     // Network player, receive data (this object viewed into other windows game over network)
                     m_correctPlayerPos = (Vector3)stream.ReceiveNext();
                     m_correctPlayerRot = (Quaternion)stream.ReceiveNext();
+                    m_correctPlayerOrientation = (Vector3)stream.ReceiveNext();
                     character.Health = (float)stream.ReceiveNext();
-                    //m_playerController.state = (CharacterState)stream.ReceiveNext();
-
 
                     string synchronizedAnim = (string)stream.ReceiveNext();
                     if ( synchronizedAnim != character.CurrentAnimationState )
