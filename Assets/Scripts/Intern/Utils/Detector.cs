@@ -54,6 +54,14 @@ namespace Extinction
                     _triggerableTarget.triggerExit(other, _tag);
             }
 
+            //void OnTriggerStay(Collider other)
+            //{
+            //    if (_target != null)
+            //        _triggerableTarget.triggerStay(other, _tag);    
+            //}
+
+
+
         }
     }
 }

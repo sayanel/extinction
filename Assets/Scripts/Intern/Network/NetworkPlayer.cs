@@ -37,7 +37,7 @@ namespace Extinction {
                 transform.rotation = Quaternion.Lerp(transform.rotation, m_correctPlayerRot, Time.deltaTime * speedSmooth);
             }
 
-            /// <summary>
+            /// <summary>   
             /// While a script is observed, PhotonView calls regularly this method:
             /// Aim: create the info we want to pass to others and to handle incoming info (depending on who created PhotonView)
             /// </summary>

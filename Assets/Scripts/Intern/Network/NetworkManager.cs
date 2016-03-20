@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Extinction.Characters;
 using Extinction.Controllers;
 using Extinction.UI;
+using Extinction.AI;
 
 namespace Extinction {
     namespace Network {
@@ -30,6 +31,8 @@ namespace Extinction {
             public void Awake() {
                 DontDestroyOnLoad(this);
             }
+
+            public GameObject horde;
 
             public static NetworkManager Instance {
                 get {
@@ -140,7 +143,17 @@ namespace Extinction {
                 Characters.Herbie herbie = herbieGO.GetComponent<Characters.Herbie>();
                 herbie.initialize(new List<string>() { "Characters/RScout", "Characters/RTank", "Characters/RController" }, new List<Vector3>() { new Vector3(0, 0, 0), new Vector3(1, 0, 1), new Vector3(2, 0, 2) }, 0, true);
                 PhotonNetwork.player.TagObject = herbieGO;
+
+                CreateHorde();
             }
+
+            public void CreateHorde() {
+                // First add to scene on Herbie PC
+                GameObject hordeLocal = PhotonNetwork.Instantiate("Horde", Vector3.zero, Quaternion.identity, 0);
+                DontDestroyOnLoad(hordeLocal);
+            }
+
+
 
             void OnLevelWasLoaded(int level) {
                 if (level != INDEX_SCENE_GAME)

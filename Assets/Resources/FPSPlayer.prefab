@@ -11,7 +11,6 @@ GameObject:
   - 143: {fileID: 14347450}
   - 114: {fileID: 11425724}
   - 114: {fileID: 11434816}
-  - 114: {fileID: 11452512}
   - 114: {fileID: 11468996}
   - 114: {fileID: 11442834}
   - 23: {fileID: 2378292}
@@ -272,20 +271,6 @@ MonoBehaviour:
   viewIdField: 0
   instantiationId: -1
   isRuntimeInstantiated: 0
---- !u!114 &11452512
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119996}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b75da36e0e537343891583e9a68b419, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _survivorStateField: {fileID: 0}
-  _survivorAimingField: {fileID: 0}
-  _survivor: {fileID: 11425724}
 --- !u!114 &11462310
 MonoBehaviour:
   m_ObjectHideFlags: 1
