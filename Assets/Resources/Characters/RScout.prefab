@@ -588,7 +588,7 @@ MonoBehaviour:
   _characterType: 1
   _canAttack: 1
   _weapons:
-  - {fileID: 0}
+  - {fileID: 11482044}
   _lifeBar: {fileID: 0}
   _rotationSmoothFactor: 0
   _visual: {fileID: 21300000, guid: bfb6b6a07a2d4a24fa9458af0fa7b043, type: 3}
@@ -651,7 +651,7 @@ MonoBehaviour:
   _fireRate: 1
   _damage: 1
   _friendlyFire: 1
-  _range: 1
+  _range: 8
   _anchor: {fileID: 405468}
   _anchorFX: {fileID: 421242}
   _targetLayer:
@@ -723,7 +723,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 6
+  m_Radius: 9
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!137 &13719534
 SkinnedMeshRenderer:
@@ -829,6 +829,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LODs.Array.data[1].renderers.Array.size
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

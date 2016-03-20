@@ -50,6 +50,8 @@ Assets/Standard Assets*
 Assets/Plugins*
 Bin
 Builds/*
+*Lightmap*
+*Reflection*
 
 # ===================================== #
 # Extinction Language Tool Kit (python) #

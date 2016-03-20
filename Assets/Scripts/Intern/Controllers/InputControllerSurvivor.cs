@@ -45,10 +45,12 @@ namespace Extinction
             {
                 _survivor.aim(Input.GetMouseButton(1));
 
-                if ( Input.GetMouseButton( 0 ) )
-                {
-                    _survivor.fire();
-                }
+                //if ( Input.GetMouseButton( 0 ) )
+                //{
+                //    _survivor.fire();
+                //}
+                _survivor.fire( Input.GetMouseButton( 0 ) );
+
             }
 
             public void movement()

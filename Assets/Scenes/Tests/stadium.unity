@@ -85,7 +85,7 @@ NavMeshSettings:
     minRegionArea: 2
     cellSize: .166666672
     manualCellSize: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: f8ea8d6f52220364798391e8cbe2d7f2, type: 2}
 --- !u!1 &5783871
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,12 +97,12 @@ GameObject:
   - 33: {fileID: 5783874}
   - 65: {fileID: 5783873}
   - 23: {fileID: 5783872}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &5783872
 MeshRenderer:
@@ -159,152 +159,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1265661546}
   m_RootOrder: 9
---- !u!1 &93888415
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 224: {fileID: 93888418}
-  - 222: {fileID: 93888417}
-  - 114: {fileID: 93888416}
-  m_Layer: 5
-  m_Name: SurvivorAim
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &93888416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 93888415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 24
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Aiming
---- !u!222 &93888417
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 93888415}
---- !u!224 &93888418
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 93888415}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 493536887}
-  m_RootOrder: 1
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 18.1000004, y: -66.1999969}
-  m_SizeDelta: {x: 347, y: 30}
-  m_Pivot: {x: 0, y: 1}
---- !u!1 &97548417
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 97548421}
-  - 114: {fileID: 97548420}
-  - 114: {fileID: 97548419}
-  - 114: {fileID: 97548418}
-  m_Layer: 0
-  m_Name: EventSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &97548418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 97548417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1997211142, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ForceModuleActive: 0
---- !u!114 &97548419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 97548417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1077351063, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: .5
-  m_ForceModuleActive: 0
---- !u!114 &97548420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 97548417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -619905303, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 5
---- !u!4 &97548421
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 97548417}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
 --- !u!1 &119906985
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,12 +170,12 @@ GameObject:
   - 33: {fileID: 119906988}
   - 65: {fileID: 119906987}
   - 23: {fileID: 119906986}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (5)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &119906986
 MeshRenderer:
@@ -389,12 +243,12 @@ GameObject:
   - 33: {fileID: 175639142}
   - 64: {fileID: 175639141}
   - 23: {fileID: 175639140}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Plane (1)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!23 &175639140
 MeshRenderer:
@@ -462,12 +316,12 @@ GameObject:
   - 33: {fileID: 281763127}
   - 65: {fileID: 281763126}
   - 23: {fileID: 281763125}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (11)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &281763125
 MeshRenderer:
@@ -535,12 +389,12 @@ GameObject:
   - 33: {fileID: 290400020}
   - 64: {fileID: 290400019}
   - 23: {fileID: 290400018}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Plane (3)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!23 &290400018
 MeshRenderer:
@@ -597,97 +451,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 520359505}
   m_RootOrder: 1
---- !u!1 &493536886
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 224: {fileID: 493536887}
-  - 223: {fileID: 493536890}
-  - 114: {fileID: 493536889}
-  - 114: {fileID: 493536888}
-  m_Layer: 5
-  m_Name: Canvas
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &493536887
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 493536886}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_Children:
-  - {fileID: 1890720953}
-  - {fileID: 93888418}
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
---- !u!114 &493536888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 493536886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &493536889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 493536886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
---- !u!223 &493536890
-Canvas:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 493536886}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
 --- !u!1 &520359504
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,7 +459,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 520359505}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Borders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -790,12 +553,12 @@ GameObject:
   - 33: {fileID: 726423118}
   - 64: {fileID: 726423117}
   - 23: {fileID: 726423116}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Plane (4)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!23 &726423116
 MeshRenderer:
@@ -863,12 +626,12 @@ GameObject:
   - 33: {fileID: 832782470}
   - 65: {fileID: 832782469}
   - 23: {fileID: 832782468}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (14)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!4 &832782467
 Transform:
@@ -936,12 +699,12 @@ GameObject:
   - 33: {fileID: 913980179}
   - 65: {fileID: 913980178}
   - 23: {fileID: 913980177}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &913980177
 MeshRenderer:
@@ -1009,12 +772,12 @@ GameObject:
   - 33: {fileID: 979434066}
   - 65: {fileID: 979434065}
   - 23: {fileID: 979434064}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (6)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &979434064
 MeshRenderer:
@@ -1082,12 +845,12 @@ GameObject:
   - 33: {fileID: 1030237692}
   - 65: {fileID: 1030237691}
   - 23: {fileID: 1030237690}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (4)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &1030237690
 MeshRenderer:
@@ -1155,12 +918,12 @@ GameObject:
   - 33: {fileID: 1135725533}
   - 64: {fileID: 1135725532}
   - 23: {fileID: 1135725531}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &1135725531
 MeshRenderer:
@@ -1228,12 +991,12 @@ GameObject:
   - 33: {fileID: 1137699692}
   - 64: {fileID: 1137699691}
   - 23: {fileID: 1137699690}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Plane (2)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!23 &1137699690
 MeshRenderer:
@@ -1301,12 +1064,12 @@ GameObject:
   - 33: {fileID: 1244696320}
   - 65: {fileID: 1244696319}
   - 23: {fileID: 1244696318}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (9)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &1244696318
 MeshRenderer:
@@ -1371,7 +1134,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1265661546}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cubes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1416,12 +1179,12 @@ GameObject:
   - 33: {fileID: 1282610319}
   - 65: {fileID: 1282610318}
   - 23: {fileID: 1282610317}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &1282610317
 MeshRenderer:
@@ -1478,56 +1241,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1265661546}
   m_RootOrder: 12
---- !u!1001 &1351197148
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 439248, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 439248, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 439248, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 439248, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 439248, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 439248, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 439248, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 439248, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 11456184, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-      propertyPath: _survivorStateField
-      value: 
-      objectReference: {fileID: 1890720954}
-    - target: {fileID: 11456184, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-      propertyPath: _survivorAimingField
-      value: 
-      objectReference: {fileID: 93888416}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 1347029d6f8330b4cabf05cff5f12451, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &1364719212
 GameObject:
   m_ObjectHideFlags: 0
@@ -1539,12 +1252,12 @@ GameObject:
   - 33: {fileID: 1364719215}
   - 65: {fileID: 1364719214}
   - 23: {fileID: 1364719213}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &1364719213
 MeshRenderer:
@@ -1612,12 +1325,12 @@ GameObject:
   - 33: {fileID: 1423702111}
   - 65: {fileID: 1423702110}
   - 23: {fileID: 1423702109}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (10)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &1423702109
 MeshRenderer:
@@ -1682,9 +1395,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1833040665}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Stadium
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1704,78 +1417,6 @@ Transform:
   - {fileID: 1265661546}
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!1 &1890720952
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 224: {fileID: 1890720953}
-  - 222: {fileID: 1890720955}
-  - 114: {fileID: 1890720954}
-  m_Layer: 5
-  m_Name: SurvivorState
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1890720953
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1890720952}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 493536887}
-  m_RootOrder: 0
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 18.1000004, y: -7.67999983}
-  m_SizeDelta: {x: 347, y: 30}
-  m_Pivot: {x: 0, y: 1}
---- !u!114 &1890720954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1890720952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 24
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: State
---- !u!222 &1890720955
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1890720952}
 --- !u!1 &1929136308
 GameObject:
   m_ObjectHideFlags: 0
@@ -1787,12 +1428,12 @@ GameObject:
   - 33: {fileID: 1929136312}
   - 65: {fileID: 1929136311}
   - 23: {fileID: 1929136310}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (13)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!4 &1929136309
 Transform:
@@ -1860,12 +1501,12 @@ GameObject:
   - 33: {fileID: 1953088860}
   - 65: {fileID: 1953088859}
   - 23: {fileID: 1953088858}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (8)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &1953088858
 MeshRenderer:
@@ -1933,12 +1574,12 @@ GameObject:
   - 33: {fileID: 2101617669}
   - 65: {fileID: 2101617668}
   - 23: {fileID: 2101617667}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (12)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &2101617667
 MeshRenderer:
@@ -2006,12 +1647,12 @@ GameObject:
   - 33: {fileID: 2118200794}
   - 65: {fileID: 2118200793}
   - 23: {fileID: 2118200792}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (7)
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 9
   m_IsActive: 1
 --- !u!23 &2118200792
 MeshRenderer:

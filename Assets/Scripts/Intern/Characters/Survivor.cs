@@ -24,20 +24,26 @@ namespace Extinction
             // ----------------------------------------------------------------------------
 
             /// <summary>
-            /// Returns if the survivor is aiming or not
-            /// </summary>
-            public bool isAiming { get { return _aiming; } }
-
-            /// <summary>
             /// Returns the survivor's orientation, i.e the vector which describes where he is looking at
             /// </summary>
-            public Vector3 orientation { get { return _orientation; } }
+            public Vector3 orientation { get { return _accuracyDeviation ? _trueOrientation : _orientation; } }
 
             /// <summary>
             /// Returns the survivor's state.
             /// It can be used for animation.
             /// </summary>
             public CharacterState state { get { return _state; } }
+
+            /// <summary>
+            /// Return the survivor's hand state.
+            /// It can be used for animation.
+            /// </summary>
+            public HandState handState { get { return _handState; } }
+
+            /// <summary>
+            /// Return if the survivor is aiming or not
+            /// </summary>
+            public bool isAiming { get { return _isAiming; } }
 
             /// <summary>
             /// Reduce or increase the survivor's lifebar
@@ -66,6 +72,12 @@ namespace Extinction
             private float _speedMultiplier = 3;
 
             /// <summary>
+            /// Reduce or increase the survivor's accuracy
+            /// </summary>
+            [SerializeField]
+            private float _accuracyMultiplier = 0.5f;
+
+            /// <summary>
             /// A pointer to a Unity CharacterController
             /// The Controller Should be put in the same GameObject than this script
             /// </summary>
@@ -90,16 +102,38 @@ namespace Extinction
             [SerializeField]
             private float _jumpImpulse = 0.4f;
 
-            [SerializeField]
-            private Timer _aimingTimer;
-
             private float _verticalSpeed = 0;
 
             private Vector3 _speed;
             private Vector3 _orientation = Vector3.forward;
 
-            private bool _aiming = false;
+            private HandState _handState = HandState.Idle;
+            private bool _isAiming = false;
+
             private Vector3 _trueOrientation = Vector3.forward;
+            private Vector3 _lastOrientation = Vector3.forward;
+            private Vector3 _nextOrientation = Vector3.forward;
+
+            [SerializeField]
+            private bool _accuracyDeviation = true;
+
+            [SerializeField]
+            private AnimationCurve _accuracyInterpolation;
+
+            [SerializeField]
+            private float _accuracyDeviationTime = 2;
+
+            [SerializeField]
+            private float _maxAccuracyDeviation = 20;
+            [SerializeField]
+            private float _minAccuracyDeviation = -20;
+
+            [SerializeField]
+            private Timer _accuracyTimer;
+
+            private Quaternion _orientationQuaternion;
+
+            public Quaternion orientationQuaternion { get { return _orientationQuaternion; } }
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -110,6 +144,13 @@ namespace Extinction
                 _orientation = Vector3.forward;
 
                 _speed = Vector3.zero;
+
+                if ( _accuracyDeviation )
+                {
+                    _accuracyTimer.init( _accuracyDeviationTime, startAccuracyRoutine, accuracyRoutine, endAccuracyRoutine, null );
+                    _accuracyTimer.start();
+                }
+                
 
                 if ( _controller != null ) return;
 
@@ -123,15 +164,33 @@ namespace Extinction
 
                 _speed.x = 0;
                 _speed.z = 0;
+            }
 
-                float minRange = -1;
-                float maxRange = 1;
+            private void accuracyRoutine()
+            {
+                float factor = _accuracyInterpolation.Evaluate( _accuracyTimer.currentTime / _accuracyTimer.maxTime );
 
-                Vector3 random = Vector3.Normalize( new Vector3( Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ) ) );
-                _trueOrientation = (0.3f * random + 1.7f * _orientation)/2;
+                Vector3 randomOrientation = Vector3.Normalize( ( factor * _nextOrientation + ( 1 - factor ) * _lastOrientation ) / 2 );
+                float multiplier = 0.3f * _accuracyMultiplier * (_isAiming ? 0.2f : 1);
+                _trueOrientation = Vector3.Normalize( ( multiplier * randomOrientation + (1-multiplier) * _orientation ) / 2 );
+
                 Vector3 camPosition = GetComponentInChildren<Camera>().transform.position;
                 Debug.DrawLine( camPosition, camPosition + 10 * _orientation );
                 Debug.DrawLine( camPosition, camPosition + 10 * _trueOrientation, Color.blue );
+            }
+
+            private void startAccuracyRoutine()
+            {
+                float minRange = -20;
+                float maxRange = 20;
+                _lastOrientation = _nextOrientation;
+
+                _nextOrientation = Quaternion.Euler( Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ) ) * Vector3.forward;
+            }
+
+            private void endAccuracyRoutine()
+            {
+                _accuracyTimer.start();
             }
 
             /// <summary>
@@ -172,6 +231,7 @@ namespace Extinction
             /// </summary>
             public void idle()
             {
+                setAnimationState( "Idle" );
                 _state = CharacterState.Idle;
             }
 
@@ -182,6 +242,7 @@ namespace Extinction
             /// <param name="value"></param>
             public void strafeLeft( float value )
             {
+                setAnimationState( "StrafeLeft" );
                 _state = CharacterState.StrafeLeft;
                 horizontalMovement( value );
             }
@@ -193,6 +254,7 @@ namespace Extinction
             /// <param name="value"></param>
             public void strafeRight( float value )
             {
+                setAnimationState( "StrafeRight" );
                 _state = CharacterState.StrafeRight;
                 horizontalMovement( value );
             }
@@ -204,6 +266,7 @@ namespace Extinction
             /// <param name="value"></param>
             public void run( float value )
             {
+                setAnimationState( "Run" );
                 if(_state != CharacterState.Sprint) 
                     _state = CharacterState.Run;
 
@@ -217,6 +280,7 @@ namespace Extinction
             /// <param name="value"></param>
             public void runBackward( float value )
             {
+                setAnimationState( "RunBackward" );
                 if ( _state == CharacterState.Sprint )
                 {
                     return;
@@ -236,7 +300,7 @@ namespace Extinction
                 if ( _state != CharacterState.Run && _state != CharacterState.Sprint && _state != CharacterState.Idle ) return;
 
                 _state = sprinting ? CharacterState.Sprint : CharacterState.Idle;
-                _aiming = false;
+                _handState = HandState.Idle;
             }
 
             /// <summary>
@@ -254,9 +318,10 @@ namespace Extinction
             /// <summary>
             /// The survivor uses his weapon
             /// </summary>
-            public void fire()
+            public void fire(bool fire)
             {
-                _weapon.fire();
+                //_weapon.fire();
+                _handState = fire ? HandState.Fire : HandState.Idle;
             }
 
             /// <summary>
@@ -265,7 +330,7 @@ namespace Extinction
             /// <param name="aiming">True or false</param>
             public void aim( bool aiming )
             {
-                if(_state != CharacterState.Sprint) _aiming = aiming;
+                if ( _state != CharacterState.Sprint ) _isAiming = aiming;
             }
 
             /// <summary>
@@ -275,7 +340,9 @@ namespace Extinction
             /// <param name="horizontalOrientation">The new horizontal angle in degrees</param>
             public void setOrientation( float verticalOrientation, float horizontalOrientation )
             {
-                _orientation = Quaternion.Euler( -verticalOrientation, horizontalOrientation, 0 ) * Vector3.forward;
+                Quaternion quat = Quaternion.Euler( -verticalOrientation, horizontalOrientation, 0 );
+                _orientationQuaternion = quat;
+                _orientation = quat * Vector3.forward;
             }
 
             /// <summary>
@@ -316,6 +383,33 @@ namespace Extinction
             }
 
             /// <summary>
+            /// Use this function to play an animation with name : stateName.
+            /// By default, it uses trigger animator value. Override the function to use different value type.
+            /// </summary>
+            /// <param name="stateName"></param>
+            public override void setAnimationState( string stateName )
+            {
+                if ( _animator == null || stateName.Equals( _currentAnimationState ) ) return;
+
+                 _currentAnimationState = stateName;
+                _animator.SetTrigger( stateName );
+            }
+
+            /// <summary>
+            /// Use this function to change animation played by this character.
+            /// By default, it uses trigger animator value. Override the function to use different value type.
+            /// </summary>
+            /// <param name="oldState"></param>
+            /// <param name="newState"></param>
+            public override void changeAnimationState( string oldState, string newState )
+            {
+                _currentAnimationState = newState;
+
+                if ( _animator != null )
+                    _animator.SetTrigger( newState );
+            }
+
+            /// <summary>
             /// If the player is not grounded, applies gravity
             /// </summary>
             private void applyGravity()
@@ -331,10 +425,7 @@ namespace Extinction
 
             // INetworkInitializerPrefab method
             public void Activate() {
-                GetComponent<InputControllerSurvivor>().enabled = true;
-                GetComponentInChildren<Camera>().enabled = true;
-                GetComponentInChildren<CameraFPS>().enabled = true;
-                GetComponentInChildren<Weapon>().GetComponent<HUDWeaponMarker>().enabled = true;
+                GetComponent<SurvivorComponentActivator>().firstPersonMode();
             }
         }
     }

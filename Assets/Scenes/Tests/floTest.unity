@@ -729,11 +729,21 @@ MonoBehaviour:
   _characterName: 0
   _characterType: 0
   _speedMultiplier: 5
+  _accuracyMultiplier: .5
   _controller: {fileID: 0}
   _weapon: {fileID: 1637927049}
   _gravity: 1
   _jumpImpulse: 20
-  _aimingTimer: {fileID: 0}
+  _accuracyDeviation: 1
+  _accuracyInterpolation:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  _accuracyDeviationTime: 2
+  _maxAccuracyDeviation: 20
+  _minAccuracyDeviation: -20
+  _accuracyTimer: {fileID: 0}
 --- !u!4 &455115413
 Transform:
   m_ObjectHideFlags: 0
@@ -1430,11 +1440,21 @@ MonoBehaviour:
   _characterName: 0
   _characterType: 0
   _speedMultiplier: 3
+  _accuracyMultiplier: .5
   _controller: {fileID: 0}
   _weapon: {fileID: 0}
   _gravity: .200000003
   _jumpImpulse: .400000006
-  _aimingTimer: {fileID: 0}
+  _accuracyDeviation: 1
+  _accuracyInterpolation:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  _accuracyDeviationTime: 2
+  _maxAccuracyDeviation: 20
+  _minAccuracyDeviation: -20
+  _accuracyTimer: {fileID: 0}
 --- !u!23 &1666020951
 MeshRenderer:
   m_ObjectHideFlags: 0

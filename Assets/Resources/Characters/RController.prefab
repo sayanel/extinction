@@ -459,7 +459,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 102124}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.73000002, y: .5, z: 15.29}
+  m_LocalPosition: {x: -5.73000002, y: 1.46000004, z: 15.29}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 438938}
@@ -773,7 +773,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 102124}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd3ae2165692dd34891f0a451ca0320e, type: 3}
   m_Name: 
@@ -794,7 +794,7 @@ MonoBehaviour:
   _fireRate: 1.5
   _damage: 10
   _friendlyFire: 1
-  _range: 2
+  _range: 8
   _anchor: {fileID: 0}
   _anchorFX: {fileID: 0}
   _targetLayer:
@@ -827,7 +827,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 6
+  m_Radius: 9
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!137 &13764704
 SkinnedMeshRenderer:
@@ -950,6 +950,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

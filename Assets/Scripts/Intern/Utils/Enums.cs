@@ -52,13 +52,22 @@ namespace Extinction {
         /// </summary>
         public enum CharacterState
         {
-            Idle,
-            StrafeLeft,
-            StrafeRight,
-            Run,
-            RunBackward,
-            Sprint,
-            Jump
+            Idle = 0,
+            Run = 1,
+            RunBackward = -1,
+            StrafeLeft = -2,
+            StrafeRight = 2,
+            Sprint = 3,
+            Jump = 4
+        }
+
+        /// <summary>
+        /// The hands state of a survivor
+        /// </summary>
+        public enum HandState
+        {
+            Idle = 0,
+            Fire = 1,
         }
     }
 }

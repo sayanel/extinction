@@ -65,8 +65,10 @@ namespace Extinction {
 
 
                     string synchronizedAnim = (string)stream.ReceiveNext();
-                    if (synchronizedAnim != character.CurrentAnimationState)
-                        character.changeAnimationState(character.CurrentAnimationState, synchronizedAnim);
+                    if ( synchronizedAnim != character.CurrentAnimationState )
+                    {
+                        character.changeAnimationState( character.CurrentAnimationState, synchronizedAnim );
+                    }
                 }
             }
         }
