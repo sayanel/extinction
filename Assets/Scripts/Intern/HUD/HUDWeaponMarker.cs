@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using Extinction.Characters;
+using Extinction.Enums;
 
 namespace Extinction
 {
@@ -43,7 +44,7 @@ namespace Extinction
 
             void OnGUI()
             {
-                GUI.DrawTexture( _position, _survivor.isAiming ? _accurateMarker : _normalMarker );
+                GUI.DrawTexture( _position, _survivor.isAiming  ? _accurateMarker : _normalMarker );
             }
         }
     }

@@ -45,20 +45,5 @@ namespace Extinction {
             ShootFX,
             ExplosionFX
         }
-
-        /// <summary>
-        /// The current state of the character
-        /// Can be used for the animation, sounds, etc. 
-        /// </summary>
-        public enum CharacterState
-        {
-            Idle,
-            StrafeLeft,
-            StrafeRight,
-            Run,
-            RunBackward,
-            Sprint,
-            Jump
-        }
     }
 }

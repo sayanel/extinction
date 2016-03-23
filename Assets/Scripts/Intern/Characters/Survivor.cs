@@ -24,20 +24,25 @@ namespace Extinction
             // ----------------------------------------------------------------------------
 
             /// <summary>
-            /// Returns if the survivor is aiming or not
-            /// </summary>
-            public bool isAiming { get { return _aiming; } }
-
-            /// <summary>
             /// Returns the survivor's orientation, i.e the vector which describes where he is looking at
             /// </summary>
-            public Vector3 orientation { get { return _orientation; } }
+            //public Vector3 orientation { get { return _orientation; } }
 
             /// <summary>
-            /// Returns the survivor's state.
+            /// Return the survivor's weapon animation state.
             /// It can be used for animation.
             /// </summary>
-            public CharacterState state { get { return _state; } }
+            public string currentWeaponAnimationState { get { return _currentWeaponAnimationState; } }
+
+            /// <summary>
+            /// Return if the survivor is aiming or not
+            /// </summary>
+            public bool isAiming { get { return _isAiming; } }
+
+            /// <summary>
+            /// Return if the survivor is aiming or not
+            /// </summary>
+            public bool isSprinting { get { return _isSprinting; } }
 
             /// <summary>
             /// Reduce or increase the survivor's lifebar
@@ -90,16 +95,25 @@ namespace Extinction
             [SerializeField]
             private float _jumpImpulse = 0.4f;
 
-            [SerializeField]
-            private Timer _aimingTimer;
-
             private float _verticalSpeed = 0;
 
             private Vector3 _speed;
-            private Vector3 _orientation = Vector3.forward;
+            //private Vector3 _orientation = Vector3.forward;
 
-            private bool _aiming = false;
-            private Vector3 _trueOrientation = Vector3.forward;
+            private string _currentWeaponAnimationState = "Idle";
+
+            [SerializeField]
+            private Animator _weaponAnimator;
+
+            private bool _isAiming = false;
+            private bool _isSprinting = false;
+
+            private Quaternion _orientationQuaternion;
+
+            public Quaternion orientationQuaternion { get { return _orientationQuaternion; } }
+
+            [SerializeField]
+            private HUDLifeBar _lifeBar;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -107,9 +121,8 @@ namespace Extinction
 
             public void Start()
             {
-                _orientation = Vector3.forward;
-
                 _speed = Vector3.zero;
+                _lifeBar.changeHealth( _health, _maxHealth );
 
                 if ( _controller != null ) return;
 
@@ -123,15 +136,6 @@ namespace Extinction
 
                 _speed.x = 0;
                 _speed.z = 0;
-
-                float minRange = -1;
-                float maxRange = 1;
-
-                Vector3 random = Vector3.Normalize( new Vector3( Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ), Random.Range( minRange, maxRange ) ) );
-                _trueOrientation = (0.3f * random + 1.7f * _orientation)/2;
-                Vector3 camPosition = GetComponentInChildren<Camera>().transform.position;
-                Debug.DrawLine( camPosition, camPosition + 10 * _orientation );
-                Debug.DrawLine( camPosition, camPosition + 10 * _trueOrientation, Color.blue );
             }
 
             /// <summary>
@@ -142,6 +146,7 @@ namespace Extinction
             {
                 float health = _health - amount * _armorMultiplier;
                 GetComponent<PhotonView>().RPC("SetHealth", PhotonTargets.All, health);
+                _lifeBar.changeHealth( _health, _maxHealth );
 
                 if(_health < 0)
                     Debug.Log("DEAD");
@@ -172,7 +177,7 @@ namespace Extinction
             /// </summary>
             public void idle()
             {
-                _state = CharacterState.Idle;
+                setAnimationState( "Idle" );
             }
 
             /// <summary>
@@ -182,7 +187,7 @@ namespace Extinction
             /// <param name="value"></param>
             public void strafeLeft( float value )
             {
-                _state = CharacterState.StrafeLeft;
+                setAnimationState( "StrafeLeft" );
                 horizontalMovement( value );
             }
 
@@ -193,7 +198,7 @@ namespace Extinction
             /// <param name="value"></param>
             public void strafeRight( float value )
             {
-                _state = CharacterState.StrafeRight;
+                setAnimationState( "StrafeRight" );
                 horizontalMovement( value );
             }
 
@@ -204,9 +209,7 @@ namespace Extinction
             /// <param name="value"></param>
             public void run( float value )
             {
-                if(_state != CharacterState.Sprint) 
-                    _state = CharacterState.Run;
-
+                setAnimationState( "Run" );
                 verticalMovement( value );
             }
 
@@ -217,12 +220,7 @@ namespace Extinction
             /// <param name="value"></param>
             public void runBackward( float value )
             {
-                if ( _state == CharacterState.Sprint )
-                {
-                    return;
-                }
-
-                _state = CharacterState.RunBackward;
+                setAnimationState( "RunBackward" );
                 verticalMovement( value );
             }
 
@@ -233,10 +231,8 @@ namespace Extinction
             /// <param name="value"></param>
             public void sprint(bool sprinting)
             {
-                if ( _state != CharacterState.Run && _state != CharacterState.Sprint && _state != CharacterState.Idle ) return;
-
-                _state = sprinting ? CharacterState.Sprint : CharacterState.Idle;
-                _aiming = false;
+                _isSprinting = sprinting;
+                setWeaponAnimationState( "Idle" );
             }
 
             /// <summary>
@@ -254,9 +250,12 @@ namespace Extinction
             /// <summary>
             /// The survivor uses his weapon
             /// </summary>
-            public void fire()
+            public void fire(bool fire)
             {
-                _weapon.fire();
+                if ( _weapon != null )
+                    _weapon.fire();
+
+                setWeaponAnimationState(fire ? "Fire" : "Idle");
             }
 
             /// <summary>
@@ -265,7 +264,7 @@ namespace Extinction
             /// <param name="aiming">True or false</param>
             public void aim( bool aiming )
             {
-                if(_state != CharacterState.Sprint) _aiming = aiming;
+                if(!_isSprinting) _isAiming = aiming;
             }
 
             /// <summary>
@@ -275,7 +274,9 @@ namespace Extinction
             /// <param name="horizontalOrientation">The new horizontal angle in degrees</param>
             public void setOrientation( float verticalOrientation, float horizontalOrientation )
             {
-                _orientation = Quaternion.Euler( -verticalOrientation, horizontalOrientation, 0 ) * Vector3.forward;
+                Quaternion quat = Quaternion.Euler( -verticalOrientation, horizontalOrientation, 0 );
+                _orientationQuaternion = quat;
+                _orientation = quat * Vector3.forward;
             }
 
             /// <summary>
@@ -304,7 +305,7 @@ namespace Extinction
             /// </summary>
             private void verticalMovement( float verticalValue )
             {
-                float multiplier = _state == CharacterState.Sprint ? 2 : 1;
+                float multiplier = _isSprinting ? 2 : 1;
                 multiplier *= verticalValue;
                 multiplier *= _defaultCharacterSpeed;
                 multiplier *= _speedMultiplier;
@@ -313,6 +314,44 @@ namespace Extinction
 
                 _speed.x += movement.x;
                 _speed.z += movement.z;
+            }
+
+            /// <summary>
+            /// Use this function to play an animation with name : stateName.
+            /// By default, it uses trigger animator value. Override the function to use different value type.
+            /// </summary>
+            /// <param name="stateName"></param>
+            public override void setAnimationState( string stateName )
+            {
+                if ( _animator == null || stateName.Equals( _currentAnimationState ) ) 
+                    return;
+                 _currentAnimationState = stateName;
+                _animator.SetTrigger( stateName );
+            }
+
+            /// <summary>
+            /// Same as setAnimationState but for weapons
+            /// </summary>
+            /// <param name="stateName"></param>
+            public void setWeaponAnimationState( string stateName )
+            {
+                if ( _weaponAnimator == null || stateName.Equals( _currentWeaponAnimationState ) ) return;
+                _currentWeaponAnimationState = stateName;
+                _weaponAnimator.SetTrigger( stateName );
+            }
+
+            /// <summary>
+            /// Use this function to change animation played by this character.
+            /// By default, it uses trigger animator value. Override the function to use different value type.
+            /// </summary>
+            /// <param name="oldState"></param>
+            /// <param name="newState"></param>
+            public override void changeAnimationState( string oldState, string newState )
+            {
+                _currentAnimationState = newState;
+
+                if ( _animator != null )
+                    _animator.SetTrigger( newState );
             }
 
             /// <summary>
@@ -331,10 +370,7 @@ namespace Extinction
 
             // INetworkInitializerPrefab method
             public void Activate() {
-                GetComponent<InputControllerSurvivor>().enabled = true;
-                GetComponentInChildren<Camera>().enabled = true;
-                GetComponentInChildren<CameraFPS>().enabled = true;
-                GetComponentInChildren<Weapon>().GetComponent<HUDWeaponMarker>().enabled = true;
+                GetComponent<SurvivorComponentActivator>().firstPersonMode();
             }
         }
     }

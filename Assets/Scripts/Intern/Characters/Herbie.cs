@@ -132,9 +132,15 @@ namespace Extinction
                 {
                     GameObject robotPrefab;
                     if (createOverNetwork)
-                        robotPrefab = PhotonNetwork.Instantiate(robotPath, new Vector3(510,41,489), Quaternion.identity, 0); // instantiated on network
+                    {
+                        robotPrefab = PhotonNetwork.Instantiate(robotPath, new Vector3(0,0,0), Quaternion.identity, 0); // instantiated on network
+                        robotPrefab.GetComponent<InputControllerSpecialRobot>().enabled = true; //activate this script localy
+                    }
                     else
+                    {
                         robotPrefab = Instantiate(Resources.Load<GameObject>(robotPath), itSpawnPos.Current, Quaternion.identity) as GameObject;
+                        robotPrefab.GetComponent<InputControllerSpecialRobot>().enabled = true; //activate this script localy
+                    }
 
                     selectedRobots.Add(robotPrefab.GetComponent<SpecialRobot>());
 

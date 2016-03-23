@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using Extinction.Characters;
 using Extinction.Utils;
+using Extinction.Enums;
 
 namespace Extinction
 {
@@ -95,7 +96,7 @@ namespace Extinction
                     zoom( _accurateFOV, time );
                 }
 
-                if ( !_survivor.isAiming && ! _zoomingOut )
+                if ( !_survivor.isAiming && !_zoomingOut )
                 {
                     _zoomingIn = false;
                     _zoomingOut = true;

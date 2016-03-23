@@ -122,7 +122,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294963199
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -195,6 +195,7 @@ MonoBehaviour:
   _friendlyFire: 1
   _range: 1000
   _anchor: {fileID: 461584}
+  _anchorFX: {fileID: 0}
   _targetLayer:
   - SpecialRobot
   _useAmmo: 0
@@ -213,6 +214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _isAlive: 1
+  _animator: {fileID: 0}
   _characterName: 0
   _characterType: 0
   _speedMultiplier: 5
@@ -387,6 +389,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: _useAmmo
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294963199
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

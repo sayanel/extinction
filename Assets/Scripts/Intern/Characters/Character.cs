@@ -20,6 +20,13 @@ namespace Extinction
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
+            protected Vector3 _orientation = Vector3.forward;
+
+            /// <summary>
+            /// Returns the character's orientation, i.e the vector which describes where he is looking at
+            /// </summary>
+            public Vector3 orientation { get { return _orientation; } set { _orientation = value; } }
+
             /// <summary>
             /// Max health that can have the character
             /// </summary>
@@ -52,10 +59,18 @@ namespace Extinction
             }
 
             /// <summary>
-            /// The current state of the character
-            /// Can be used for the animation, sounds, etc. 
+            /// The animator attached to this Character.
             /// </summary>
-            protected CharacterState _state = CharacterState.Idle;
+            [SerializeField]
+            protected Animator _animator;
+
+            /// <summary>
+            /// The name of the current animation played by this character.
+            /// </summary>
+            protected string _currentAnimationState;
+            public string CurrentAnimationState{
+                get{ return _currentAnimationState; }
+            }
 
             /// <summary>
             /// Default speed of a character, without any passive skill
@@ -91,6 +106,33 @@ namespace Extinction
             public CharacterType getCharacterType()
             {
                 return _characterType;
+            }
+
+            /// <summary>
+            /// Use this function to play an animation with name : stateName.
+            /// By default, it uses trigger animator value. Override the function to use different value type.
+            /// </summary>
+            /// <param name="stateName"></param>
+            public virtual void setAnimationState(string stateName)
+            {
+                _currentAnimationState = stateName;
+
+                if( _animator != null)
+                    _animator.SetTrigger(stateName);
+            }
+
+            /// <summary>
+            /// Use this function to change animation played by this character.
+            /// By default, it uses trigger animator value. Override the function to use different value type.
+            /// </summary>
+            /// <param name="oldState"></param>
+            /// <param name="newState"></param>
+            public virtual void changeAnimationState(string oldState, string newState)
+            {
+                _currentAnimationState = newState;
+
+                if (_animator != null)
+                    _animator.SetTrigger(newState);
             }
 
             /// <summary>

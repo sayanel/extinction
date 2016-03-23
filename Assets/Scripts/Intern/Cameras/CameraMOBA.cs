@@ -16,6 +16,12 @@ namespace Extinction
             // ----------------------------------------------------------------------------
 
             /// <summary>
+            /// The height from which the icones will be visible
+            /// </summary>
+            [SerializeField]
+            private float _heightIconeVisible = 30;
+
+            /// <summary>
             /// if mouse pointer X position is greater than screenWidth - m_rightLimit, move the camera to the right
             /// </summary>
             [SerializeField]
@@ -206,6 +212,22 @@ namespace Extinction
                 }
 
                 transform.Translate( 0, 0, delta * _zoomStep, transform );
+
+                Ray ray = new Ray( transform.position, new Vector3( 0, -1, 0 ) );
+                RaycastHit hitInfo = new RaycastHit();
+
+                Terrain currentTerrain = Terrain.activeTerrain;
+                if( currentTerrain != null )
+                {
+                    currentTerrain.GetComponent<TerrainCollider>().Raycast( ray, out hitInfo, 1000 );
+                }
+                else
+                    hitInfo.point = new Vector3( transform.position.x, 0, transform.position.z );
+
+                if( Vector3.Distance( hitInfo.point, transform.position ) >= _heightIconeVisible )
+                    _cameraComponent.cullingMask |= ( 1 << LayerMask.NameToLayer( "RobotIcone" ) );
+                else
+                    _cameraComponent.cullingMask &= ~( 1 << LayerMask.NameToLayer( "RobotIcone" ) );
                 //setFieldOfView( _currentZoom );
             }
 
