@@ -20,13 +20,14 @@ namespace Extinction {
 
             [SerializeField] protected Transform _target;
             protected NavMeshAgent _nav; // Reference to the nav mesh agent.
+            protected Animator _anim;
 
             [SerializeField] protected float _speed = 40;
             [SerializeField] protected float _life = 100;
             [SerializeField] public bool _isDead = false;
             [SerializeField] private int idGroup = 0;
             private Boolean isSeeingTarget = false;
-            private int lambdaDist = 10;
+            private int lambdaDist = 3;
 
 
             // ----------------------------------------------------------------------------
@@ -38,27 +39,39 @@ namespace Extinction {
             /// </summary>
             public void init()
             {
+                 // TODO:
+                 // Mettre un billet pour le déplacement dans le nav mesh agent pour créer des groupes plûtôt que des lignes 
+
+
                 _nav = GetComponent<NavMeshAgent>();
-                _nav.speed = UnityEngine.Random.Range(12, 18);
-                _nav.acceleration = UnityEngine.Random.Range(12, 18);
+                _anim = GetComponent<Animator>();
+                _nav.speed = UnityEngine.Random.Range(4, 4);
+                _nav.acceleration = UnityEngine.Random.Range(4, 4);
                 _target = Horde.getWayPoint();
             }
 
             public void UpdateCreaker()
             {
+                Vector2 WPposition = new Vector2(Horde.getGroupTarget(this.idGroup).position.x, Horde.getGroupTarget(this.idGroup).position.z);
+                Vector2 creakerPosition = new Vector2(transform.position.x, transform.position.z);
+
                 if (this.idGroup != 0)
                 {
-                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(Horde.getGroupTarget(this.idGroup).position, transform.position) < lambdaDist)
+                    
+                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(WPposition, creakerPosition) <= lambdaDist)
                     {
                         Horde.setNewWaypoint(this.idGroup);
+                        //Debug.LogError("idGroup: " + this.idGroup + " last WP: " + WPposition + " new WP : " + Horde.getGroupTarget(this.idGroup));
                     }
-                    followTarget(Horde.getGroupTarget(idGroup));
+                    _target = Horde.getGroupTarget(idGroup);
+                    followTarget(_target); // follow target ( transform )
                 }
                 else
                 {
-                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(Horde.getGroupTarget(this.idGroup).position, transform.position) <= lambdaDist)
+                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(WPposition, creakerPosition) <= lambdaDist)
                         _target = Horde.getWayPoint(); 
-                    followTarget(_target);
+                    followTarget(_target); // transform
+                    Debug.LogError("groupe: " + idGroup + " -> " + _target);
                 }
                     
             }

@@ -243,7 +243,7 @@ namespace Extinction
             /// Change the player's current state to jump
             /// If the player is grounded, it creates a speed impulse
             /// </summary>
-            /// <param name="value"></param>
+            /// <param name="value"></param> 
             public void jump()
             {
                 if ( !_controller.isGrounded ) return;

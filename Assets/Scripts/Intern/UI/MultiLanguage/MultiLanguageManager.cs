@@ -15,8 +15,8 @@ namespace Extinction {
         public class MultiLanguageManager : SingletonMonoBehavior<MultiLanguageManager> {
 
             private string jsonDirPathResources = "MultiLanguage";
-            public string _code = "en";
-            private JSONObject _elements;
+            public string _code = "en"; 
+            private JSONObject _elements;   
             private static string KEY_ELEMENTS = "elements";
 
             new public void Awake() {
