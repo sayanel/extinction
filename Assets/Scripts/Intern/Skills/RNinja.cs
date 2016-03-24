@@ -24,6 +24,9 @@ namespace Extinction
             [SerializeField]
             private List<Weapon> _weapons;
 
+            [SerializeField]
+            private HUDLifeBar _worldLifeBar; // WORLD life bar
+
             private NavMeshAgent _navMeshAgentComponent;
 
             private IEnumerator _rotateRoutine;
@@ -68,6 +71,11 @@ namespace Extinction
             {
                 _navMeshAgentComponent = GetComponent<NavMeshAgent>();
                 _potentialTargets = new List<Character>();
+            }
+
+            void Start()
+            {
+                setAnimationState( "Idle" );
             }
 
             void Update()
@@ -283,6 +291,7 @@ namespace Extinction
                 {
                     weapon.fire();
                 }
+                setAnimationState( "Attack" );
             }
 
             public override void attack( Character target )
@@ -292,11 +301,19 @@ namespace Extinction
 
                 turn( angle );
                 attack();
+
+                setAnimationState( "Attack" );
             }
 
             public override void getDamage( int amount )
             {
-                _health -= amount;
+                float health = _health - amount;
+                GetComponent<PhotonView>().RPC( "SetHealth", PhotonTargets.All, health );
+
+                if( _worldLifeBar != null )
+                {
+                    _worldLifeBar.changeHealth( _health, _maxHealth );
+                }
 
                 if( _health <= 0 )
                 {
@@ -309,6 +326,8 @@ namespace Extinction
                 _navMeshAgentComponent.updateRotation = true;
                 _navMeshAgentComponent.Resume();
                 _navMeshAgentComponent.SetDestination( vec );
+
+                setAnimationState( "Walk" );
             }
 
             public override void stopWalking()

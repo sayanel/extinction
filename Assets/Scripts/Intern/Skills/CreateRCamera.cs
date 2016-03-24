@@ -18,6 +18,9 @@ namespace Extinction
             [SerializeField]
             private GameObject _rCameraModel;
 
+            [SerializeField]
+            private string _rCameraModelPath = "Characters/MiniRobot/RCamera";
+
             /// <summary>
             /// Layer names of the objects which can block the visibility of the robot.
             /// Set to Terrain by default.
@@ -31,8 +34,9 @@ namespace Extinction
 
             public override void activate(Vector3 position)
             {
-                GameObject rCamera = Instantiate(_rCameraModel, position, Quaternion.identity) as GameObject;
+                //GameObject rCamera = Instantiate(_rCameraModel, position, Quaternion.identity) as GameObject;
                 //TODO : make the instantiation synchnized on the network
+                GameObject rCamera = PhotonNetwork.Instantiate( _rCameraModelPath, position, Quaternion.identity, 0 );
 
                 rCamera.GetComponent<RCamera>().TerrainMasks = _terrainMasks;
                 rCamera.GetComponent<RCamera>().FogManager = _fogManager;

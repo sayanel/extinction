@@ -17,6 +17,9 @@ namespace Extinction
             [SerializeField]
             private GameObject _rNinjaModel;
 
+            [SerializeField]
+            private string _rNinjaModelPath = "Characters/MiniRobot/RNinja";
+
             /// <summary>
             /// Layer names of the objects which can block the visibility of the robot.
             /// Set to Terrain by default.
@@ -30,8 +33,10 @@ namespace Extinction
 
             public override void activate(Vector3 position)
             {
-                GameObject rNinja = Instantiate(_rNinjaModel, position, Quaternion.identity) as GameObject;
+                //GameObject rNinja = Instantiate(_rNinjaModel, position, Quaternion.identity) as GameObject;
                 //TODO : make the instantiation synchnized on the network
+                GameObject rNinja = PhotonNetwork.Instantiate( _rNinjaModelPath, position, Quaternion.identity, 0 );
+
                 rNinja.GetComponent<RNinja>().TerrainMasks = _terrainMasks;
 
                 StartCoroutine(handleCooldown());

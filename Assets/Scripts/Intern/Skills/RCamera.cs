@@ -16,6 +16,9 @@ public class RCamera : Unit, ITriggerable
     [SerializeField]
     FogManager _fogManager;
 
+    [SerializeField]
+    private HUDLifeBar _worldLifeBar; // WORLD life bar
+
     /// <summary>
     /// Layer names of the objects which can block the visibility of the robot.
     /// Set to Terrain by default.
@@ -39,6 +42,11 @@ public class RCamera : Unit, ITriggerable
     void Awake()
     {
         _potentialTargets = new List<Character>();
+    }
+
+    void Start()
+    {
+        setAnimationState( "Idle" );
     }
 
     public override void activateSkill1()
@@ -78,7 +86,13 @@ public class RCamera : Unit, ITriggerable
 
     public override void getDamage( int amount )
     {
-        _health -= amount;
+        float health = _health - amount;
+        GetComponent<PhotonView>().RPC( "SetHealth", PhotonTargets.All, health );
+
+        if( _worldLifeBar != null )
+        {
+            _worldLifeBar.changeHealth( _health, _maxHealth );
+        }
 
         if( _health <= 0 )
         {
