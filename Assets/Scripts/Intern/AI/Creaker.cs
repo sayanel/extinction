@@ -71,7 +71,7 @@ namespace Extinction {
                     if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(WPposition, creakerPosition) <= lambdaDist)
                         _target = Horde.getWayPoint(); 
                     followTarget(_target); // transform
-                    Debug.LogError("groupe: " + idGroup + " -> " + _target);
+                    //Debug.LogError("groupe: " + idGroup + " -> " + _target);
                 }
                     
             }

@@ -122,6 +122,9 @@ namespace Extinction
             public void Start()
             {
                 _speed = Vector3.zero;
+                if(_lifeBar == null ){
+                    _lifeBar = GetComponentInChildren<HUDLifeBar>();
+                }
                 _lifeBar.changeHealth( _health, _maxHealth );
 
                 if ( _controller != null ) return;
@@ -252,7 +255,7 @@ namespace Extinction
             /// </summary>
             public void fire(bool fire)
             {
-                if ( _weapon != null )
+                if ( fire && _weapon != null )
                     _weapon.fire();
 
                 setWeaponAnimationState(fire ? "Fire" : "Idle");

@@ -149,8 +149,8 @@ namespace Extinction {
 
             public void CreateHorde() {
                 // First add to scene on Herbie PC
-                GameObject hordeLocal = PhotonNetwork.Instantiate("Horde", Vector3.zero, Quaternion.identity, 0);
-                DontDestroyOnLoad(hordeLocal);
+                //GameObject hordeLocal = PhotonNetwork.Instantiate("Horde", Vector3.zero, Quaternion.identity, 0);
+                //DontDestroyOnLoad(hordeLocal);
             }
 
 

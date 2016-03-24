@@ -11,6 +11,7 @@ using Extinction.Weapons;
 using Extinction.HUD;
 using Extinction.Skills;
 using Extinction.Utils;
+using Extinction.FX;
 
 namespace Extinction
 {
@@ -408,8 +409,21 @@ namespace Extinction
 
                 if(_health <= 0)
                 {
-                    _isAlive = false;
+                    FXManager.Instance.Activate( (int)Enums.FXType.ExplosionFX, transform.position, Quaternion.identity );
+                    onDeath();
                 }
+            }
+
+            public void onDeath()
+            {
+               GetComponent<PhotonView>().RPC( "onDeathRPC", PhotonTargets.All );
+            }
+
+            [PunRPC]
+            public void onDeathRPC()
+            {
+                _isAlive = false;
+                gameObject.SetActive( false );
             }
 
             public override void move( Vector3 vec )

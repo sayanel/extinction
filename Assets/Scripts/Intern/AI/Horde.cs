@@ -30,7 +30,11 @@ namespace Extinction
 
             private GameObject creakerGO;
 
-
+            //the dimension of the terrain, use to find spawn positions of creakers : 
+            [SerializeField]
+            Vector2 terrainRangeX = new Vector2( 340, 650 );
+            [SerializeField]
+            Vector2 terrainRangeY = new Vector2( 350, 700 );
 
 
             public void Start()
@@ -94,7 +98,7 @@ namespace Extinction
             public bool getSpawnPos(out Vector3 pos)
             {
                 int layerMask = (1 << NavMesh.GetAreaFromName("Walkable"));
-                var position = new Vector3(Random.Range(340, 650), 20, Random.Range(350, 700));
+                var position = new Vector3( Random.Range( terrainRangeX.x, terrainRangeX.y ), 1/*20*/, Random.Range( terrainRangeY.x, terrainRangeY.y ) );//new Vector3(Random.Range(340, 650), 20, Random.Range(350, 700));
 
             
                 NavMeshHit hit;
@@ -115,11 +119,15 @@ namespace Extinction
 
             public void createHorde(int nbCreakers)
             {
-                Vector3 pos;
+                Vector3 pos = new Vector3(0,0,0);
 
                 for(int i=0; i<nbCreakers; ++i)
-                {   
-                    while(!getSpawnPos(out pos)) { }
+                {
+                    bool foundPos = false;
+                    for(int j = 0; (j < 100 && !foundPos); j++ ) {
+                        getSpawnPos( out pos );
+                    }
+
                     _creakers.Add(createCreaker(pos));
                 }
             }
@@ -172,7 +180,7 @@ namespace Extinction
             static public void setNewWaypoint(int idGroup)
             {
                 _groupTarget[idGroup] = getWayPoint();
-                Debug.LogError("idGroup: " + idGroup + " -> " + _groups[idGroup] + " new waypoint: " + _groupTarget[idGroup]);
+                //Debug.LogError("idGroup: " + idGroup + " -> " + _groups[idGroup] + " new waypoint: " + _groupTarget[idGroup]);
             }
 
             static public void setCharacterTarget(Character c, int id)
