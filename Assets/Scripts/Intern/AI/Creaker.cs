@@ -38,7 +38,7 @@ namespace Extinction {
             [SerializeField] public bool _isDead = false;
             [SerializeField] private int idGroup = 0;
             private Boolean isSeeingTarget = false;
-            private int lambdaDist = 5;
+            private int lambdaDist = 2;
 
              
             // ----------------------------------------------------------------------------
@@ -75,14 +75,18 @@ namespace Extinction {
                         Horde.setNewWaypoint(this.idGroup);
                         //Debug.LogError("idGroup: " + this.idGroup + " last WP: " + WPposition + " new WP : " + Horde.getGroupTarget(this.idGroup));
                     }
-                    _target = Horde.getGroupTarget(idGroup);
-                    followTarget(_target); // follow target ( transform )
+                    if(_target != Horde.getGroupTarget(idGroup))
+                    {
+                        _target = Horde.getGroupTarget(idGroup);
+                        followTarget(_target); // follow target ( transform )
+                    }
+                    
                 }
                 else
                 {
                     if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(WPposition, creakerPosition) <= lambdaDist)
                         _target = Horde.getWayPoint(); 
-                    followTarget(_target); // transform
+                        followTarget(_target); // transform
                     //Debug.LogError("groupe: " + idGroup + " -> " + _target);
                 }
 
@@ -140,8 +144,9 @@ namespace Extinction {
                         Horde.setCharacterTarget(c, this.idGroup);
                         if (!this.isSeeingTarget) Horde.targetFound(this.idGroup); //verifier que la nouvelle target est identique à celle du groupe
                         this.isSeeingTarget = true;
-                        _nav.speed += 10;
+                        _nav.speed += 5;
                         setState(State.RUN);
+                        Debug.LogError("Collision with survivor " + c + " MyGrp: " + idGroup );
                     }
 
                    
@@ -165,7 +170,7 @@ namespace Extinction {
                     {          
                         Horde.addTargetLost(this.idGroup);
                         this.isSeeingTarget = false;
-                        _nav.speed -= 10;
+                        _nav.speed -= 5;
                         setState(State.WALK);
                     }
                 }
