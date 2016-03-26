@@ -103,6 +103,9 @@ namespace Extinction
                 //number of ammo we can to put on the magazine : 
                 int nb = _magazineMaxCapacity - _nbCurrentAmmo;
 
+                //launch FX
+                FXManager.Instance.Activate((int)Enums.FXType.ReloadFX, _anchorFX.position, _anchorFX.rotation);
+
                 _nbCurrentAmmo += (ammo > nb) ? nb : ammo;
             }
         }

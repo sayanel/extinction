@@ -73,6 +73,7 @@ namespace Extinction {
                 GetComponentInChildren<HUDWeaponMarker>().enabled = true;
                 GetComponentInChildren<GUILayer>().enabled = true;
                 GetComponentInChildren<FlareLayer>().enabled = true;
+                GetComponentInChildren<AudioListener>().enabled = true;
             }
 
             public void thirdPersonMode()
@@ -112,6 +113,8 @@ namespace Extinction {
                 GetComponentInChildren<HUDWeaponMarker>().enabled = false;
                 GetComponentInChildren<GUILayer>().enabled = false;
                 GetComponentInChildren<FlareLayer>().enabled = false;
+                GetComponentInChildren<AudioListener>().enabled = false;
+
             }
         }
     }
