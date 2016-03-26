@@ -10,6 +10,7 @@ namespace Extinction
     {
         public class Horde : MonoBehaviour
         {
+            [SerializeField]
             private int nbCreaker = 100;
             //static protected NavMeshAgent _nav; // Reference to the nav mesh agent.
 
