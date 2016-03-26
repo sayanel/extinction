@@ -158,4 +158,9 @@ public class RCamera : Unit, ITriggerable
     {
         transform.Rotate( 0, angle, 0 );
     }
+
+    public override void die()
+    {
+        throw new System.NotImplementedException();
+    }
 }

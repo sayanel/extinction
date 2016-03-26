@@ -18,6 +18,7 @@ namespace Extinction
             /// <summary>
             /// Max number of ammo that can be stocked in the weapon.
             /// </summary>
+            [SerializeField]
             protected int _magazineMaxCapacity = 1;
             
             /// <summary>
@@ -25,6 +26,9 @@ namespace Extinction
             /// </summary>
             [SerializeField]
             protected int _nbCurrentAmmo = 0;
+
+            public bool magazineEmpty { get { return _nbCurrentAmmo <= 0; } }
+            public bool magazineFull { get { return _nbCurrentAmmo >= _magazineMaxCapacity; } }
 
             /// <summary>
             /// True if the weapon repeteadly fires while the fire button is hold.

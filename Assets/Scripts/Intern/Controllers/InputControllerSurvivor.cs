@@ -45,12 +45,17 @@ namespace Extinction
             {
                 _survivor.aim(Input.GetMouseButton(1));
 
-                //if ( Input.GetMouseButton( 0 ) )
-                //{
-                //    _survivor.fire();
-                //}
                 _survivor.fire( Input.GetMouseButton( 0 ) );
 
+                if ( Input.GetKey( KeyCode.R ) )
+                {
+                    _survivor.reload( true );
+                }
+
+                if ( Input.GetKey( KeyCode.K ) )
+                {
+                    _survivor.die();
+                }
             }
 
             public void movement()

@@ -33,6 +33,7 @@ namespace Extinction
             /// The length of the ray. Automatically deduced with the range of this weapon.
             /// </summary>
             protected float _rayLenght = 100f;
+            
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -79,7 +80,7 @@ namespace Extinction
                     _previousTime = Time.time;
 
                     //launch FX
-                    FXManager.Instance.Activate((int)Enums.FXType.ShootFX, _anchorFX.position, _anchorFX.rotation);
+                    FXManager.Instance.Activate((int)_fireFX, _anchorFX.position, _anchorFX.rotation);
 
                 }
             }
