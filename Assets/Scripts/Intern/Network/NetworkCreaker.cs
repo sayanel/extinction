@@ -30,7 +30,7 @@ namespace Extinction {
             /// !isMine: do only correction for remote players
             /// </summary>
             void Update() {
-                if (photonView.isMine)
+                if (photonView.isMine) 
                     return;
 
                 transform.position = Vector3.Lerp(transform.position, m_correctPlayerPos, Time.deltaTime * speedSmooth);

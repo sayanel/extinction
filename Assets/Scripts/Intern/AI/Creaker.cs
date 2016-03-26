@@ -11,6 +11,16 @@ using Extinction.Utils;
 namespace Extinction {
     namespace AI {
 
+        public enum State{
+            IDLE,
+            WALK,
+            RUN,
+            ATTACK,
+            GETDAMAGE,
+            DIE,
+            SCREAM
+        }
+
         public class Creaker : UncontrolableRobot, ITriggerable
         {
 
@@ -20,16 +30,17 @@ namespace Extinction {
 
             [SerializeField] protected Transform _target;
             protected NavMeshAgent _nav; // Reference to the nav mesh agent.
-            protected Animator _anim;
+
+            [SerializeField] State _state;
 
             [SerializeField] protected float _speed = 40;
             [SerializeField] protected float _life = 100;
             [SerializeField] public bool _isDead = false;
             [SerializeField] private int idGroup = 0;
             private Boolean isSeeingTarget = false;
-            private int lambdaDist = 3;
+            private int lambdaDist = 2;
 
-
+             
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -39,14 +50,14 @@ namespace Extinction {
             /// </summary>
             public void init()
             {
-                 // TODO:
-                 // Mettre un billet pour le déplacement dans le nav mesh agent pour créer des groupes plûtôt que des lignes 
+                // TODO:
+                // Mettre un billet pour le déplacement dans le nav mesh agent pour créer des groupes plûtôt que des lignes 
 
-
+                _state = State.IDLE;
                 _nav = GetComponent<NavMeshAgent>();
-                _anim = GetComponent<Animator>();
-                _nav.speed = UnityEngine.Random.Range(4, 4);
-                _nav.acceleration = UnityEngine.Random.Range(4, 4);
+                _animator = GetComponent<Animator>(); 
+                _nav.speed = UnityEngine.Random.Range(1, 1);
+                _nav.acceleration = UnityEngine.Random.Range(1, 1);
                 _target = Horde.getWayPoint();
             }
 
@@ -54,6 +65,7 @@ namespace Extinction {
             {
                 Vector2 WPposition = new Vector2(Horde.getGroupTarget(this.idGroup).position.x, Horde.getGroupTarget(this.idGroup).position.z);
                 Vector2 creakerPosition = new Vector2(transform.position.x, transform.position.z);
+                State previousState = getState();
 
                 if (this.idGroup != 0)
                 {
@@ -63,17 +75,35 @@ namespace Extinction {
                         Horde.setNewWaypoint(this.idGroup);
                         //Debug.LogError("idGroup: " + this.idGroup + " last WP: " + WPposition + " new WP : " + Horde.getGroupTarget(this.idGroup));
                     }
-                    _target = Horde.getGroupTarget(idGroup);
-                    followTarget(_target); // follow target ( transform )
+                    if(_target != Horde.getGroupTarget(idGroup))
+                    {
+                        _target = Horde.getGroupTarget(idGroup);
+                        followTarget(_target); // follow target ( transform )
+                    }
+                    
                 }
                 else
                 {
                     if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(WPposition, creakerPosition) <= lambdaDist)
                         _target = Horde.getWayPoint(); 
-                    followTarget(_target); // transform
+                        followTarget(_target); // transform
                     //Debug.LogError("groupe: " + idGroup + " -> " + _target);
                 }
-                    
+
+                if(previousState != getState())
+                    updateAnimator();
+
+            }
+
+            public State getState()
+            {
+                return _state;
+            }
+
+            public void setState(State s)
+            {
+                if (s == _state) return;
+                else _state = s;
             }
 
             public void triggerEnter(Collider other, string tag)
@@ -103,6 +133,7 @@ namespace Extinction {
                                     Horde.removeOneCreaker(this.idGroup);
                                     setIdGroup(c.getIdGroup());
                                     Horde.addOneCreaker(this.idGroup);
+                                    setState(State.SCREAM);
                                 }
                             }
                     }
@@ -113,7 +144,9 @@ namespace Extinction {
                         Horde.setCharacterTarget(c, this.idGroup);
                         if (!this.isSeeingTarget) Horde.targetFound(this.idGroup); //verifier que la nouvelle target est identique à celle du groupe
                         this.isSeeingTarget = true;
-                        _nav.speed += 10;
+                        _nav.speed += 5;
+                        setState(State.RUN);
+                        Debug.LogError("Collision with survivor " + c + " MyGrp: " + idGroup );
                     }
 
                    
@@ -137,8 +170,40 @@ namespace Extinction {
                     {          
                         Horde.addTargetLost(this.idGroup);
                         this.isSeeingTarget = false;
-                        _nav.speed -= 10;      
+                        _nav.speed -= 5;
+                        setState(State.WALK);
                     }
+                }
+            }
+
+            public void updateAnimator()
+            {
+                switch (_state)
+                {
+                    case State.IDLE:
+                        setAnimationState("Idle");
+                        break;
+                    case State.RUN:
+                        setAnimationState("Run");
+                        break;
+                    case State.WALK:
+                        setAnimationState("Walk");
+                        break;
+                    case State.ATTACK:
+                        setAnimationState("Attack");
+                        break;
+                    //case State.GETDAMAGE:
+                    //    setAnimationState("GetDamage");
+                    //    break;
+                    //case State.DIE:
+                    //    setAnimationState("Die");
+                    //    break;
+                    //case State.SCREAM:
+                    //    setAnimationState("Scream");
+                    //    break;
+                    default:
+                        setAnimationState("Idle");
+                        break;
                 }
             }
 
@@ -168,16 +233,19 @@ namespace Extinction {
             public void followTarget()
             {
                 if (_target) _nav.SetDestination(_target.position);
+                setState(State.WALK);
             }
 
             public void followTarget(Transform target)
             {
                 _nav.SetDestination(target.position);
+                setState(State.WALK);
             }
 
             public void followTarget(GameObject target)
             {
                 _nav.SetDestination(target.transform.position);
+                setState(State.WALK);
             }
 
             public Transform getCreakerTarget(Creaker creaker)
@@ -193,16 +261,18 @@ namespace Extinction {
 
             public void attackSurvivor(Survivor survivor)
             {
+                setState(State.ATTACK);
                 survivor.getDamage(5);
             }
 
             public void getDamage(float damage)
             {
                 _life -= damage;
-
+                setState(State.GETDAMAGE);
                 if (_life <= 0)
                 {
                     _isDead = true;
+                    setState(State.DIE);
                     Horde.removeOneCreaker(this.idGroup);
                 }
                     

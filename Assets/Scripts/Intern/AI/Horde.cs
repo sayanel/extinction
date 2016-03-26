@@ -15,10 +15,9 @@ namespace Extinction
             //static protected NavMeshAgent _nav; // Reference to the nav mesh agent.
 
             private List<Creaker> _creakers = new List<Creaker>();
-            private int _nbCreakersToUpdate = 100;
+            [SerializeField] private int _nbCreakersToUpdate = 300;
             private int creakerIndex = 0;
-            [SerializeField]
-            private static GameObject[] _waypoints;         
+            [SerializeField] private static GameObject[] _waypoints;         
 
             [SerializeField] public GameObject creakerPrefab;
 
@@ -36,6 +35,9 @@ namespace Extinction
             Vector2 terrainRangeX = new Vector2( 340, 650 );
             [SerializeField]
             Vector2 terrainRangeY = new Vector2( 350, 700 );
+            [SerializeField] private static int _counterSetNewWP;
+            [SerializeField] private static int _counterMaxSetNewWP;
+            [SerializeField] private static bool _setNewWP;
 
 
             public void Start()
@@ -46,15 +48,18 @@ namespace Extinction
                 _groupTarget.Add(_waypoints[UnityEngine.Random.Range(0, _waypoints.Length)].transform);
                 _targetLost.Add(0);
                 //_nav = GetComponent<NavMeshAgent>();
+                _counterSetNewWP = 0;
+                _counterMaxSetNewWP = 500;
+                _setNewWP = false;
 
                 createHorde(nbCreaker);
-
             }
 
             public void Update()
             {
                 //foreach (Transform pos in _groupTarget){}
 
+                //Lost survivor?
                 for (int i = 1; i < _groupTarget.Count; ++i)
                 {
                     if (_targetLost[i] <= 0 && _groupCharacterTarget[i] != null)
@@ -67,11 +72,14 @@ namespace Extinction
                     if (_groupCharacterTarget[i] != null) _groupTarget[i] = _groupCharacterTarget[i].transform;
                     
                 }
+
+
                 int j;
                 for(j = 0; j < creakerIndex + _nbCreakersToUpdate; ++j)
                 {
                     if (_creakers[(j + creakerIndex) % nbCreaker]._isDead)
                     {
+                        //TODO : supprimer les creakers proprement
                         _creakers.RemoveAt(j + creakerIndex);
                         --j;
                         continue;
@@ -82,6 +90,8 @@ namespace Extinction
                 creakerIndex = (creakerIndex + j)%nbCreaker;
                 
                 seeGroups();
+
+                //counterTimeWP(0);
             }
 
             public void seeGroups()
@@ -178,10 +188,30 @@ namespace Extinction
                 return _groupTarget[idGroup];
             }
 
+            static public void counterTimeWP(int go)
+            {
+
+                if (Horde._counterSetNewWP != 0 || _setNewWP == true)
+                {
+                    _counterSetNewWP++;
+                    if (_counterSetNewWP >= _counterMaxSetNewWP)
+                    {
+                        _counterSetNewWP = 0;
+                    }
+                    _setNewWP = false;
+                }
+
+            }
+
             static public void setNewWaypoint(int idGroup)
             {
-                _groupTarget[idGroup] = getWayPoint();
-                //Debug.LogError("idGroup: " + idGroup + " -> " + _groups[idGroup] + " new waypoint: " + _groupTarget[idGroup]);
+
+                if (_counterSetNewWP == 0)
+                {
+                    _groupTarget[idGroup] = getWayPoint();
+                    _setNewWP = true;
+                }
+                    //Debug.LogError("idGroup: " + idGroup + " -> " + _groups[idGroup] + " new waypoint: " + _groupTarget[idGroup]);
             }
 
             static public void setCharacterTarget(Character c, int id)
