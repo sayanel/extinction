@@ -78,6 +78,18 @@ namespace Extinction
             private CharacterController _controller;
 
             /// <summary>
+            /// A timer activated when the survivor reloads
+            /// </summary>
+            [SerializeField]
+            private Timer _reloadTimer;
+
+            /// <summary>
+            /// Time spent by reloading action
+            /// </summary>
+            [SerializeField]
+            private float _reloadTime = 2;
+
+            /// <summary>
             /// A pointer to the weapon of the survivor
             /// </summary>
             [SerializeField]
@@ -127,6 +139,8 @@ namespace Extinction
                 }
                 _lifeBar.changeHealth( _health, _maxHealth );
 
+                _reloadTimer.init( _reloadTime, null, null, idleWeapon, null );
+
                 if ( _controller != null ) return;
 
                 _controller = GetComponent<CharacterController>();
@@ -139,6 +153,8 @@ namespace Extinction
 
                 _speed.x = 0;
                 _speed.z = 0;
+
+                _lifeBar.changeHealth( _health, _maxHealth );
             }
 
             /// <summary>
@@ -149,10 +165,14 @@ namespace Extinction
             {
                 float health = _health - amount * _armorMultiplier;
                 GetComponent<PhotonView>().RPC("SetHealth", PhotonTargets.All, health);
-                _lifeBar.changeHealth( _health, _maxHealth );
 
-                if(_health < 0)
-                    Debug.Log("DEAD");
+                if ( _health < 0 )
+                    die();
+            }
+
+            public override void die()
+            {
+                Debug.Log( "DEAD" );
             }
 
             /// <summary>
@@ -181,6 +201,14 @@ namespace Extinction
             public void idle()
             {
                 setAnimationState( "Idle" );
+            }
+
+            /// <summary>
+            /// Change the player's current weapon animation state to idle
+            /// </summary>
+            public void idleWeapon()
+            {
+                setWeaponAnimationState( "Idle" );
             }
 
             /// <summary>
@@ -255,10 +283,31 @@ namespace Extinction
             /// </summary>
             public void fire(bool fire)
             {
-                if ( fire && _weapon != null )
-                    _weapon.fire();
+                if ( _currentWeaponAnimationState == "Reload")
+                    return;
 
-                setWeaponAnimationState(fire ? "Fire" : "Idle");
+                if ( _weapon.magazineEmpty ) 
+                    fire = false;
+
+                setWeaponAnimationState( fire ? "Fire" : "Idle" );
+
+                if ( _weapon != null && fire )
+                    _weapon.fire();
+            }
+
+            /// <summary>
+            /// The survivor reloads his weapon
+            /// </summary>
+            public void reload( bool reload )
+            {
+                if ( _currentWeaponAnimationState == "Reload" || _weapon.magazineFull )
+                    return;
+
+                setWeaponAnimationState( reload ? "Reload" : "Idle" );
+
+                if ( _weapon != null && reload )
+                    _reloadTimer.start();
+                    _weapon.reload(30);
             }
 
             /// <summary>

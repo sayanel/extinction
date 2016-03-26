@@ -373,6 +373,11 @@ namespace Extinction
             {
                 throw new NotImplementedException();
             }
+
+            public override void die()
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

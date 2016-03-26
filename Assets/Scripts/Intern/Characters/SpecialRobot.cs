@@ -566,6 +566,11 @@ namespace Extinction
             {
                 _lifeBar = lifeBar;
             }
+
+            public override void die()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
