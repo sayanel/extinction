@@ -11,6 +11,7 @@ namespace Extinction {
             public Button toggleSelectPlayer;
 
             void Awake() {
+                // Check if already selected by other player
                 toggleSelectPlayer.interactable = (int) PhotonNetwork.room.customProperties[playerData.namePrefab] == 0;
             }
 
@@ -24,7 +25,10 @@ namespace Extinction {
                 if (oldSelectedPrefab != null && oldSelectedPrefab != playerData.namePrefab)
                     changedProperties.Add(oldSelectedPrefab, 0);
 
+                // Update over network
                 PhotonNetwork.room.SetCustomProperties(changedProperties);
+
+                // Store the prefab name as player name: used when PhotonNetwork.Instantiate
                 PhotonNetwork.player.name = playerData.namePrefab;
             }
 
@@ -48,6 +52,7 @@ namespace Extinction {
             }
 
             public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+                // need to be declared
             }
         }
     }
