@@ -113,6 +113,45 @@ namespace Extinction {
                 GetComponentInChildren<GUILayer>().enabled = false;
                 GetComponentInChildren<FlareLayer>().enabled = false;
             }
+
+            public void deadMode()
+            {
+                _firstPersonMode = false;
+
+                SkinnedMeshRenderer[] skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+                foreach ( SkinnedMeshRenderer renderer in skinnedMeshRenderers )
+                {
+                    if ( renderer.ToString().Contains( "3rd" ) )
+                    {
+                        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+                    }
+                    else
+                    {
+                        renderer.enabled = false;
+                    }
+                }
+
+                MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
+
+                foreach ( MeshRenderer renderer in meshRenderers )
+                {
+                    if ( renderer.ToString().Contains( "3rd" ) )
+                    {
+                        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+                    }
+                    else
+                    {
+                        renderer.enabled = false;
+                    }
+                }
+
+                GetComponentInChildren<InputControllerSurvivor>().enabled = false;
+                //GetComponentInChildren<Camera>().enabled = false;
+                //////GetComponentInChildren<CameraFPS>().enabled = false;
+                GetComponentInChildren<HUDWeaponMarker>().enabled = false;
+                GetComponentInChildren<GUILayer>().enabled = false;
+                GetComponentInChildren<FlareLayer>().enabled = false;
+            }
         }
     }
 }

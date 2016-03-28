@@ -14,12 +14,17 @@ namespace Extinction {
 
             [SerializeField]
             private Survivor _survivor;
-            [SerializeField]
-            private float _angleOffsetY = 60;
+            
             [SerializeField]
             private float _angleOffsetX = 0;
             [SerializeField]
+            private float _angleOffsetY = 60;
+            [SerializeField]
             private float _angleOffsetZ = 0;
+
+            public float angleOffsetX { get { return _angleOffsetX; } set { _angleOffsetX = value; } }
+            public float angleOffsetY { get { return _angleOffsetY; } set { _angleOffsetY = value; } }
+            public float angleOffsetZ { get { return _angleOffsetZ; } set { _angleOffsetZ = value; } }
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
