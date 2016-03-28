@@ -121,6 +121,11 @@ namespace Extinction {
 
             }
 
+            public override void die()
+            {
+                throw new NotImplementedException();
+            }
+
             public State getState()
             {
                 return _state;

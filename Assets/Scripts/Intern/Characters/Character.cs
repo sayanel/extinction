@@ -156,6 +156,11 @@ namespace Extinction
             /// <param name="amount">quantity of health to decrease</param>
             public abstract void getDamage( int amount );
 
+            /// <summary>
+            /// Set up what to do when the character dies
+            /// </summary>
+            public abstract void die();
+
             [PunRPC]
             public void SetHealth(float life) {
                 _health = life;

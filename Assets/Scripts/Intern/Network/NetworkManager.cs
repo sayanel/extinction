@@ -162,7 +162,7 @@ namespace Extinction {
                 Debug.Log("LAUNCH GAME");
 
                 if (PhotonNetwork.player.name != "herbie")
-                    CreateSurvivor( "SurvivorAnton", new Vector3( 0 , 10, 0), Quaternion.identity );
+                    CreateSurvivor( "SurvivorAnton", new Vector3( 0, 10, 0 ), Quaternion.identity );
                 else
                     CreateHerbie(new Vector3(0, 10, 0), Quaternion.identity);
             }
