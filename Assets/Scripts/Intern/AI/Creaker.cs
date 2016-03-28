@@ -116,14 +116,14 @@ namespace Extinction {
                 setState(State.DIE);
                 _nav.Stop();
                 StartCoroutine(delayedDeath());
-                Debug.Log("I AM DEAD");
+                //Debug.Log("I AM DEAD");
             }
 
             private IEnumerator delayedDeath()
             {
                 yield return new WaitForSeconds(5.0F);
                 yield return new WaitForSeconds(5.0f);
-                Debug.Log("destroy creacker");
+                //Debug.Log("destroy creacker");
                 //SkinnedMeshRenderer[] renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
                 //foreach( SkinnedMeshRenderer renderer in renderers )
                 //{
@@ -186,7 +186,7 @@ namespace Extinction {
                         //_nav.speed = _speedRun;
                         setState(State.RUN);
 
-                        Debug.LogError("Collision with survivor " + c + " MyGrp: " + idGroup);
+                        //Debug.LogError("Collision with survivor " + c + " MyGrp: " + idGroup);
                     }
 
                    
@@ -214,7 +214,15 @@ namespace Extinction {
                         this.isSeeingTarget = false;
                         _nav.speed = _speed;
                         setState(State.WALK);
-                        //setAnimationState("Walk");
+                    }
+                }
+
+                if (tag == "CreakerDetectionCollider") // If its our RANGE collider who collides
+                {
+                    if (other.gameObject.tag == "playerRangeCollider") // if a survivor get out of the collider
+                    {
+                        setState(State.WALK);
+                        followTarget();
                     }
                 }
 
@@ -224,38 +232,39 @@ namespace Extinction {
             {
                     switch (this._state)
                     {
-                        //case State.IDLE:
-                        //    setAnimationState("Idle");
-                        //    Debug.LogError("State = Idle");
-                        //    break;
+
+                        case State.IDLE:
+                            setAnimationState("Idle");
+                            //Debug.LogError("State = Idle");
+                            break;
                         case State.RUN:
                             setAnimationState("Run");
-                            Debug.LogError("State = Run");
+                            //Debug.LogError("State = Run");
                             break;
                         case State.WALK:
                             setAnimationState("Walk");
-                            Debug.LogError("State = Walk");
+                            //Debug.LogError("State = Walk");
                             break;
                         case State.ATTACK:
                             setAnimationState("Attack");
-                            Debug.LogError("State = Attack");
+                            //Debug.LogError("State = Attack");
                             break;
                         case State.GETDAMAGE:
                             setAnimationState("GetDamage");
-                            Debug.LogError("State = GetDamage");
+                            //Debug.LogError("State = GetDamage");
                         break;
                         case State.DIE:
                             setAnimationState("Die");
-                            Debug.LogError("State = Die");
+                            //Debug.LogError("State = Die");
                             break;
                         case State.SCREAM:
                             setAnimationState("Scream");
                             setState(State.WALK);
-                            Debug.LogError("State = Scream");
+                            //Debug.LogError("State = Scream");
                             break;
                         default:
                             setAnimationState("Walk");
-                            Debug.LogError("State = Default Walk");
+                            //Debug.LogError("State = Default Walk");
                             break;
                     }
                 
@@ -289,9 +298,12 @@ namespace Extinction {
 
             public void followTarget()
             {
-                if (_target) _nav.SetDestination(_target.position);
-                setState(State.WALK);
-                //setAnimationState("Walk");
+                if (_target)
+                {
+                    _nav.SetDestination(_target.position);
+                    setState(State.WALK);
+                }
+                else setState(State.IDLE);
             }
 
             public void followTarget(Transform target)
