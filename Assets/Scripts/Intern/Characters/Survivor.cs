@@ -84,6 +84,15 @@ namespace Extinction
             private Timer _reloadTimer;
 
             /// <summary>
+            /// A timer activated when the survivor dies
+            /// </summary>
+            [SerializeField]
+            private Timer _dieTimer;
+
+            [SerializeField]
+            private float _dieAnimationTime = 2;
+
+            /// <summary>
             /// Time spent by reloading action
             /// </summary>
             [SerializeField]
@@ -146,6 +155,7 @@ namespace Extinction
                 _lifeBar.changeHealth( _health, _maxHealth );
 
                 _reloadTimer.init( _reloadTime, null, null, idleWeapon, null );
+                _dieTimer.init( _dieAnimationTime, null, null, switchToFreefly, null );
 
                 if ( _controller != null ) return;
 
@@ -178,7 +188,21 @@ namespace Extinction
 
             public override void die()
             {
-                Debug.Log( "DEAD" );
+                setWeaponAnimationState( "Die" );
+                setAnimationState( "Die" );
+                GetComponent<InputControllerSurvivor>().enabled = false;
+                GetComponentInChildren<CameraFPS>().useAnchor = true;
+                GetComponentInChildren<SurvivorAnimationProcedural>().angleOffsetX = 0;
+                GetComponentInChildren<SurvivorAnimationProcedural>().angleOffsetY = 0;
+                GetComponentInChildren<SurvivorAnimationProcedural>().angleOffsetZ = 0;
+                _dieTimer.start();
+            }
+
+            public void switchToFreefly()
+            {
+                GetComponentInChildren<CameraFPS>().enabled = false;
+                GetComponentInChildren<InputControllerFreeflyCamera>().enabled = true;
+                GetComponent<SurvivorComponentActivator>().deadMode();
             }
 
             /// <summary>

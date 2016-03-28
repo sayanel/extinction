@@ -18,6 +18,9 @@ namespace Extinction
         {
             public delegate void TimerCallback();
 
+            [SerializeField]
+            private string _timerFunction = "Timer";
+
             /// <summary>
             /// _currentTime of Timer in seconds
             /// </summary>

@@ -20,6 +20,15 @@ namespace Extinction
             // -------------------------------- ATTRIBUTES --------------------------------
             // ----------------------------------------------------------------------------
 
+            [SerializeField]
+            private Transform _anchor;
+
+            [SerializeField]
+            private bool _useAnchor = false;
+
+            public bool useAnchor { get { return _useAnchor; } set { _useAnchor = value; } }
+
+
             /// <summary>
             /// pointer to the survivor
             /// </summary>
@@ -66,6 +75,7 @@ namespace Extinction
             private bool _zoomingIn;
             private bool _zoomingOut;
 
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -86,6 +96,9 @@ namespace Extinction
 
             public void Update()
             {
+                if(_useAnchor)
+                    transform.position = _anchor.position;
+
                 transform.LookAt( transform.position + _survivor.orientation, Vector3.up );
 
                 if ( _survivor.isAiming && !_zoomingIn )
