@@ -19,6 +19,8 @@ namespace Extinction {
 
             [PunRPC]
             void updatePosition() {
+                _view = GetComponent<PhotonView>();
+                Debug.Log("Update position " + PhotonNetwork.player.name);
                 if (PhotonNetwork.player.name == "herbie")
                     return;
 
@@ -36,16 +38,20 @@ namespace Extinction {
 
                 while(true) {
                     index = Random.Range(0, nbSpawns - 1);
+                    Debug.Log(index);
                     if (photonSpawnTaken[index] == null)
                         break;
                 }
                 GameObject goSurvivor = (GameObject) PhotonNetwork.player.TagObject;
                 goSurvivor.transform.position = transform.GetChild(index).transform.position;
+                Debug.Log("index " + index + "for player " + PhotonNetwork.player.name);
 
                 photonSpawnTaken.Add(index, index);
                 PhotonNetwork.room.customProperties[_keyPositions] = photonSpawnTaken;
                 Debug.Log(photonSpawnTaken.ToString());
             }
+
+            void OnPhotonSerializeView() {} 
         }
     }
 }

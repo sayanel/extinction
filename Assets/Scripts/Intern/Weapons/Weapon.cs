@@ -80,6 +80,11 @@ namespace Extinction
             [SerializeField]
             protected Transform _anchorFX;
 
+            public Transform AnchorFX {
+                get { return _anchorFX; }
+                set { _anchorFX = value; }
+            }
+
             /// <summary>
             /// Only GameObjects which are on these layers can be hit by the ray.
             /// Contains Default layer by default.

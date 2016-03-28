@@ -127,6 +127,12 @@ namespace Extinction
             [SerializeField]
             private HUDLifeBar _lifeBar;
 
+            [SerializeField]
+            public Transform _anchorFPS_FX;
+
+            [SerializeField]
+            public Transform _anchorThird_FX;
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -375,9 +381,10 @@ namespace Extinction
             /// <param name="stateName"></param>
             public override void setAnimationState( string stateName )
             {
-                if ( _animator == null || stateName.Equals( _currentAnimationState ) ) 
+                if ( _animator == null || stateName.Equals( _currentAnimationState ) ) {
                     return;
-                 _currentAnimationState = stateName;
+                }
+                _currentAnimationState = stateName;
                 _animator.SetTrigger( stateName );
             }
 
@@ -387,8 +394,11 @@ namespace Extinction
             /// <param name="stateName"></param>
             public void setWeaponAnimationState( string stateName )
             {
-                if ( _weaponAnimator == null || stateName.Equals( _currentWeaponAnimationState ) ) return;
+                if ( _weaponAnimator == null || stateName.Equals(_currentWeaponAnimationState) )
+                    return;
+
                 _currentWeaponAnimationState = stateName;
+                _weaponAnimator.ResetTrigger("Fire");
                 _weaponAnimator.SetTrigger( stateName );
             }
 

@@ -45,8 +45,8 @@ namespace Extinction
             {
                 _survivor.aim(Input.GetMouseButton(1));
 
-                _survivor.fire( Input.GetMouseButton( 0 ) );
-
+                _survivor.fire(Input.GetMouseButton(0));
+                    
                 if ( Input.GetKey( KeyCode.R ) )
                 {
                     _survivor.reload( true );

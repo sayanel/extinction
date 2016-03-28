@@ -125,6 +125,8 @@ namespace Extinction {
             }
 
             public void LaunchGame(AsyncLoading asyncLoadingScript) {
+                GetComponent<AudioSource>().Stop();
+                GetComponent<AudioListener>().enabled = false;
                 asyncLoadingScript.StartLoading(INDEX_SCENE_GAME);
             }
 

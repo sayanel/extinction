@@ -33,8 +33,9 @@ namespace Extinction
             /// The length of the ray. Automatically deduced with the range of this weapon.
             /// </summary>
             protected float _rayLenght = 100f;
-            
 
+            [SerializeField]
+            public Transform _anchorFX_Third;
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -58,6 +59,10 @@ namespace Extinction
                 if(_anchorFX == null ){
                     _anchorFX = _anchor;
                 }
+
+                if(_anchorFX_Third == null) {
+                    _anchorFX_Third = _anchorFX;
+                }
             }
 
             override
@@ -79,8 +84,11 @@ namespace Extinction
                     _nbCurrentAmmo--;
                     _previousTime = Time.time;
 
-                    //launch FX
-                    FXManager.Instance.Activate((int)_fireFX, _anchorFX.position, _anchorFX.rotation);
+                    FXManager.Instance.Activate((int)_fireFX, _anchorFX_Third.position, _anchorFX_Third.rotation);
+
+                    // Local
+                    FXManager.Instance.ActivateRPC((int)_fireFX, _anchorFX.position, _anchorFX.rotation);
+                    
 
                 }
             }

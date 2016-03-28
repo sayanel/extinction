@@ -78,6 +78,7 @@ namespace Extinction {
 
             public void thirdPersonMode()
             {
+                Debug.Log("Third passed " + PhotonNetwork.player.name);
                 _firstPersonMode = false;
 
                 SkinnedMeshRenderer[] skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -114,7 +115,6 @@ namespace Extinction {
                 GetComponentInChildren<GUILayer>().enabled = false;
                 GetComponentInChildren<FlareLayer>().enabled = false;
                 GetComponentInChildren<AudioListener>().enabled = false;
-
             }
         }
     }
