@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Extinction.Characters;
+using Extinction.Characters; 
 
 namespace Extinction
 {
@@ -13,9 +13,9 @@ namespace Extinction
             [SerializeField]
             private int nbCreaker = 100;
             //static protected NavMeshAgent _nav; // Reference to the nav mesh agent.
-
+             
             private List<Creaker> _creakers = new List<Creaker>();
-            [SerializeField] private int _nbCreakersToUpdate = 300;
+            [SerializeField] private int _nbCreakersToUpdate = 100;
             private int creakerIndex = 0;
             [SerializeField] private static GameObject[] _waypoints;         
 
@@ -168,6 +168,7 @@ namespace Extinction
 
             }
 
+            //Si un creaker du groupe 0 croise un survivant
             static public int createNewGroup(Character c, int nb)
             {
                 _groups.Add(nb);
@@ -206,7 +207,7 @@ namespace Extinction
             static public void setNewWaypoint(int idGroup)
             {
 
-                if (_counterSetNewWP == 0)
+                //if (_counterSetNewWP == 0)
                 {
                     _groupTarget[idGroup] = getWayPoint();
                     _setNewWP = true;
