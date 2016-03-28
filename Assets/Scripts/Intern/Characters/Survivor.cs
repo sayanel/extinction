@@ -179,6 +179,7 @@ namespace Extinction
             public override void die()
             {
                 Debug.Log( "DEAD" );
+                Game.GameManager.Instance.changeSurvivorStatus( _characterName, CharacterStatus.Dead );
             }
 
             /// <summary>
