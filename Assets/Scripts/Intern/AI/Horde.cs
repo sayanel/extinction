@@ -11,11 +11,11 @@ namespace Extinction
         public class Horde : MonoBehaviour
         {
             [SerializeField]
-            private int nbCreaker = 100;
+            private int nbCreaker = 20;
             //static protected NavMeshAgent _nav; // Reference to the nav mesh agent.
              
             private List<Creaker> _creakers = new List<Creaker>();
-            [SerializeField] private int _nbCreakersToUpdate = 100;
+            [SerializeField] private int _nbCreakersToUpdate = 20;
             private int creakerIndex = 0;
             [SerializeField] private static GameObject[] _waypoints;         
 
@@ -58,7 +58,7 @@ namespace Extinction
             public void Update()
             {
                 //foreach (Transform pos in _groupTarget){}
-
+                _nbCreakersToUpdate = nbCreaker;
                 //Lost survivor?
                 for (int i = 1; i < _groupTarget.Count; ++i)
                 {
@@ -83,7 +83,7 @@ namespace Extinction
                         Creaker c = _creakers[( j + creakerIndex ) % nbCreaker];
                         nbCreaker--;
                         removeOneCreaker( c.getIdGroup() );
-                        _creakers.RemoveAt(j + creakerIndex);
+                        _creakers.RemoveAt((j + creakerIndex) % nbCreaker);
                         --j;
 
                         c.die();
@@ -131,6 +131,14 @@ namespace Extinction
                 Creaker creaker = creakerGO.GetComponent<Creaker>();
                 creaker.init();
                 return creaker;
+                //creakerGO = PhotonNetwork.Instantiate("Creaker", position, Quaternion.identity, 0) as GameObject;
+                //DontDestroyOnLoad(creakerGO);
+                //creakerGO.GetComponent<Creaker>().detectorCollider.SetActive(true);
+                //creakerGO.GetComponent<Creaker>().rangeCollider.SetActive(true);
+
+                //Creaker creaker = creakerGO.GetComponent<Creaker>();
+                //creaker.init();
+                //return creaker;
             }
 
             public void createHorde(int nbCreakers)

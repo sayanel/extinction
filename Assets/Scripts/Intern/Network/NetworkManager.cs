@@ -150,6 +150,7 @@ namespace Extinction {
             public void CreateHorde() {
                 // First add to scene on Herbie PC
                 GameObject hordeLocal = PhotonNetwork.Instantiate("Horde", Vector3.zero, Quaternion.identity, 0);
+                //GameObject hordeLocal = Instantiate(Resources.Load("Horde"), Vector3.zero, Quaternion.identity) as GameObject;
                 DontDestroyOnLoad(hordeLocal);
             }
 
@@ -162,7 +163,7 @@ namespace Extinction {
                 Debug.Log("LAUNCH GAME");
 
                 if (PhotonNetwork.player.name != "herbie")
-                    CreateSurvivor( "SurvivorAnton", new Vector3( 0, 10, 0 ), Quaternion.identity );
+                    CreateSurvivor( "SurvivorAnton", new Vector3(500, 40, 550), Quaternion.identity );
                 else
                     CreateHerbie(new Vector3(0, 10, 0), Quaternion.identity);
             }
