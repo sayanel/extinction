@@ -20,12 +20,16 @@ namespace Extinction {
             [SerializeField]
             private bool _offlineMode = true;
 
+            private Survivor _survivor;
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
 
             public void Awake()
             {
+                _survivor = GetComponent<Survivor>();
+
                 if ( _offlineMode )
                 {
                     if(_firstPersonMode) firstPersonMode();
@@ -38,6 +42,7 @@ namespace Extinction {
 
             public void firstPersonMode()
             {
+                activateHUD();
                 _firstPersonMode = true;
                 SkinnedMeshRenderer[] skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
                 foreach(SkinnedMeshRenderer renderer in skinnedMeshRenderers){
@@ -74,6 +79,7 @@ namespace Extinction {
                 GetComponentInChildren<GUILayer>().enabled = true;
                 GetComponentInChildren<FlareLayer>().enabled = true;
                 GetComponentInChildren<AudioListener>().enabled = true;
+                GetComponentInChildren<HUDLifeBar>().gameObject.SetActive(false);
             }
 
             public void thirdPersonMode()
@@ -154,6 +160,13 @@ namespace Extinction {
                 GetComponentInChildren<HUDWeaponMarker>().enabled = false;
                 GetComponentInChildren<GUILayer>().enabled = false;
                 GetComponentInChildren<FlareLayer>().enabled = false;
+            }
+
+            public void activateHUD()
+            {
+                GameObject hudSurvivor =  Instantiate( Resources.Load<GameObject>( "HUD/HUDSurvivor" ) );
+                hudSurvivor.GetComponentInChildren<HUDSurvivorHealth>().survivor = _survivor;
+                hudSurvivor.GetComponentInChildren<HUDWeaponMagazine>().weapon = _survivor.weapon;
             }
         }
     }

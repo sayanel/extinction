@@ -56,6 +56,11 @@ namespace Extinction
                 {
                     _survivor.die();
                 }
+
+                if ( Input.GetKey( KeyCode.H ) )
+                {
+                    _survivor.getDamage(5);
+                }
             }
 
             public void movement()
