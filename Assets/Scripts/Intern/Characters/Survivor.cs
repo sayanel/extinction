@@ -104,6 +104,8 @@ namespace Extinction
             [SerializeField]
             private Weapon _weapon;
 
+            public Weapon weapon {get {return _weapon;}}
+
             /// <summary>
             /// Fake gravity used when the survivor jumps
             /// </summary>

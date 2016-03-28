@@ -24,6 +24,8 @@ namespace Extinction
 
             private Rect _position;
 
+            private int targetSize = 128;
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -33,7 +35,7 @@ namespace Extinction
             // Use this for initialization
             void Start()
             {
-                _position = new Rect( Screen.width / 2 - 16, Screen.height / 2 - 16, 32, 32 );
+                _position = new Rect( Screen.width / 2 - targetSize / 2, Screen.height / 2 - targetSize / 2, targetSize, targetSize );
             }
 
             // Update is called once per frame

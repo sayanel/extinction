@@ -20,12 +20,16 @@ namespace Extinction
             /// </summary>
             [SerializeField]
             protected int _magazineMaxCapacity = 1;
+
+            public int magazineMaxCapacity { get { return _magazineMaxCapacity; } }
             
             /// <summary>
             /// Current number of ammo in the weapon.
             /// </summary>
             [SerializeField]
             protected int _nbCurrentAmmo = 0;
+
+            public int nbCurrentAmmo { get { return _nbCurrentAmmo; } }
 
             public bool magazineEmpty { get { return _nbCurrentAmmo <= 0; } }
             public bool magazineFull { get { return _nbCurrentAmmo >= _magazineMaxCapacity; } }
