@@ -36,6 +36,8 @@ namespace Extinction
 
             [SerializeField]
             public Transform _anchorFX_Third;
+
+            public GameObject bulletHole;
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -80,6 +82,11 @@ namespace Extinction
                                         LayerMask.GetMask(_targetLayer))) {
                         GameObject target = hitInfo.transform.gameObject;
                         onHit(target);
+                        if (bulletHole != null) {
+                            Debug.Log("BULLET");
+                            FXManager.Instance.Activate((int)Enums.FXType.BulletHoleFX, hitInfo.point, Quaternion.FromToRotation(Vector3.forward, hitInfo.normal));
+
+                        }
                     }
                     _nbCurrentAmmo--;
                     _previousTime = Time.time;
@@ -103,6 +110,8 @@ namespace Extinction
             public void onHit(GameObject obj)
             {
                 Character o = obj.GetComponent<Character>();
+                if (o == null)
+                    return;
                 o.getDamage(_damage);
             }
 

@@ -44,7 +44,8 @@ namespace Extinction {
         public enum FXType {
             ShootFX,
             ExplosionFX,
-            ReloadFX
+            ReloadFX,
+            BulletHoleFX
         }
     }
 }

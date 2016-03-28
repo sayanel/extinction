@@ -15,17 +15,19 @@ namespace Extinction {
                 // Use rpc to stack (as a lock system)
                 _view = GetComponent<PhotonView>();
                 _view.RPC("updatePosition", PhotonTargets.All);
+                updatePosition();
             }
 
             [PunRPC]
             void updatePosition() {
                 _view = GetComponent<PhotonView>();
                 Debug.Log("Update position " + PhotonNetwork.player.name);
+
                 if (PhotonNetwork.player.name == "herbie")
                     return;
 
-                if (!_view.isMine)
-                    return;
+                //if (!_view.isMine)
+                    //return;
 
                 if (PhotonNetwork.room.customProperties[_keyPositions] == null) {
                     Hashtable spawnTaken = new Hashtable() { };
@@ -50,8 +52,7 @@ namespace Extinction {
                 PhotonNetwork.room.customProperties[_keyPositions] = photonSpawnTaken;
                 Debug.Log(photonSpawnTaken.ToString());
             }
-
-            void OnPhotonSerializeView() {} 
+            public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) { }
         }
     }
 }
