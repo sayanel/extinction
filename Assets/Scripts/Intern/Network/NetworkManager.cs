@@ -143,7 +143,7 @@ namespace Extinction {
                     throw new System.Exception("Fail when creating Herbie prefab");
 
                 Characters.Herbie herbie = herbieGO.GetComponent<Characters.Herbie>();
-                herbie.initialize(new List<string>() { "Characters/RScout", "Characters/RTank", "Characters/RController" }, new List<Vector3>() { new Vector3(0, 0, 0), new Vector3(1, 0, 1), new Vector3(2, 0, 2) }, 0, true);
+                herbie.initialize(new List<string>() { "Characters/RScout", "Characters/RTank", "Characters/RController" }, new List<Vector3>() { new Vector3(473, 53, 438), new Vector3(473, 53, 442), new Vector3(473, 53, 444) }, 0, true);
                 PhotonNetwork.player.TagObject = herbieGO;
 
                 CreateHorde();

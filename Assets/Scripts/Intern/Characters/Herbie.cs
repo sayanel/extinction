@@ -130,10 +130,13 @@ namespace Extinction
                 List<SpecialRobot> selectedRobots = new List<SpecialRobot>();
                 foreach (string robotPath in selectedRobotsPaths)
                 {
+                    if (!itSpawnPos.MoveNext())
+                        itSpawnPos = spawnPositions.GetEnumerator();
+
                     GameObject robotPrefab;
                     if (createOverNetwork)
                     {
-                        robotPrefab = PhotonNetwork.Instantiate(robotPath, new Vector3(0,0,0), Quaternion.identity, 0); // instantiated on network
+                        robotPrefab = PhotonNetwork.Instantiate(robotPath, itSpawnPos.Current, Quaternion.identity, 0); // instantiated on network
                         robotPrefab.GetComponent<InputControllerSpecialRobot>().enabled = true; //activate this script localy
                     }
                     else
@@ -144,8 +147,7 @@ namespace Extinction
 
                     selectedRobots.Add(robotPrefab.GetComponent<SpecialRobot>());
 
-                    if(!itSpawnPos.MoveNext())
-                        itSpawnPos = spawnPositions.GetEnumerator();
+
                 }
 
                 //initialize herbie's hud

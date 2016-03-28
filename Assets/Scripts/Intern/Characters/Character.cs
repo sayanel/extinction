@@ -161,9 +161,12 @@ namespace Extinction
             /// </summary>
             public abstract void die();
 
+            public virtual void onHealthChanged(){}
+
             [PunRPC]
             public void SetHealth(float life) {
                 _health = life;
+                onHealthChanged();
             }
 
             /// <summary>

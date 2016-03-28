@@ -37,6 +37,11 @@ namespace Extinction {
             RCamera
         }
 
+        public enum CharacterStatus {
+            Alive,
+            Dead
+        }
+
         public enum AmmoType {
             Default
         }

@@ -391,32 +391,30 @@ namespace Extinction
                 attack();
             }
 
+            public override void onHealthChanged()
+            {
+                if( _lifeBar != null )
+                {
+                    _lifeBar.setProgression( ( _health / (float)_maxHealth ) );
+                }
+
+                if( _worldLifeBar != null )
+                {
+                    _worldLifeBar.changeHealth( _health, _maxHealth );
+                }
+            }
+
             [PunRPC]
             public override void getDamage( int amount )
             {
                 float health = _health - amount;
-                GetComponent<PhotonView>().RPC("SetHealth", PhotonTargets.All, health);
-
-                if(_lifeBar != null)
-                {
-                    _lifeBar.setProgression( (_health / (float)_maxHealth) );
-                }
-
-                if(_worldLifeBar != null)
-                {
-                    _worldLifeBar.changeHealth(_health, _maxHealth);
-                }
+                GetComponent<PhotonView>().RPC("SetHealth", PhotonTargets.All, health); // call onHealthChanaged()
 
                 if(_health <= 0)
                 {
                     FXManager.Instance.Activate( (int)Enums.FXType.ExplosionFX, transform.position, Quaternion.identity );
-                    onDeath();
+                    die();
                 }
-            }
-
-            public void onDeath()
-            {
-               GetComponent<PhotonView>().RPC( "onDeathRPC", PhotonTargets.All );
             }
 
             [PunRPC]
@@ -569,7 +567,8 @@ namespace Extinction
 
             public override void die()
             {
-                throw new NotImplementedException();
+                GetComponent<PhotonView>().RPC( "onDeathRPC", PhotonTargets.All );
+                Game.GameManager.Instance.changeRobotStatus( _characterName, CharacterStatus.Dead );
             }
         }
     }

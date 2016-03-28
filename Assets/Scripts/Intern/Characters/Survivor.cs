@@ -205,6 +205,7 @@ namespace Extinction
                 GetComponentInChildren<CameraFPS>().enabled = false;
                 GetComponentInChildren<InputControllerFreeflyCamera>().enabled = true;
                 GetComponent<SurvivorComponentActivator>().deadMode();
+                Game.GameManager.Instance.changeSurvivorStatus( _characterName, CharacterStatus.Dead );
             }
 
             /// <summary>
