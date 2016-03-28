@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Extinction.Characters;
+using Extinction.Characters; 
 
 namespace Extinction
 {
@@ -10,11 +10,11 @@ namespace Extinction
     {
         public class Horde : MonoBehaviour
         {
-            [SerializeField] private int nbCreaker = 300;
+            [SerializeField] private int nbCreaker = 100;
             //static protected NavMeshAgent _nav; // Reference to the nav mesh agent.
-
+             
             private List<Creaker> _creakers = new List<Creaker>();
-            [SerializeField] private int _nbCreakersToUpdate = 300;
+            [SerializeField] private int _nbCreakersToUpdate = 100;
             private int creakerIndex = 0;
             [SerializeField] private static GameObject[] _waypoints;         
 
@@ -103,7 +103,7 @@ namespace Extinction
             public bool getSpawnPos(out Vector3 pos)
             {
                 int layerMask = (1 << NavMesh.GetAreaFromName("Walkable"));
-                var position = new Vector3(Random.Range(340, 650), 20, Random.Range(350, 700));
+                var position = new Vector3(Random.Range(340, 650), 40, Random.Range(350, 700));
 
             
                 NavMeshHit hit;
@@ -158,6 +158,7 @@ namespace Extinction
 
             }
 
+            //Si un creaker du groupe 0 croise un survivant
             static public int createNewGroup(Character c, int nb)
             {
                 _groups.Add(nb);
@@ -196,7 +197,7 @@ namespace Extinction
             static public void setNewWaypoint(int idGroup)
             {
 
-                if (_counterSetNewWP == 0)
+                //if (_counterSetNewWP == 0)
                 {
                     _groupTarget[idGroup] = getWayPoint();
                     _setNewWP = true;

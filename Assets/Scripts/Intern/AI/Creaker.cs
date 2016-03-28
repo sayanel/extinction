@@ -33,12 +33,14 @@ namespace Extinction {
 
             [SerializeField] State _state;
 
-            [SerializeField] protected float _speed = 40;
+            [SerializeField] protected float _speed;
+            [SerializeField] protected float _speedRun;
             [SerializeField] protected float _life = 100;
             [SerializeField] public bool _isDead = false;
             [SerializeField] private int idGroup = 0;
+            [SerializeField] private int nbCreakersGrp;
             private Boolean isSeeingTarget = false;
-            private int lambdaDist = 2;
+            private float lambdaDist = 3.0f;
 
              
             // ----------------------------------------------------------------------------
@@ -55,42 +57,66 @@ namespace Extinction {
 
                 _state = State.IDLE;
                 _nav = GetComponent<NavMeshAgent>();
-                _animator = GetComponent<Animator>(); 
-                _nav.speed = UnityEngine.Random.Range(1, 1);
-                _nav.acceleration = UnityEngine.Random.Range(1, 1);
+                _animator = GetComponent<Animator>();
+                _speed = 2 + UnityEngine.Random.Range(0, 1);
+                _nav.speed = _speed;
+                _speedRun = 4 + UnityEngine.Random.Range(0, 1);
+                _nav.acceleration = 1;// UnityEngine.Random.Range(1, 1);
                 _target = Horde.getWayPoint();
+                followTarget(_target);
             }
 
             public void UpdateCreaker()
             {
-                Vector2 WPposition = new Vector2(Horde.getGroupTarget(this.idGroup).position.x, Horde.getGroupTarget(this.idGroup).position.z);
+                
                 Vector2 creakerPosition = new Vector2(transform.position.x, transform.position.z);
                 State previousState = getState();
 
+                nbCreakersGrp = Horde.getGroupSize(idGroup);
+
+                // test 
+                //Vector2 WPposition = new Vector2(_target.position.x, _target.position.z);
+                //if (!Horde.targetIsSurvivor(this.idGroup) && Vector2.Distance(WPposition, creakerPosition) <= lambdaDist)
+                //{
+                //    Horde.setNewWaypoint(this.idGroup);
+                //    _target = Horde.getWayPoint();
+
+                //    Debug.LogError(Vector2.Distance(WPposition, creakerPosition));
+                //    Debug.LogError("idGroup: " + this.idGroup + " last WP: " + WPposition + " new WP : " + Horde.getGroupTarget(this.idGroup));
+                //    followTarget(_target);
+                //}
+                // end test
+
                 if (this.idGroup != 0)
                 {
-                    
-                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(WPposition, creakerPosition) <= lambdaDist)
+                    Vector2 WPposition = new Vector2(Horde.getGroupTarget(this.idGroup).position.x, Horde.getGroupTarget(this.idGroup).position.z);
+                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector2.Distance(WPposition, creakerPosition) <= lambdaDist)
                     {
                         Horde.setNewWaypoint(this.idGroup);
+                        Debug.LogError(Vector2.Distance(WPposition, creakerPosition));
                         //Debug.LogError("idGroup: " + this.idGroup + " last WP: " + WPposition + " new WP : " + Horde.getGroupTarget(this.idGroup));
                     }
-                    if(_target != Horde.getGroupTarget(idGroup))
+                    if (_target != Horde.getGroupTarget(idGroup))
                     {
                         _target = Horde.getGroupTarget(idGroup);
                         followTarget(_target); // follow target ( transform )
                     }
-                    
+
                 }
                 else
                 {
-                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(WPposition, creakerPosition) <= lambdaDist)
-                        _target = Horde.getWayPoint(); 
-                        followTarget(_target); // transform
+                    Vector2 WPposition = new Vector2(_target.position.x, _target.position.z);
+                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector2.Distance(WPposition, creakerPosition) <= lambdaDist)
+                    {
+                        _target = Horde.getWayPoint();
+                        followTarget(_target);
+                    }
+
+
                     //Debug.LogError("groupe: " + idGroup + " -> " + _target);
                 }
 
-                if(previousState != getState())
+                if (previousState != getState())
                     updateAnimator();
 
             }
@@ -144,7 +170,7 @@ namespace Extinction {
                         Horde.setCharacterTarget(c, this.idGroup);
                         if (!this.isSeeingTarget) Horde.targetFound(this.idGroup); //verifier que la nouvelle target est identique à celle du groupe
                         this.isSeeingTarget = true;
-                        _nav.speed += 5;
+                        _nav.speed = _speedRun;
                         setState(State.RUN);
                         Debug.LogError("Collision with survivor " + c + " MyGrp: " + idGroup );
                     }
@@ -170,7 +196,7 @@ namespace Extinction {
                     {          
                         Horde.addTargetLost(this.idGroup);
                         this.isSeeingTarget = false;
-                        _nav.speed -= 5;
+                        _nav.speed = _speed;
                         setState(State.WALK);
                     }
                 }
@@ -238,13 +264,15 @@ namespace Extinction {
 
             public void followTarget(Transform target)
             {
-                _nav.SetDestination(target.position);
+                //_nav.SetDestination(target.position);
+                _nav.destination = target.position;
                 setState(State.WALK);
             }
 
             public void followTarget(GameObject target)
             {
-                _nav.SetDestination(target.transform.position);
+                //_nav.SetDestination(target.transform.position);
+                _nav.destination = target.transform.position;
                 setState(State.WALK);
             }
 
