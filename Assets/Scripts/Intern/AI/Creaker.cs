@@ -35,7 +35,7 @@ namespace Extinction {
 
             [SerializeField] protected float _speed;
             [SerializeField] protected float _speedRun;
-            [SerializeField] protected float _life = 100;
+            //[SerializeField] protected float _life = 100;
             [SerializeField] public bool _isDead = false;
             [SerializeField] private int idGroup = 0;
             [SerializeField] private int nbCreakersGrp;
@@ -93,7 +93,7 @@ namespace Extinction {
                     if (!Horde.targetIsSurvivor(this.idGroup) && Vector2.Distance(WPposition, creakerPosition) <= lambdaDist)
                     {
                         Horde.setNewWaypoint(this.idGroup);
-                        Debug.LogError(Vector2.Distance(WPposition, creakerPosition));
+                        //Debug.LogError(Vector2.Distance(WPposition, creakerPosition));
                         //Debug.LogError("idGroup: " + this.idGroup + " last WP: " + WPposition + " new WP : " + Horde.getGroupTarget(this.idGroup));
                     }
                     if (_target != Horde.getGroupTarget(idGroup))
@@ -123,7 +123,19 @@ namespace Extinction {
 
             public override void die()
             {
-                throw new NotImplementedException();
+                setState( State.DIE );
+                setAnimationState( "Die" );
+            }
+
+            private IEnumerator delayedDeath()
+            {
+                yield return new WaitForSeconds( 5.0F );
+                //SkinnedMeshRenderer[] renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+                //foreach( SkinnedMeshRenderer renderer in renderers )
+                //{
+                //    renderer.enabled = false;
+                //}
+                PhotonNetwork.Destroy( this.gameObject );
             }
 
             public State getState()
@@ -177,7 +189,7 @@ namespace Extinction {
                         this.isSeeingTarget = true;
                         _nav.speed = _speedRun;
                         setState(State.RUN);
-                        Debug.LogError("Collision with survivor " + c + " MyGrp: " + idGroup );
+                        //Debug.LogError("Collision with survivor " + c + " MyGrp: " + idGroup );
                     }
 
                    
@@ -298,19 +310,6 @@ namespace Extinction {
                 survivor.getDamage(5);
             }
 
-            public void getDamage(float damage)
-            {
-                _life -= damage;
-                setState(State.GETDAMAGE);
-                if (_life <= 0)
-                {
-                    _isDead = true;
-                    setState(State.DIE);
-                    Horde.removeOneCreaker(this.idGroup);
-                }
-                    
-            }
-
             public override void addPotentialTarget(Character target)
             {
                 throw new NotImplementedException();
@@ -358,7 +357,18 @@ namespace Extinction {
 
             public override void getDamage(int amount)
             {
-                throw new NotImplementedException();
+                float health = _health - amount;
+                GetComponent<PhotonView>().RPC( "SetHealth", PhotonTargets.All, health );
+
+                setState( State.GETDAMAGE );
+
+                if( _health <= 0 )
+                {
+                    _isDead = true;
+                    setState( State.DIE );
+                    _health = 0;
+                    //Horde.removeOneCreaker(this.idGroup);
+                }
             }
 
             public override void activateSkill1()

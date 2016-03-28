@@ -77,11 +77,16 @@ namespace Extinction
                 int j;
                 for(j = 0; j < creakerIndex + _nbCreakersToUpdate; ++j)
                 {
-                    if (_creakers[(j + creakerIndex) % nbCreaker]._isDead)
+                    if (_creakers[(j + creakerIndex) % nbCreaker].Health <= 0.0001)
                     {
                         //TODO : supprimer les creakers proprement
+                        Creaker c = _creakers[( j + creakerIndex ) % nbCreaker];
+                        nbCreaker--;
+                        removeOneCreaker( c.getIdGroup() );
                         _creakers.RemoveAt(j + creakerIndex);
                         --j;
+
+                        c.die();
                         continue;
                     }
                     //Debug.LogError("Index: " + j);
