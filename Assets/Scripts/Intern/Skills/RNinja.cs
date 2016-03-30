@@ -27,7 +27,7 @@ namespace Extinction
             [SerializeField]
             private HUDLifeBar _worldLifeBar; // WORLD life bar
 
-            private NavMeshAgent _navMeshAgentComponent;
+            //private NavMeshAgent _navMeshAgentComponent;
 
             private IEnumerator _rotateRoutine;
 
@@ -69,7 +69,7 @@ namespace Extinction
 
             void Awake()
             {
-                _navMeshAgentComponent = GetComponent<NavMeshAgent>();
+                //_navMeshAgentComponent = GetComponent<NavMeshAgent>();
                 _potentialTargets = new List<Character>();
             }
 
@@ -96,9 +96,18 @@ namespace Extinction
                     if( _targets.Count > 0 )
                     {
                         _currentAICommand = new CommandMoveAndAttack( this, getPriorityTarget(), 0.5f );
+                        //execute the command : 
                         _currentAICommand.Execute();
                         _unitBehavior = UnitBehavior.Attacking;
                     }
+                }
+                //is the attacking command finished ? 
+                else if(_unitBehavior == UnitBehavior.Attacking && _currentAICommand.IsFinished())
+                {
+                    //stop the command : 
+                    _currentAICommand.End();
+                    _unitBehavior = UnitBehavior.Idle;
+                    setAnimationState("Idle");
                 }
             }
 
@@ -323,17 +332,17 @@ namespace Extinction
 
             public override void move( Vector3 vec )
             {
-                _navMeshAgentComponent.updateRotation = true;
-                _navMeshAgentComponent.Resume();
-                _navMeshAgentComponent.SetDestination( vec );
+                //_navMeshAgentComponent.updateRotation = true;
+                //_navMeshAgentComponent.Resume();
+                //_navMeshAgentComponent.SetDestination( vec );
 
-                setAnimationState( "Walk" );
+                //setAnimationState( "Walk" );
             }
 
             public override void stopWalking()
             {
-                _navMeshAgentComponent.Stop();
-                _navMeshAgentComponent.updateRotation = false;
+                //_navMeshAgentComponent.Stop();
+                //_navMeshAgentComponent.updateRotation = false;
             }
 
             public override void turn( float angle )
@@ -344,7 +353,7 @@ namespace Extinction
             public void smoothTurn( float angle )
             {
                 //remove the control over the rotation for the navMeshAgent in order to get a custom rotation to the robot
-                _navMeshAgentComponent.updateRotation = false;
+                //_navMeshAgentComponent.updateRotation = false;
 
                 //stop the previous rotation 
                 if( _rotateRoutine != null )

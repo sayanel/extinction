@@ -16,11 +16,12 @@ public class HUDLifeBar : MonoBehaviour
 
     [SerializeField]
     private RectTransform _panel;
+    [SerializeField]
     private Image _panelImage;
     [SerializeField]
     private RectTransform _background;
 
-    void Awake()
+    void Start()
     {
         //try to automatically fill _panel and _background parameters.
         if(_panel == null )
@@ -39,12 +40,11 @@ public class HUDLifeBar : MonoBehaviour
                     if( rectTransform != null )
                         _panel = rectTransform;
                 }
-
             }
-
-            if( _panel != null )
-                _panelImage = _panel.GetComponent<Image>();
         }
+
+        if( _panel != null )
+            _panelImage = _panel.transform.GetComponent<Image>();
     }
 	
 	void Update() 

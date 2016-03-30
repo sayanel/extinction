@@ -31,9 +31,9 @@ namespace Extinction
             /// Max health that can have the character
             /// </summary>
             [SerializeField]
-            protected static float _maxHealth = 100;
+            protected float _maxHealth = 100;
 
-            public static float MaxHealth{
+            public float MaxHealth{
                 get { return _maxHealth; }
             }
 

@@ -143,7 +143,7 @@ namespace Extinction {
                     throw new System.Exception("Fail when creating Herbie prefab");
 
                 Characters.Herbie herbie = herbieGO.GetComponent<Characters.Herbie>();
-                herbie.initialize(new List<string>() { "Characters/RScout", "Characters/RTank", "Characters/RController" }, new List<Vector3>() { new Vector3(473, 53, 438), new Vector3(473, 53, 442), new Vector3(473, 53, 444) }, 0, true);
+                herbie.initialize(new List<string>() { "Characters/RScout", "Characters/RTank", "Characters/RController" }, new List<Vector3>() { new Vector3(484, 41, 484), new Vector3(487, 41, 484), new Vector3(490, 41, 484) }, 0, true);
                 PhotonNetwork.player.TagObject = herbieGO;
 
                 CreateHorde();
@@ -151,7 +151,8 @@ namespace Extinction {
 
             public void CreateHorde() {
                 // First add to scene on Herbie PC
-                GameObject hordeLocal = PhotonNetwork.Instantiate("Horde", Vector3.zero, Quaternion.identity, 0);
+                GameObject hordeLocal = Instantiate(Resources.Load("Horde"), Vector3.zero, Quaternion.identity) as GameObject;
+                //GameObject hordeLocal = PhotonNetwork.Instantiate("Horde", Vector3.zero, Quaternion.identity, 0);
                 DontDestroyOnLoad(hordeLocal);
             }
 
@@ -167,7 +168,7 @@ namespace Extinction {
                 if (PhotonNetwork.player.name != "herbie")
                     CreateSurvivor( "SurvivorsPrefabs/" + PhotonNetwork.player.name, new Vector3( 0, 10, 0 ), Quaternion.identity );
                 else
-                    CreateHerbie(new Vector3(470, 50, 530), Quaternion.identity);
+                    CreateHerbie(new Vector3(487, 70, 484), Quaternion.identity);
             }
         }
     }

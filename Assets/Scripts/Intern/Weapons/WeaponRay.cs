@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 
 using Extinction.Characters;
+using Extinction.AI;
 using Extinction.FX;
 
 namespace Extinction
@@ -82,11 +83,22 @@ namespace Extinction
                                         LayerMask.GetMask(_targetLayer))) {
                         GameObject target = hitInfo.transform.gameObject;
                         onHit(target);
-                        if (bulletHole != null) {
-                            Debug.Log("BULLET");
-                            FXManager.Instance.Activate((int)Enums.FXType.BulletHoleFX, hitInfo.point, Quaternion.FromToRotation(Vector3.forward, hitInfo.normal));
 
+                        Debug.Log("BULLET");
+                        Character hitCharacter = hitInfo.transform.gameObject.GetComponent<Character>();
+                        if (hitCharacter != null)
+                        {
+                            if(hitCharacter.getCharacterType() == Enums.CharacterType.Survivor || hitCharacter.getCharacterType() == Enums.CharacterType.Creaker)
+                            {
+                                FXManager.Instance.Activate((int)Enums.FXType.BloodFX, hitInfo.point, Quaternion.FromToRotation(Vector3.forward, hitInfo.normal));
+                            }
+                            else if(hitCharacter.getCharacterType() == Enums.CharacterType.SpecialRobot)
+                            {
+                                FXManager.Instance.Activate((int)Enums.FXType.FXSpark, hitInfo.point, Quaternion.FromToRotation(Vector3.forward, hitInfo.normal));
+                            }
                         }
+                        else
+                            FXManager.Instance.Activate((int)Enums.FXType.BulletHoleFX, hitInfo.point, Quaternion.FromToRotation(Vector3.forward, hitInfo.normal));
                     }
                     _nbCurrentAmmo--;
                     _previousTime = Time.time;
@@ -112,6 +124,7 @@ namespace Extinction
                 Character o = obj.GetComponent<Character>();
                 if (o == null)
                     return;
+
                 o.getDamage(_damage);
             }
 

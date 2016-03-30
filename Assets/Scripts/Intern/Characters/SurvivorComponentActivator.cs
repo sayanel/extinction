@@ -42,6 +42,11 @@ namespace Extinction {
 
             public void firstPersonMode()
             {
+                //lock and hide cursor : 
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+
+
                 activateHUD();
                 _firstPersonMode = true;
                 SkinnedMeshRenderer[] skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();

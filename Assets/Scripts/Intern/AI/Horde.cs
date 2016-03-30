@@ -15,11 +15,14 @@ namespace Extinction
             //static protected NavMeshAgent _nav; // Reference to the nav mesh agent.
              
             private List<Creaker> _creakers = new List<Creaker>();
-            [SerializeField] private int _nbCreakersToUpdate = 20;
+            [SerializeField]
+            private int _nbCreakersToUpdate = 20;
             private int creakerIndex = 0;
-            [SerializeField] private static GameObject[] _waypoints;         
+            [SerializeField]
+            private static GameObject[] _waypoints;      
 
-            [SerializeField] public GameObject creakerPrefab;
+            [SerializeField]
+            public GameObject creakerPrefab;
 
             //Gestion de la horde
             private static List<int> _groups = new List<int>();
@@ -53,14 +56,16 @@ namespace Extinction
                 _setNewWP = false;
 
                 createHorde(nbCreaker);
+
+                StartCoroutine(delayedUpdate());
             }
 
             public void Update()
             {
                 //foreach (Transform pos in _groupTarget){}
-                _nbCreakersToUpdate = nbCreaker;
+                //_nbCreakersToUpdate = nbCreaker;
                 //Lost survivor?
-                for (int i = 1; i < _groupTarget.Count; ++i)
+                /*for (int i = 1; i < _groupTarget.Count; ++i)
                 {
                     if (_targetLost[i] <= 0 && _groupCharacterTarget[i] != null)
                     {
@@ -69,43 +74,60 @@ namespace Extinction
                         _groupTarget[i] = getWayPoint();
                     } 
                        
-                    if (_groupCharacterTarget[i] != null) _groupTarget[i] = _groupCharacterTarget[i].transform;
+                    if (_groupCharacterTarget[i] != null)
+                        _groupTarget[i] = _groupCharacterTarget[i].transform;
                     
-                }
+                }*/
 
-
-                int j;
-                for(j = 0; j < creakerIndex + _nbCreakersToUpdate; ++j)
+                for (int j = 0; j < nbCreaker; ++j)
                 {
-                    if (_creakers[(j + creakerIndex) % nbCreaker].Health <= 0.0001)
+                    //play creaker death :
+                    if (_creakers[(j) % nbCreaker].Health <= 0.0001)
                     {
                         //TODO : supprimer les creakers proprement
-                        Creaker c = _creakers[( j + creakerIndex ) % nbCreaker];
+                        Creaker c = _creakers[(j) % nbCreaker];
                         nbCreaker--;
-                        removeOneCreaker( c.getIdGroup() );
-                        _creakers.RemoveAt((j + creakerIndex) % nbCreaker);
+                        removeOneCreaker(c.getIdGroup());
+                        _creakers.RemoveAt((j) % nbCreaker);
                         --j;
 
                         c.die();
-                        continue;
                     }
-                    //Debug.LogError("Index: " + j);
-                    _creakers[(j+creakerIndex)%nbCreaker].UpdateCreaker();
                 }
-                creakerIndex = (creakerIndex + j)%nbCreaker;
-                
-                seeGroups();
 
-                //counterTimeWP(0);
+                    //move fnctionnalities to delayedUpdate() coroutine.
+
+                    //seeGroups();
+
+                    //counterTimeWP(0);
             }
 
+            IEnumerator delayedUpdate()
+            {
+                while (true)
+                {
+                    for (int j = 0; j < /*creakerIndex +*/ _nbCreakersToUpdate; ++j)
+                    {
+                        if(_creakers[(j + creakerIndex) % nbCreaker].Health > 0.0001)
+                        {
+                            //update creaker if he is not dead : 
+                            _creakers[(j + creakerIndex) % nbCreaker].UpdateCreaker();
+                        }
+                    }
+                    creakerIndex = (creakerIndex + _nbCreakersToUpdate) % nbCreaker;
+
+                    yield return new WaitForSeconds(0.5f);
+                }
+            }
+
+            //for debuging.
             public void seeGroups()
             {
                 for (int i = 0; i < _groups.Count; ++i)
                 {
                     if (_groups[i] > 1)
                     {
-                        //Debug.LogError("Groupe n° " + i + " with " + _groups[i] + " creakers" + " target: " + _groupTarget[i] );
+                        Debug.LogError("Groupe n° " + i + " with " + _groups[i] + " creakers" + " target: " + _groupTarget[i] );
                     }
                 }
                
@@ -130,15 +152,35 @@ namespace Extinction
 
                 Creaker creaker = creakerGO.GetComponent<Creaker>();
                 creaker.init();
-                return creaker;
                 //creakerGO = PhotonNetwork.Instantiate("Creaker", position, Quaternion.identity, 0) as GameObject;
                 //DontDestroyOnLoad(creakerGO);
-                //creakerGO.GetComponent<Creaker>().detectorCollider.SetActive(true);
-                //creakerGO.GetComponent<Creaker>().rangeCollider.SetActive(true);
+                return creaker;
 
                 //Creaker creaker = creakerGO.GetComponent<Creaker>();
                 //creaker.init();
                 //return creaker;
+            }
+
+            public void localInitialization()
+            {
+                StartCoroutine(localInitializationRoutine());
+            }
+
+            IEnumerator localInitializationRoutine()
+            {
+                int testNb = 0;
+
+                while(_creakers.Count < nbCreaker && testNb < 4)
+                {
+                    yield return new WaitForSeconds(0.5f);
+                    testNb++;
+                }
+
+                foreach (Creaker creaker in _creakers)
+                {
+                    creaker.detectorCollider.SetActive(true);
+                    creaker.rangeCollider.SetActive(true);
+                }
             }
 
             public void createHorde(int nbCreakers)
@@ -179,6 +221,12 @@ namespace Extinction
                 _targetLost.Add(0);
                 return _groups.Count - 1;
 
+            }
+
+            static public Transform getRandomWaypoint()
+            {
+               int id = Random.Range(0, _waypoints.Length);
+               return _waypoints[id].transform;
             }
 
             //Si un creaker du groupe 0 croise un survivant

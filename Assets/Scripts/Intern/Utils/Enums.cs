@@ -50,7 +50,9 @@ namespace Extinction {
             ShootFX,
             ExplosionFX,
             ReloadFX,
-            BulletHoleFX
+            BulletHoleFX,
+            BloodFX,
+            FXSpark
         }
     }
 }

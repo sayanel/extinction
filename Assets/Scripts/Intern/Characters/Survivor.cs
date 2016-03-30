@@ -9,6 +9,7 @@ using Extinction.Controllers;
 using Extinction.Utils;
 using Extinction.HUD;
 using Extinction.Cameras;
+using Extinction.Game;
 
 namespace Extinction
 {
@@ -173,6 +174,9 @@ namespace Extinction
                 _speed.z = 0;
 
                 _lifeBar.changeHealth( _health, _maxHealth );
+
+                if (_health <= 0)
+                    die();
             }
 
             /// <summary>
@@ -183,9 +187,6 @@ namespace Extinction
             {
                 float health = _health - amount * _armorMultiplier;
                 GetComponent<PhotonView>().RPC("SetHealth", PhotonTargets.All, health);
-
-                if ( _health < 0 )
-                    die();
             }
 
             public override void die()
@@ -198,6 +199,7 @@ namespace Extinction
                 GetComponentInChildren<SurvivorAnimationProcedural>().angleOffsetY = 0;
                 GetComponentInChildren<SurvivorAnimationProcedural>().angleOffsetZ = 0;
                 _dieTimer.start();
+                GameManager.Instance.changeSurvivorStatus(_characterName, CharacterStatus.Dead);
             }
 
             public void switchToFreefly()
@@ -205,7 +207,7 @@ namespace Extinction
                 GetComponentInChildren<CameraFPS>().enabled = false;
                 GetComponentInChildren<InputControllerFreeflyCamera>().enabled = true;
                 GetComponent<SurvivorComponentActivator>().deadMode();
-                Game.GameManager.Instance.changeSurvivorStatus( _characterName, CharacterStatus.Dead );
+                //Game.GameManager.Instance.changeSurvivorStatus( _characterName, CharacterStatus.Dead );
             }
 
             /// <summary>

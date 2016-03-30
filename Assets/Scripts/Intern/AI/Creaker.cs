@@ -6,6 +6,7 @@ using System.Collections;
 using System;
 using Extinction.Characters;
 using Extinction.Utils;
+using Extinction.FX;
 
 
 namespace Extinction {
@@ -42,15 +43,32 @@ namespace Extinction {
             private Boolean isSeeingTarget = false;
             private float lambdaDist = 6.0f;
 
+            [SerializeField]
+            public GameObject detectorCollider;
+            [SerializeField]
+            public GameObject rangeCollider;
+
             //[SerializeField]
             //public GameObject detectorCollider;
             //[SerializeField]
             //public GameObject rangeCollider;
+            public enum LogicState { WANDERING, ATTACKING };
+            [SerializeField]
+            public LogicState _logicState = LogicState.WANDERING;
+            [SerializeField]
+            public Character _characterTarget;
 
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
+
+
+            void Awake()
+            {
+                if(_animator == null)
+                    _animator = GetComponent<Animator>();
+            }
 
             /// <summary>
             /// Initialize one creaker
@@ -69,11 +87,16 @@ namespace Extinction {
                 _nav.acceleration = 1;// UnityEngine.Random.Range(1, 1);
                 _target = Horde.getWayPoint();
                 followTarget(_target);
+
+                detectorCollider.SetActive(true);
+                rangeCollider.SetActive(true);
             }
+
+
 
             public void UpdateCreaker()
             {
-                
+                /*
                 Vector2 creakerPosition = new Vector2(transform.position.x, transform.position.z);
 
                 nbCreakersGrp = Horde.getGroupSize(idGroup);
@@ -107,22 +130,52 @@ namespace Extinction {
 
 
                     //Debug.LogError("groupe: " + idGroup + " -> " + _target);
+                }*/
+                if (_logicState == LogicState.ATTACKING)
+                {
+                    if (_characterTarget == null)
+                    {
+                        _logicState = LogicState.WANDERING;
+                        _target = Horde.getRandomWaypoint();
+                        Horde.setNewWaypoint(this.idGroup);
+                        _nav.SetDestination(_target.position);
+                        setState(State.WALK);
+                        Debug.Log("setDestination : " + Time.time);
+                    }
+                    else if (_characterTarget != null && _characterTarget.Health <= 0)
+                    {
+                        _characterTarget = null;
+                        _logicState = LogicState.WANDERING;
+                        _target = Horde.getRandomWaypoint();
+                        Horde.setNewWaypoint(this.idGroup);
+                        _nav.SetDestination(_target.position);
+                        setState(State.WALK);
+                        Debug.Log("setDestination : " + Time.time);
+                    }
+                    else
+                    {
+                        _nav.SetDestination(_characterTarget.transform.position);
+                        Debug.Log("setDestination : " + Time.time);
+                        Debug.Log("attacking !");
+                    }
                 }
 
             }
 
             public override void die()
             {
+                StopAllCoroutines();
+                StartCoroutine(delayedDeath());
+                setAnimationState("Die");
                 setState(State.DIE);
                 _nav.Stop();
-                StartCoroutine(delayedDeath());
                 //Debug.Log("I AM DEAD");
             }
 
             private IEnumerator delayedDeath()
             {
                 yield return new WaitForSeconds(5.0F);
-                yield return new WaitForSeconds(5.0f);
+                //yield return new WaitForSeconds(5.0f);
                 //Debug.Log("destroy creacker");
                 //SkinnedMeshRenderer[] renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
                 //foreach( SkinnedMeshRenderer renderer in renderers )
@@ -139,7 +192,16 @@ namespace Extinction {
 
             public void setState(State s)
             {
-                if (s == this._state || this._state == State.DIE) return;
+                //if (this._state == State.DIE) {
+                //    updateAnimator(); return;
+                //}
+
+                //if (s == State.DIE) {
+                //    this._state = State.DIE;
+                //    updateAnimator();
+                //    return;
+                //}
+                if (s == this._state) return;
                 else this._state = s;
                 updateAnimator();
             }
@@ -186,10 +248,14 @@ namespace Extinction {
                         //_nav.speed = _speedRun;
                         setState(State.RUN);
 
+                        _logicState = LogicState.ATTACKING;
+                        _characterTarget = other.transform.parent.GetComponent<Character>();
+                        Debug.Log("switch to ATTACKING logic state.");
+                        setAnimationState("Attack");
+
                         //Debug.LogError("Collision with survivor " + c + " MyGrp: " + idGroup);
                     }
 
-                   
                 }
 
                 else if (tag == "CreakerRangeCollider") // if its our range colliger which collides
@@ -198,9 +264,33 @@ namespace Extinction {
                     {
                         Survivor s = other.gameObject.transform.parent.GetComponent<Survivor>();
                         attackSurvivor(s);
+                        setAnimationState("Attack");
+                    }
+                    else if (other.gameObject.tag == "waypoint")
+                    {
+                        StartCoroutine(findWaypoint());
                     }
                 }
 
+            }
+
+            IEnumerator findWaypoint()
+            {
+                Transform newTarget = Horde.getRandomWaypoint();
+                if (_target == null)
+                    _target = newTarget;
+                while( Vector3.Distance(newTarget.position, _target.position) < 5)
+                {
+                    newTarget = Horde.getRandomWaypoint();
+                    setState(State.SCREAM);
+
+                    yield return new WaitForSeconds(2.0f);
+                }
+
+                _target = newTarget;
+                Horde.setNewWaypoint(this.idGroup);
+                _nav.SetDestination(_target.position);
+                Debug.Log("setDestination : " + Time.time);
             }
 
             public void triggerExit(Collider other, string tag)
@@ -222,7 +312,8 @@ namespace Extinction {
                     if (other.gameObject.tag == "playerRangeCollider") // if a survivor get out of the collider
                     {
                         setState(State.WALK);
-                        followTarget();
+                        //followTarget();
+
                     }
                 }
 
@@ -230,6 +321,7 @@ namespace Extinction {
 
             public void updateAnimator()
             {
+                float animationLength = 0;
                     switch (this._state)
                     {
 
@@ -247,11 +339,15 @@ namespace Extinction {
                             break;
                         case State.ATTACK:
                             setAnimationState("Attack");
-                            //Debug.LogError("State = Attack");
-                            break;
+                            animationLength = _animator.GetCurrentAnimatorStateInfo(0).length;
+                            StartCoroutine(switchToWalkState(animationLength));
+                        //Debug.LogError("State = Attack");
+                        break;
                         case State.GETDAMAGE:
                             setAnimationState("GetDamage");
-                            //Debug.LogError("State = GetDamage");
+                            animationLength = _animator.GetCurrentAnimatorStateInfo(0).length;
+                            StartCoroutine(switchToWalkState(animationLength));
+                        //Debug.LogError("State = GetDamage");
                         break;
                         case State.DIE:
                             setAnimationState("Die");
@@ -259,7 +355,9 @@ namespace Extinction {
                             break;
                         case State.SCREAM:
                             setAnimationState("Scream");
-                            setState(State.WALK);
+                            animationLength = _animator.GetCurrentAnimatorStateInfo(0).length;
+                            StartCoroutine(switchToWalkState(animationLength));
+                            //setState(State.WALK);
                             //Debug.LogError("State = Scream");
                             break;
                         default:
@@ -267,10 +365,13 @@ namespace Extinction {
                             //Debug.LogError("State = Default Walk");
                             break;
                     }
-                
+            }
 
-
-
+            //return to walk state after a delay
+            IEnumerator switchToWalkState(float delay)
+            {
+                yield return new WaitForSeconds(delay);
+                setState(State.WALK);
             }
 
             public int getIdGroup()
@@ -300,10 +401,11 @@ namespace Extinction {
             {
                 if (_target)
                 {
-                    _nav.SetDestination(_target.position);
+                    _nav.SetDestination(_target.position); //TODO
                     setState(State.WALK);
                 }
                 else setState(State.IDLE);
+                Debug.Log("setDestination : " + Time.time);
             }
 
             public void followTarget(Transform target)
@@ -312,6 +414,8 @@ namespace Extinction {
                 _nav.destination = target.position;
                 setState(State.WALK);
                 //setAnimationState("Walk");
+                Debug.Log("setDestination : " + Time.time);
+
             }
 
             public void followTarget(GameObject target)
@@ -320,6 +424,8 @@ namespace Extinction {
                 _nav.destination = target.transform.position;
                 setState(State.WALK);
                 //setAnimationState("Walk");
+                Debug.Log("setDestination : " + Time.time);
+
             }
 
             public Transform getCreakerTarget(Creaker creaker)
@@ -338,7 +444,7 @@ namespace Extinction {
                 setState(State.ATTACK);
                 //setAnimationState("Attack");
                 survivor.getDamage(5);
-                Debug.LogError("Attack");
+                //Debug.LogError("Attack");
             }
 
             public override void addPotentialTarget(Character target)
@@ -391,7 +497,6 @@ namespace Extinction {
                 float health = _health - amount;
                 GetComponent<PhotonView>().RPC( "SetHealth", PhotonTargets.All, health );
 
-                setState( State.GETDAMAGE );
 
                 if( _health <= 0 )
                 {
@@ -399,6 +504,14 @@ namespace Extinction {
                     setState( State.DIE );
                     _health = 0;
                     //Horde.removeOneCreaker(this.idGroup);
+                }
+            }
+
+            public override void onHealthChanged()
+            {
+                if (_health > 0)
+                {
+                    setState(State.GETDAMAGE);
                 }
             }
 

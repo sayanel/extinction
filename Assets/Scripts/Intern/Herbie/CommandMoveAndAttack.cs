@@ -69,7 +69,7 @@ namespace Extinction
             {
                 while( !_isFinished )
                 {
-                    if( !_target.IsAlive ) // is the target already dead ? 
+                    if( _target.Health <= 0 ) // is the target already dead ? 
                     {
                         _isFinished = true;
                     }
