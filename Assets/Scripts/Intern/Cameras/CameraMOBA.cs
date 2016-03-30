@@ -57,7 +57,7 @@ namespace Extinction
             }
 
             [SerializeField]
-            private float _zoomSpeed = 0.1F;
+            private float _zoomSpeed = 1.0F;
 
             [SerializeField]
             private float _zoomMin = 10.0F;
@@ -81,6 +81,18 @@ namespace Extinction
             private Camera _cameraComponent;
 
             private Queue<float> _zoomQueue = new Queue<float>();
+
+            public enum ZoomStateEnum { NO_ZOOM, ZOOM_BEGIN, ZOOM_END, ZOOM, ZOOM_JUST_END};
+            private ZoomStateEnum _zoomState = ZoomStateEnum.NO_ZOOM;
+            public ZoomStateEnum ZoomState{
+                get{ return _zoomState;}
+                set{_zoomState = value;}
+            }
+            private Coroutine _zoomCoroutine;
+            private float _zoomSpeedFactor;
+            private float _zoomBeginTime;
+            private float _zoomEndTime;
+            private float _zoomDelta;
 
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
@@ -110,7 +122,7 @@ namespace Extinction
 
                 _currentZoom = _zoomMax;
 
-                zoom( 0 );
+                //zoom( 0 );
             }
 
             public override void setFieldOfView( float fieldOfView )
@@ -158,6 +170,45 @@ namespace Extinction
 
             }
 
+            public void zoomSmooth02(float delta)
+            {
+                if( _zoomCoroutine != null )
+                {
+                    if( _zoomState == ZoomStateEnum.ZOOM_END || Mathf.Sign( _zoomDelta ) != Mathf.Sign( delta ) )
+                    {
+                        _zoomState = ZoomStateEnum.NO_ZOOM;
+                        StopCoroutine( _zoomCoroutine );
+                    }
+                }
+
+                _zoomDelta = delta;
+                Debug.Log( "delta = " + _zoomDelta );
+
+                switch( _zoomState )
+                {
+                    case ZoomStateEnum.NO_ZOOM:
+                        _zoomState = ZoomStateEnum.ZOOM_BEGIN;
+                        _zoomSpeedFactor += 0;
+                        _zoomBeginTime = 0;
+                        break;
+                    case ZoomStateEnum.ZOOM_BEGIN:
+                        _zoomSpeedFactor += Time.deltaTime * _zoomSpeed;
+                        _zoomBeginTime += Time.deltaTime * ( Mathf.Abs( _zoomDelta ) * 10.0F - 1 );
+                        if( _zoomBeginTime > Time.deltaTime )
+                            _zoomState = ZoomStateEnum.ZOOM;
+                        break;
+                    case ZoomStateEnum.ZOOM:
+                        _zoomBeginTime += Time.deltaTime;
+                        break;
+                }
+                Debug.Log( "Zoom state : " + _zoomState.ToString() + ", zoom begin time : " + _zoomBeginTime );
+
+                _currentZoom = -( _zoomStep * _zoomSpeedFactor * _zoomDelta );
+
+
+                translateCameraVertically( _currentZoom );
+            }
+
             /// <summary>
             /// A coroutine to perform a smooth zoom.
             /// </summary>
@@ -189,7 +240,7 @@ namespace Extinction
                         }
 
                         time += deltaTime;
-                        yield return new WaitForSeconds(deltaTime);
+                        yield return 0;
                     }
                 }
             }
@@ -202,16 +253,19 @@ namespace Extinction
             /// <param name="delta"> camera's field of view will be incremented/decremented with this value. </param>
             public void zoom( float delta )
             {
-                if( delta < 0 )
-                {
-                    _currentZoom += _zoomStep;
-                }
-                else if( delta > 0 )
-                {
-                    _currentZoom -= _zoomStep;
-                }
+                _zoomDelta = delta * 10;
+                _zoomDelta *= (Mathf.Sign( delta ) * _zoomDelta);
 
-                transform.Translate( 0, 0, delta * _zoomStep, transform );
+                _currentZoom = _zoomStep * _zoomDelta;
+                
+                translateCameraVertically(_currentZoom);
+            }
+
+            private void translateCameraVertically(float verticalPosition)
+            {
+                Debug.Log( "zoom = " + verticalPosition );
+
+                transform.Translate( 0, 0, verticalPosition, transform );
 
                 Ray ray = new Ray( transform.position, new Vector3( 0, -1, 0 ) );
                 RaycastHit hitInfo = new RaycastHit();
@@ -229,6 +283,49 @@ namespace Extinction
                 else
                     _cameraComponent.cullingMask &= ~( 1 << LayerMask.NameToLayer( "RobotIcone" ) );
                 //setFieldOfView( _currentZoom );
+            }
+
+            public void resetZoom()
+            {
+                _zoomBeginTime = 0;
+            }
+
+            public void endZoom()
+            {
+                //if( _zoomCoroutine != null )
+                //    StopCoroutine( _zoomCoroutine );
+
+                Debug.Log( "begin coroutine" );
+                _zoomCoroutine = StartCoroutine( endZoomCoroutine() );
+                Debug.Log( "end coroutine" );
+
+                _zoomState = ZoomStateEnum.ZOOM_END;
+            }
+
+            IEnumerator endZoomCoroutine()
+            {
+                _zoomEndTime = 0;
+                while( _zoomEndTime < 0.5 ) {
+
+                    _zoomBeginTime = 0;
+
+                    _zoomSpeedFactor -= Time.deltaTime * _zoomSpeed;
+                    if( _zoomSpeedFactor < 0 ) _zoomSpeedFactor = 0;
+                    _zoomEndTime += Time.deltaTime;
+
+                    _currentZoom = - ( _zoomStep * _zoomSpeedFactor * _zoomDelta);
+
+                    translateCameraVertically( _currentZoom );
+
+                    yield return null;
+                }
+
+                _zoomState = ZoomStateEnum.NO_ZOOM;
+            }
+
+            public bool zoomEnds()
+            {
+                return (_zoomState == ZoomStateEnum.ZOOM_JUST_END);
             }
 
             /// <summary>

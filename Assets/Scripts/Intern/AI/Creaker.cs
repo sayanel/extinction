@@ -33,14 +33,21 @@ namespace Extinction {
 
             [SerializeField] State _state;
 
-            [SerializeField] protected float _speed = 40;
-            [SerializeField] protected float _life = 100;
+            [SerializeField] protected float _speed;
+            [SerializeField] protected float _speedRun;
+            //[SerializeField] protected float _life = 100;
             [SerializeField] public bool _isDead = false;
             [SerializeField] private int idGroup = 0;
+            [SerializeField] private int nbCreakersGrp;
             private Boolean isSeeingTarget = false;
-            private int lambdaDist = 2;
+            private float lambdaDist = 6.0f;
 
-             
+            //[SerializeField]
+            //public GameObject detectorCollider;
+            //[SerializeField]
+            //public GameObject rangeCollider;
+
+
             // ----------------------------------------------------------------------------
             // --------------------------------- METHODS ----------------------------------
             // ----------------------------------------------------------------------------
@@ -55,66 +62,93 @@ namespace Extinction {
 
                 _state = State.IDLE;
                 _nav = GetComponent<NavMeshAgent>();
-                _animator = GetComponent<Animator>(); 
-                _nav.speed = UnityEngine.Random.Range(1, 1);
-                _nav.acceleration = UnityEngine.Random.Range(1, 1);
+                _animator = GetComponent<Animator>();
+                _speed = 2 + UnityEngine.Random.Range(0, 1);
+                _nav.speed = _speed;
+                _speedRun = 4 + UnityEngine.Random.Range(0, 1);
+                _nav.acceleration = 1;// UnityEngine.Random.Range(1, 1);
                 _target = Horde.getWayPoint();
+                followTarget(_target);
             }
 
             public void UpdateCreaker()
             {
-                Vector2 WPposition = new Vector2(Horde.getGroupTarget(this.idGroup).position.x, Horde.getGroupTarget(this.idGroup).position.z);
+                
                 Vector2 creakerPosition = new Vector2(transform.position.x, transform.position.z);
-                State previousState = getState();
+
+                nbCreakersGrp = Horde.getGroupSize(idGroup);
 
                 if (this.idGroup != 0)
                 {
-                    
-                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(WPposition, creakerPosition) <= lambdaDist)
+                    Vector2 WPposition = new Vector2(Horde.getGroupTarget(this.idGroup).position.x, Horde.getGroupTarget(this.idGroup).position.z);
+                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector2.Distance(WPposition, creakerPosition) <= lambdaDist)
                     {
                         Horde.setNewWaypoint(this.idGroup);
+                        //Debug.LogError(Vector2.Distance(WPposition, creakerPosition));
                         //Debug.LogError("idGroup: " + this.idGroup + " last WP: " + WPposition + " new WP : " + Horde.getGroupTarget(this.idGroup));
                     }
-                    if(_target != Horde.getGroupTarget(idGroup))
-                    {
-                        _target = Horde.getGroupTarget(idGroup);
-                        followTarget(_target); // follow target ( transform )
-                    }
-                    
+                    //if (_target != Horde.getGroupTarget(idGroup))
+                    //{
+                    //    _target = Horde.getGroupTarget(idGroup);
+                    //    followTarget(_target); // follow target ( transform )
+                    //}
+                    _target = Horde.getGroupTarget(this.idGroup);
+                    followTarget(_target);
+
                 }
                 else
                 {
-                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector3.Distance(WPposition, creakerPosition) <= lambdaDist)
-                        _target = Horde.getWayPoint(); 
-                        followTarget(_target); // transform
+                    Vector2 WPposition = new Vector2(_target.position.x, _target.position.z);
+                    if (!Horde.targetIsSurvivor(this.idGroup) && Vector2.Distance(WPposition, creakerPosition) <= lambdaDist)
+                    {
+                        _target = Horde.getWayPoint();
+                        followTarget(_target);
+                    }
+
+
                     //Debug.LogError("groupe: " + idGroup + " -> " + _target);
                 }
-
-                if(previousState != getState())
-                    updateAnimator();
 
             }
 
             public override void die()
             {
-                throw new NotImplementedException();
+                setState(State.DIE);
+                _nav.Stop();
+                StartCoroutine(delayedDeath());
+                //Debug.Log("I AM DEAD");
+            }
+
+            private IEnumerator delayedDeath()
+            {
+                yield return new WaitForSeconds(5.0F);
+                yield return new WaitForSeconds(5.0f);
+                //Debug.Log("destroy creacker");
+                //SkinnedMeshRenderer[] renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+                //foreach( SkinnedMeshRenderer renderer in renderers )
+                //{
+                //    renderer.enabled = false;
+                //}
+                PhotonNetwork.Destroy(this.gameObject);
             }
 
             public State getState()
             {
-                return _state;
+                return this._state;
             }
 
             public void setState(State s)
             {
-                if (s == _state) return;
-                else _state = s;
+                if (s == this._state || this._state == State.DIE) return;
+                else this._state = s;
+                updateAnimator();
             }
 
             public void triggerEnter(Collider other, string tag)
             {
+
                 
-                if(tag == "CreakerDetectionCollider") // If its our detection collider who collides
+                if (tag == "CreakerDetectionCollider") // If its our detection collider who collides
                 {
                     if (other.gameObject.tag == "creakerDetectionCollider") // if the collider we collide with is creaker
                     {
@@ -131,7 +165,7 @@ namespace Extinction {
                                 c.setIdGroup(this.idGroup);
                                 Horde.addOneCreaker(this.idGroup);
                             }
-                            else
+                            else if(this.idGroup != 0 && c.getIdGroup() != 0 && this.idGroup != c.getIdGroup() )
                             {
                                 if (Horde.getGroupSize(c.getIdGroup()) > Horde.getGroupSize(this.idGroup))
                                 {
@@ -149,9 +183,10 @@ namespace Extinction {
                         Horde.setCharacterTarget(c, this.idGroup);
                         if (!this.isSeeingTarget) Horde.targetFound(this.idGroup); //verifier que la nouvelle target est identique à celle du groupe
                         this.isSeeingTarget = true;
-                        _nav.speed += 5;
+                        //_nav.speed = _speedRun;
                         setState(State.RUN);
-                        Debug.LogError("Collision with survivor " + c + " MyGrp: " + idGroup );
+
+                        //Debug.LogError("Collision with survivor " + c + " MyGrp: " + idGroup);
                     }
 
                    
@@ -165,51 +200,77 @@ namespace Extinction {
                         attackSurvivor(s);
                     }
                 }
+
             }
 
             public void triggerExit(Collider other, string tag)
-            {       
+            {
+
                 if (tag == "CreakerDetectionCollider") // If its our detection collider who collides
                 { 
                     if (other.gameObject.tag == "stealthCollider" && this.isSeeingTarget) // if a survivor get out of the collider
                     {          
                         Horde.addTargetLost(this.idGroup);
                         this.isSeeingTarget = false;
-                        _nav.speed -= 5;
+                        _nav.speed = _speed;
                         setState(State.WALK);
                     }
                 }
+
+                if (tag == "CreakerDetectionCollider") // If its our RANGE collider who collides
+                {
+                    if (other.gameObject.tag == "playerRangeCollider") // if a survivor get out of the collider
+                    {
+                        setState(State.WALK);
+                        followTarget();
+                    }
+                }
+
             }
 
             public void updateAnimator()
             {
-                switch (_state)
-                {
-                    case State.IDLE:
-                        setAnimationState("Idle");
+                    switch (this._state)
+                    {
+
+                        case State.IDLE:
+                            setAnimationState("Idle");
+                            //Debug.LogError("State = Idle");
+                            break;
+                        case State.RUN:
+                            setAnimationState("Run");
+                            //Debug.LogError("State = Run");
+                            break;
+                        case State.WALK:
+                            setAnimationState("Walk");
+                            //Debug.LogError("State = Walk");
+                            break;
+                        case State.ATTACK:
+                            setAnimationState("Attack");
+                            //Debug.LogError("State = Attack");
+                            break;
+                        case State.GETDAMAGE:
+                            setAnimationState("GetDamage");
+                            //Debug.LogError("State = GetDamage");
                         break;
-                    case State.RUN:
-                        setAnimationState("Run");
-                        break;
-                    case State.WALK:
-                        setAnimationState("Walk");
-                        break;
-                    case State.ATTACK:
-                        setAnimationState("Attack");
-                        break;
-                    //case State.GETDAMAGE:
-                    //    setAnimationState("GetDamage");
-                    //    break;
-                    //case State.DIE:
-                    //    setAnimationState("Die");
-                    //    break;
-                    //case State.SCREAM:
-                    //    setAnimationState("Scream");
-                    //    break;
-                    default:
-                        setAnimationState("Idle");
-                        break;
-                }
+                        case State.DIE:
+                            setAnimationState("Die");
+                            //Debug.LogError("State = Die");
+                            break;
+                        case State.SCREAM:
+                            setAnimationState("Scream");
+                            setState(State.WALK);
+                            //Debug.LogError("State = Scream");
+                            break;
+                        default:
+                            setAnimationState("Walk");
+                            //Debug.LogError("State = Default Walk");
+                            break;
+                    }
+                
+
+
+
             }
 
             public int getIdGroup()
@@ -237,20 +298,28 @@ namespace Extinction {
 
             public void followTarget()
             {
-                if (_target) _nav.SetDestination(_target.position);
-                setState(State.WALK);
+                if (_target)
+                {
+                    _nav.SetDestination(_target.position);
+                    setState(State.WALK);
+                }
+                else setState(State.IDLE);
             }
 
             public void followTarget(Transform target)
             {
-                _nav.SetDestination(target.position);
+                //_nav.SetDestination(target.position);
+                _nav.destination = target.position;
                 setState(State.WALK);
+                //setAnimationState("Walk");
             }
 
             public void followTarget(GameObject target)
             {
-                _nav.SetDestination(target.transform.position);
+                //_nav.SetDestination(target.transform.position);
+                _nav.destination = target.transform.position;
                 setState(State.WALK);
+                //setAnimationState("Walk");
             }
 
             public Transform getCreakerTarget(Creaker creaker)
@@ -267,20 +336,9 @@ namespace Extinction {
             public void attackSurvivor(Survivor survivor)
             {
                 setState(State.ATTACK);
+                //setAnimationState("Attack");
                 survivor.getDamage(5);
-            }
-
-            public void getDamage(float damage)
-            {
-                _life -= damage;
-                setState(State.GETDAMAGE);
-                if (_life <= 0)
-                {
-                    _isDead = true;
-                    setState(State.DIE);
-                    Horde.removeOneCreaker(this.idGroup);
-                }
-                    
+                Debug.LogError("Attack");
             }
 
             public override void addPotentialTarget(Character target)
@@ -330,7 +388,18 @@ namespace Extinction {
 
             public override void getDamage(int amount)
             {
-                throw new NotImplementedException();
+                float health = _health - amount;
+                GetComponent<PhotonView>().RPC( "SetHealth", PhotonTargets.All, health );
+
+                setState( State.GETDAMAGE );
+
+                if( _health <= 0 )
+                {
+                    _isDead = true;
+                    setState( State.DIE );
+                    _health = 0;
+                    //Horde.removeOneCreaker(this.idGroup);
+                }
             }
 
             public override void activateSkill1()

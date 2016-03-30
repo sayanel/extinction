@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Extinction.Characters;
+using Extinction.Characters; 
 
 namespace Extinction
 {
@@ -11,11 +11,11 @@ namespace Extinction
         public class Horde : MonoBehaviour
         {
             [SerializeField]
-            private int nbCreaker = 100;
+            private int nbCreaker = 20;
             //static protected NavMeshAgent _nav; // Reference to the nav mesh agent.
-
+             
             private List<Creaker> _creakers = new List<Creaker>();
-            [SerializeField] private int _nbCreakersToUpdate = 300;
+            [SerializeField] private int _nbCreakersToUpdate = 20;
             private int creakerIndex = 0;
             [SerializeField] private static GameObject[] _waypoints;         
 
@@ -58,7 +58,7 @@ namespace Extinction
             public void Update()
             {
                 //foreach (Transform pos in _groupTarget){}
-
+                _nbCreakersToUpdate = nbCreaker;
                 //Lost survivor?
                 for (int i = 1; i < _groupTarget.Count; ++i)
                 {
@@ -77,11 +77,16 @@ namespace Extinction
                 int j;
                 for(j = 0; j < creakerIndex + _nbCreakersToUpdate; ++j)
                 {
-                    if (_creakers[(j + creakerIndex) % nbCreaker]._isDead)
+                    if (_creakers[(j + creakerIndex) % nbCreaker].Health <= 0.0001)
                     {
                         //TODO : supprimer les creakers proprement
-                        _creakers.RemoveAt(j + creakerIndex);
+                        Creaker c = _creakers[( j + creakerIndex ) % nbCreaker];
+                        nbCreaker--;
+                        removeOneCreaker( c.getIdGroup() );
+                        _creakers.RemoveAt((j + creakerIndex) % nbCreaker);
                         --j;
+
+                        c.die();
                         continue;
                     }
                     //Debug.LogError("Index: " + j);
@@ -126,6 +131,14 @@ namespace Extinction
                 Creaker creaker = creakerGO.GetComponent<Creaker>();
                 creaker.init();
                 return creaker;
+                //creakerGO = PhotonNetwork.Instantiate("Creaker", position, Quaternion.identity, 0) as GameObject;
+                //DontDestroyOnLoad(creakerGO);
+                //creakerGO.GetComponent<Creaker>().detectorCollider.SetActive(true);
+                //creakerGO.GetComponent<Creaker>().rangeCollider.SetActive(true);
+
+                //Creaker creaker = creakerGO.GetComponent<Creaker>();
+                //creaker.init();
+                //return creaker;
             }
 
             public void createHorde(int nbCreakers)
@@ -168,6 +181,7 @@ namespace Extinction
 
             }
 
+            //Si un creaker du groupe 0 croise un survivant
             static public int createNewGroup(Character c, int nb)
             {
                 _groups.Add(nb);
@@ -206,7 +220,7 @@ namespace Extinction
             static public void setNewWaypoint(int idGroup)
             {
 
-                if (_counterSetNewWP == 0)
+                //if (_counterSetNewWP == 0)
                 {
                     _groupTarget[idGroup] = getWayPoint();
                     _setNewWP = true;

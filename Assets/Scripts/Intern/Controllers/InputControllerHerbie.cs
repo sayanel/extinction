@@ -80,10 +80,19 @@ namespace Extinction
                 //zoom
                 if( !Mathf.Approximately( 0.0F, Input.GetAxis( "Mouse ScrollWheel" ) ) )
                 {
-                    if (!EventSystem.current.IsPointerOverGameObject())
-                        _herbieCameraComponent.zoom(Input.GetAxis("Mouse ScrollWheel"));
-                        //_herbieCameraComponent.zoomSmooth( Input.GetAxis( "Mouse ScrollWheel" ) );
+                    if( !EventSystem.current.IsPointerOverGameObject() )
+                        _herbieCameraComponent.zoom( Input.GetAxis( "Mouse ScrollWheel" ) );
+                    //_herbieCameraComponent.zoomSmooth( Input.GetAxis( "Mouse ScrollWheel" ) );
                 }
+                else
+                {
+                    _herbieCameraComponent.resetZoom();
+                    if( _herbieCameraComponent.ZoomState == CameraMOBA.ZoomStateEnum.ZOOM )
+                    {
+                        _herbieCameraComponent.endZoom();
+                    }
+                }
+                
 
                 //position
                 _herbieCameraComponent.setPosition( Input.mousePosition );
